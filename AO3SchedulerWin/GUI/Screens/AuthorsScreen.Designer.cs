@@ -29,14 +29,14 @@
         private void InitializeComponent()
         {
             panel1 = new Panel();
-            button1 = new Button();
-            button2 = new Button();
+            setActiveButton = new Button();
             button3 = new Button();
-            button4 = new Button();
+            button2 = new Button();
+            button1 = new Button();
             panel2 = new Panel();
-            listView1 = new ListView();
-            label1 = new Label();
+            usersListView = new ListView();
             columnHeader1 = new ColumnHeader();
+            loggedUserLabel = new Label();
             panel1.SuspendLayout();
             panel2.SuspendLayout();
             SuspendLayout();
@@ -44,103 +44,115 @@
             // panel1
             // 
             panel1.BackColor = Color.Brown;
-            panel1.Controls.Add(button4);
+            panel1.Controls.Add(setActiveButton);
             panel1.Controls.Add(button3);
             panel1.Controls.Add(button2);
             panel1.Controls.Add(button1);
             panel1.Dock = DockStyle.Right;
-            panel1.Location = new Point(656, 0);
+            panel1.Location = new Point(937, 0);
+            panel1.Margin = new Padding(4, 5, 4, 5);
             panel1.Name = "panel1";
-            panel1.Size = new Size(144, 450);
+            panel1.Size = new Size(206, 750);
             panel1.TabIndex = 0;
             // 
-            // button1
+            // setActiveButton
             // 
-            button1.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-            button1.Location = new Point(13, 12);
-            button1.Name = "button1";
-            button1.Size = new Size(119, 49);
-            button1.TabIndex = 0;
-            button1.Text = "Add account";
-            button1.UseVisualStyleBackColor = true;
-            // 
-            // button2
-            // 
-            button2.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-            button2.Location = new Point(13, 67);
-            button2.Name = "button2";
-            button2.Size = new Size(119, 49);
-            button2.TabIndex = 1;
-            button2.Text = "Remove account";
-            button2.UseVisualStyleBackColor = true;
+            setActiveButton.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            setActiveButton.Location = new Point(19, 295);
+            setActiveButton.Margin = new Padding(4, 5, 4, 5);
+            setActiveButton.Name = "setActiveButton";
+            setActiveButton.Size = new Size(170, 82);
+            setActiveButton.TabIndex = 3;
+            setActiveButton.Text = "Set as active";
+            setActiveButton.UseVisualStyleBackColor = true;
+            setActiveButton.Click += setActiveButton_Click;
             // 
             // button3
             // 
             button3.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-            button3.Location = new Point(13, 122);
+            button3.Location = new Point(19, 203);
+            button3.Margin = new Padding(4, 5, 4, 5);
             button3.Name = "button3";
-            button3.Size = new Size(119, 49);
+            button3.Size = new Size(170, 82);
             button3.TabIndex = 2;
             button3.Text = "Update account";
             button3.UseVisualStyleBackColor = true;
             // 
-            // button4
+            // button2
             // 
-            button4.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-            button4.Location = new Point(13, 177);
-            button4.Name = "button4";
-            button4.Size = new Size(119, 49);
-            button4.TabIndex = 3;
-            button4.Text = "Set as active";
-            button4.UseVisualStyleBackColor = true;
+            button2.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            button2.Location = new Point(19, 112);
+            button2.Margin = new Padding(4, 5, 4, 5);
+            button2.Name = "button2";
+            button2.Size = new Size(170, 82);
+            button2.TabIndex = 1;
+            button2.Text = "Remove account";
+            button2.UseVisualStyleBackColor = true;
+            // 
+            // button1
+            // 
+            button1.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            button1.Location = new Point(19, 20);
+            button1.Margin = new Padding(4, 5, 4, 5);
+            button1.Name = "button1";
+            button1.Size = new Size(170, 82);
+            button1.TabIndex = 0;
+            button1.Text = "Add account";
+            button1.UseVisualStyleBackColor = true;
             // 
             // panel2
             // 
-            panel2.Controls.Add(listView1);
-            panel2.Controls.Add(label1);
+            panel2.Controls.Add(usersListView);
+            panel2.Controls.Add(loggedUserLabel);
             panel2.Dock = DockStyle.Fill;
             panel2.Location = new Point(0, 0);
+            panel2.Margin = new Padding(4, 5, 4, 5);
             panel2.Name = "panel2";
-            panel2.Padding = new Padding(10);
-            panel2.Size = new Size(656, 450);
+            panel2.Padding = new Padding(14, 17, 14, 17);
+            panel2.Size = new Size(937, 750);
             panel2.TabIndex = 1;
             // 
-            // listView1
+            // usersListView
             // 
-            listView1.Columns.AddRange(new ColumnHeader[] { columnHeader1 });
-            listView1.Dock = DockStyle.Fill;
-            listView1.Location = new Point(10, 50);
-            listView1.Name = "listView1";
-            listView1.Size = new Size(636, 390);
-            listView1.TabIndex = 0;
-            listView1.UseCompatibleStateImageBehavior = false;
-            listView1.View = View.Details;
-            // 
-            // label1
-            // 
-            label1.AutoSize = true;
-            label1.Dock = DockStyle.Top;
-            label1.Font = new Font("Segoe UI", 15.75F, FontStyle.Regular, GraphicsUnit.Point);
-            label1.Location = new Point(10, 10);
-            label1.Name = "label1";
-            label1.Size = new Size(183, 40);
-            label1.TabIndex = 1;
-            label1.Text = "Logged in as: User";
+            usersListView.Columns.AddRange(new ColumnHeader[] { columnHeader1 });
+            usersListView.Dock = DockStyle.Fill;
+            usersListView.FullRowSelect = true;
+            usersListView.Location = new Point(14, 62);
+            usersListView.Margin = new Padding(4, 5, 4, 5);
+            usersListView.Name = "usersListView";
+            usersListView.Size = new Size(909, 671);
+            usersListView.TabIndex = 0;
+            usersListView.UseCompatibleStateImageBehavior = false;
+            usersListView.View = View.Details;
             // 
             // columnHeader1
             // 
             columnHeader1.Text = "User";
-            columnHeader1.Width = 100;
+            columnHeader1.Width = 800;
+            // 
+            // loggedUserLabel
+            // 
+            loggedUserLabel.AutoSize = true;
+            loggedUserLabel.Dock = DockStyle.Top;
+            loggedUserLabel.Font = new Font("Segoe UI", 15.75F, FontStyle.Regular, GraphicsUnit.Point);
+            loggedUserLabel.Location = new Point(14, 17);
+            loggedUserLabel.Margin = new Padding(4, 0, 4, 0);
+            loggedUserLabel.Name = "loggedUserLabel";
+            loggedUserLabel.Size = new Size(282, 45);
+            loggedUserLabel.TabIndex = 1;
+            loggedUserLabel.Text = "Logged in as: User";
             // 
             // AuthorsScreen
             // 
-            AutoScaleDimensions = new SizeF(7F, 15F);
+            AutoScaleDimensions = new SizeF(10F, 25F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(800, 450);
+            ClientSize = new Size(1143, 750);
             Controls.Add(panel2);
             Controls.Add(panel1);
+            Margin = new Padding(4, 5, 4, 5);
             Name = "AuthorsScreen";
             Text = "AuthorsScreen";
+            Load += AuthorsScreen_Load;
             panel1.ResumeLayout(false);
             panel2.ResumeLayout(false);
             panel2.PerformLayout();
@@ -150,13 +162,13 @@
         #endregion
 
         private Panel panel1;
-        private Button button4;
+        private Button setActiveButton;
         private Button button3;
         private Button button2;
         private Button button1;
         private Panel panel2;
-        private ListView listView1;
+        private ListView usersListView;
         private ColumnHeader columnHeader1;
-        private Label label1;
+        private Label loggedUserLabel;
     }
 }

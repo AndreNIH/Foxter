@@ -40,9 +40,10 @@
             schedulePostButton.FlatStyle = FlatStyle.Flat;
             schedulePostButton.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
             schedulePostButton.ForeColor = Color.White;
-            schedulePostButton.Location = new Point(0, 398);
+            schedulePostButton.Location = new Point(0, 663);
+            schedulePostButton.Margin = new Padding(4, 5, 4, 5);
             schedulePostButton.Name = "schedulePostButton";
-            schedulePostButton.Size = new Size(800, 52);
+            schedulePostButton.Size = new Size(1143, 87);
             schedulePostButton.TabIndex = 0;
             schedulePostButton.Text = "Schedule New Post";
             schedulePostButton.UseVisualStyleBackColor = false;
@@ -56,28 +57,31 @@
             storyListContainer.ColumnStyles.Add(new ColumnStyle());
             storyListContainer.Dock = DockStyle.Fill;
             storyListContainer.Location = new Point(0, 0);
+            storyListContainer.Margin = new Padding(4, 5, 4, 5);
             storyListContainer.Name = "storyListContainer";
             storyListContainer.RowCount = 1;
-            storyListContainer.RowStyles.Add(new RowStyle(SizeType.Absolute, 150F));
-            storyListContainer.Size = new Size(800, 366);
+            storyListContainer.RowStyles.Add(new RowStyle());
+            storyListContainer.Size = new Size(1143, 610);
             storyListContainer.TabIndex = 1;
             // 
             // panel1
             // 
             panel1.Dock = DockStyle.Bottom;
-            panel1.Location = new Point(0, 366);
+            panel1.Location = new Point(0, 610);
+            panel1.Margin = new Padding(4, 5, 4, 5);
             panel1.Name = "panel1";
-            panel1.Size = new Size(800, 32);
+            panel1.Size = new Size(1143, 53);
             panel1.TabIndex = 0;
             // 
             // SchedulerScreen
             // 
-            AutoScaleDimensions = new SizeF(7F, 15F);
+            AutoScaleDimensions = new SizeF(10F, 25F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(800, 450);
+            ClientSize = new Size(1143, 750);
             Controls.Add(storyListContainer);
             Controls.Add(panel1);
             Controls.Add(schedulePostButton);
+            Margin = new Padding(4, 5, 4, 5);
             Name = "SchedulerScreen";
             Text = "SchedulerForm";
             ResumeLayout(false);

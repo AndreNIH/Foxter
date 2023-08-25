@@ -22,7 +22,7 @@ namespace AO3SchedulerWin.Forms
             InitializeComponent();
             _model = new LocalStoryModel();
             _tableView = new StoryListViewAdapter(storyListContainer);
-            _controller = new StoryController(_tableView, _model);
+            _controller = new StoryTableController(_tableView, _model);
             _controller.UpdateViews();
 
 
@@ -33,7 +33,7 @@ namespace AO3SchedulerWin.Forms
             for (int i = 0; i < 1; i++)
             {
                 var story = new Story();
-                
+
                 story.AuthorId = 0;
                 story.StoryId = 1;
                 story.Title = "Great Story";

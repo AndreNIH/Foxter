@@ -1,4 +1,5 @@
 using AO3SchedulerWin.Forms;
+using AO3SchedulerWin.GUI.Screens;
 using System.Runtime.InteropServices;
 
 namespace AO3SchedulerWin
@@ -17,7 +18,7 @@ namespace AO3SchedulerWin
         {
             InitializeComponent();
             this.MaximizedBounds = Screen.FromHandle(this.Handle).WorkingArea;
-            SetMainContent(new Forms.SchedulerScreen());
+            SetMainContent(new Forms.HomeScreen());
         }
 
         //Child Form Loading
@@ -34,8 +35,6 @@ namespace AO3SchedulerWin
             childForm.AutoScroll = true;
             childForm.Show();
 
-            var f = new ScheduleStoryForm();
-            f.Show();
         }
 
 
@@ -85,6 +84,27 @@ namespace AO3SchedulerWin
 
         private Form _activeForm;
 
+        //Sidebar Buttons
+        private void homeButton_Click(object sender, EventArgs e)
+        {
+            SetMainContent(new HomeScreen());
+        }
 
+        private void scheduleButton_Click(object sender, EventArgs e)
+        {
+            SetMainContent(new SchedulerScreen());
+        }
+
+        private void accountsButton_Click(object sender, EventArgs e)
+        {
+            SetMainContent(new AuthorsScreen());
+        }
+
+        private void settingsButton_Click(object sender, EventArgs e)
+        {
+
+        }
+
+       
     }
 }

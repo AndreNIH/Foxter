@@ -9,9 +9,9 @@ using System.Threading.Tasks;
 
 namespace AO3SchedulerWin.Controllers.StoryControllers
 {
-    internal class StoryController : IStoryController
+    internal class StoryTableController : IStoryController
     {
-        public StoryController(IStoryView view, IStoryModel model)
+        public StoryTableController(IStoryView view, IStoryModel model)
         {
             _view = view;
             _model = model;
