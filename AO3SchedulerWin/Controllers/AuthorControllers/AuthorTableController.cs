@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using AO3SchedulerWin.Models;
-using AO3SchedulerWin.Views;
+using AO3SchedulerWin.Views.AuthorViews;
 
 namespace AO3SchedulerWin.Controllers.AuthorControllers
 {
@@ -17,13 +17,12 @@ namespace AO3SchedulerWin.Controllers.AuthorControllers
             author.Id = authorId;
             author.Name = name;
             author.Password = password;
-            _model.AddAuthor(author);
-            return true;
+            return _model.AddAuthor(author);
         }
 
         public bool UnregisterAuthor(int authorId)
         {
-            throw new NotImplementedException();
+            return _model.RemoveAuthor(authorId);
         }
 
         public void UpdateViews()
@@ -33,7 +32,12 @@ namespace AO3SchedulerWin.Controllers.AuthorControllers
             _view.ApplyChanges();
         }
 
-        public AuthorTableController(IAuthorView view, IAuthorModel model)
+        public bool SetActiveAuthor(int authorId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public AuthorTableController(IAuthorModel model, IAuthorView view)
         {
             _view = view;
             _model = model;

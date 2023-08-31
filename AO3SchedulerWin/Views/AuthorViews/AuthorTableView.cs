@@ -5,9 +5,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AO3SchedulerWin.Views
+namespace AO3SchedulerWin.Views.AuthorViews
 {
-    internal class AuthorListViewAdapter : IAuthorView
+    internal class AuthorTableView : IAuthorView
     {
         public void ApplyChanges()
         {
@@ -23,7 +23,7 @@ namespace AO3SchedulerWin.Views
             _changesQueue.Add(author);
         }
 
-        public AuthorListViewAdapter(ListView listView)
+        public AuthorTableView(ListView listView)
         {
             _listView = listView;
         }

@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             label4 = new Label();
-            label3 = new Label();
+            authorLabel = new Label();
             label2 = new Label();
             SuspendLayout();
             // 
@@ -44,17 +44,17 @@
             label4.TabIndex = 8;
             label4.Text = "You have: 0 pending story uploads";
             // 
-            // label3
+            // authorLabel
             // 
-            label3.AutoSize = true;
-            label3.Font = new Font("Segoe UI", 27.75F, FontStyle.Regular, GraphicsUnit.Point);
-            label3.ForeColor = Color.FromArgb(153, 0, 0);
-            label3.Location = new Point(427, 15);
-            label3.Margin = new Padding(4, 0, 4, 0);
-            label3.Name = "label3";
-            label3.Size = new Size(142, 74);
-            label3.TabIndex = 7;
-            label3.Text = "User";
+            authorLabel.AutoSize = true;
+            authorLabel.Font = new Font("Segoe UI", 27.75F, FontStyle.Regular, GraphicsUnit.Point);
+            authorLabel.ForeColor = Color.FromArgb(153, 0, 0);
+            authorLabel.Location = new Point(427, 15);
+            authorLabel.Margin = new Padding(4, 0, 4, 0);
+            authorLabel.Name = "authorLabel";
+            authorLabel.Size = new Size(142, 74);
+            authorLabel.TabIndex = 7;
+            authorLabel.Text = "User";
             // 
             // label2
             // 
@@ -73,11 +73,12 @@
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(1143, 750);
             Controls.Add(label4);
-            Controls.Add(label3);
+            Controls.Add(authorLabel);
             Controls.Add(label2);
             Margin = new Padding(4, 5, 4, 5);
             Name = "HomeScreen";
             Text = "HomeScreen";
+            Load += HomeScreen_Load;
             ResumeLayout(false);
             PerformLayout();
         }
@@ -85,7 +86,7 @@
         #endregion
 
         private Label label4;
-        private Label label3;
+        private Label authorLabel;
         private Label label2;
     }
 }

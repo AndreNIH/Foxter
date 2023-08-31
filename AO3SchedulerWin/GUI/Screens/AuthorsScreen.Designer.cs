@@ -34,9 +34,10 @@
             button2 = new Button();
             button1 = new Button();
             panel2 = new Panel();
+            userLabel = new Label();
             usersListView = new ListView();
             columnHeader1 = new ColumnHeader();
-            loggedUserLabel = new Label();
+            loggedAsLabel = new Label();
             panel1.SuspendLayout();
             panel2.SuspendLayout();
             SuspendLayout();
@@ -102,8 +103,9 @@
             // 
             // panel2
             // 
+            panel2.Controls.Add(userLabel);
             panel2.Controls.Add(usersListView);
-            panel2.Controls.Add(loggedUserLabel);
+            panel2.Controls.Add(loggedAsLabel);
             panel2.Dock = DockStyle.Fill;
             panel2.Location = new Point(0, 0);
             panel2.Margin = new Padding(4, 5, 4, 5);
@@ -112,15 +114,25 @@
             panel2.Size = new Size(937, 750);
             panel2.TabIndex = 1;
             // 
+            // userLabel
+            // 
+            userLabel.AutoSize = true;
+            userLabel.Font = new Font("Segoe UI", 15.75F, FontStyle.Regular, GraphicsUnit.Point);
+            userLabel.Location = new Point(230, 17);
+            userLabel.Name = "userLabel";
+            userLabel.Size = new Size(186, 45);
+            userLabel.TabIndex = 2;
+            userLabel.Text = "Placeholder";
+            // 
             // usersListView
             // 
             usersListView.Columns.AddRange(new ColumnHeader[] { columnHeader1 });
             usersListView.Dock = DockStyle.Fill;
             usersListView.FullRowSelect = true;
-            usersListView.Location = new Point(14, 62);
+            usersListView.Location = new Point(14, 72);
             usersListView.Margin = new Padding(4, 5, 4, 5);
             usersListView.Name = "usersListView";
-            usersListView.Size = new Size(909, 671);
+            usersListView.Size = new Size(909, 661);
             usersListView.TabIndex = 0;
             usersListView.UseCompatibleStateImageBehavior = false;
             usersListView.View = View.Details;
@@ -130,17 +142,17 @@
             columnHeader1.Text = "User";
             columnHeader1.Width = 800;
             // 
-            // loggedUserLabel
+            // loggedAsLabel
             // 
-            loggedUserLabel.AutoSize = true;
-            loggedUserLabel.Dock = DockStyle.Top;
-            loggedUserLabel.Font = new Font("Segoe UI", 15.75F, FontStyle.Regular, GraphicsUnit.Point);
-            loggedUserLabel.Location = new Point(14, 17);
-            loggedUserLabel.Margin = new Padding(4, 0, 4, 0);
-            loggedUserLabel.Name = "loggedUserLabel";
-            loggedUserLabel.Size = new Size(282, 45);
-            loggedUserLabel.TabIndex = 1;
-            loggedUserLabel.Text = "Logged in as: User";
+            loggedAsLabel.AutoSize = true;
+            loggedAsLabel.Dock = DockStyle.Top;
+            loggedAsLabel.Font = new Font("Segoe UI", 15.75F, FontStyle.Regular, GraphicsUnit.Point);
+            loggedAsLabel.Location = new Point(14, 17);
+            loggedAsLabel.Name = "loggedAsLabel";
+            loggedAsLabel.Padding = new Padding(0, 0, 0, 10);
+            loggedAsLabel.Size = new Size(209, 55);
+            loggedAsLabel.TabIndex = 1;
+            loggedAsLabel.Text = "Logged in as:";
             // 
             // AuthorsScreen
             // 
@@ -169,6 +181,7 @@
         private Panel panel2;
         private ListView usersListView;
         private ColumnHeader columnHeader1;
-        private Label loggedUserLabel;
+        private Label loggedAsLabel;
+        private Label userLabel;
     }
 }

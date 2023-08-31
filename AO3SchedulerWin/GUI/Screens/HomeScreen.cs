@@ -1,4 +1,7 @@
-﻿using System;
+﻿using AO3SchedulerWin.Controllers.AuthorControllers;
+using AO3SchedulerWin.Models.AuthorModels;
+using AO3SchedulerWin.Views.AuthorViews;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -15,6 +18,15 @@ namespace AO3SchedulerWin.Forms
         public HomeScreen()
         {
             InitializeComponent();
+            var model = new AuthorTestModel();
+            _authorController = new LoggedAuthorController(model, new AuthorNameView(authorLabel));
         }
+
+        private void HomeScreen_Load(object sender, EventArgs e)
+        {
+            _authorController.UpdateViews();
+        }
+
+        private IAuthorController _authorController;
     }
 }

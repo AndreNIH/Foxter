@@ -24,9 +24,11 @@ namespace AO3SchedulerWin.Models.AuthorModels
             return _authors.Find(e => e.Id == id);
         }
 
-        public bool RemoveAuthor(Author author)
+        public bool RemoveAuthor(int authorId)
         {
-            throw new NotImplementedException();   
+            var elem = _authors.Find(e => e.Id == authorId);
+            _authors.Remove(elem);
+            return true;
         }
 
         public bool UpdateAuthor(int id, Author author)
@@ -45,8 +47,10 @@ namespace AO3SchedulerWin.Models.AuthorModels
             return true;
         }
 
-        private List<Author> _authors = new List<Author>();
-        private int _activeAuthorId=-1;
+
+     
+        private static List<Author> _authors = new List<Author>();
+        private static int _activeAuthorId=-1;
         
     }
 }

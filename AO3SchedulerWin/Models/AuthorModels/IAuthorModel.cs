@@ -10,7 +10,7 @@ namespace AO3SchedulerWin.Models.AuthorModels
     {
         bool AddAuthor(Author author);
         bool UpdateAuthor(int id, Author author);
-        bool RemoveAuthor(Author author);
+        bool RemoveAuthor(int authorId);
         Author? GetAuthorById(int id);
         List<Author> GetAllAuthors();
         Author? GetActiveAuthor();
