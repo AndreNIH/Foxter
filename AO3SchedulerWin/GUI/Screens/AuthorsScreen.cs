@@ -44,11 +44,7 @@ namespace AO3SchedulerWin.GUI.Screens
 
         private void AuthorsScreen_Load(object sender, EventArgs e)
         {
-            _tableController.RegisterAuthor(99, "Andre1", "123");
-            _tableController.RegisterAuthor(1, "Andre2", "123");
-            _tableController.RegisterAuthor(2, "Andre3", "123");
-            _tableController.RegisterAuthor(3, "Andre4", "123");
-            _tableController.RegisterAuthor(4, "Andre5", "123");
+            
             AuthorCoordinator.Get.NotifyAll();
 
 
