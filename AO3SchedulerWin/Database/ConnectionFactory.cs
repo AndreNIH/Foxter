@@ -9,14 +9,14 @@ using System.Threading.Tasks;
 using System.Data;
 using System.Data.SqlClient;
 
-namespace AO3SchedulerWin
+namespace AO3SchedulerWin.Database
 {
     internal class ConnectionFactory
     {
         private static readonly string _databaseFile = "database.sqlite";
         private static bool _dbInitialized = false;
 
-        private static String GetDabasePath()
+        private static string GetDabasePath()
         {
             string localAppDataPath = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
             string path = Path.Combine(localAppDataPath, "AO3S", "database/");
@@ -25,7 +25,7 @@ namespace AO3SchedulerWin
 
         private static SQLiteConnection GetConnectionNoInit()
         {
-            return new SQLiteConnection($"Data Source={GetDabasePath() + _databaseFile};Version=3;"); 
+            return new SQLiteConnection($"Data Source={GetDabasePath() + _databaseFile};Version=3;");
         }
 
         private static void CreateTables()
@@ -38,7 +38,7 @@ namespace AO3SchedulerWin
             }
         }
 
-        
+
         private static void CreatePhysicalDatabase()
         {
             Directory.CreateDirectory(GetDabasePath());
@@ -52,19 +52,20 @@ namespace AO3SchedulerWin
         {
             try
             {
-                if(_dbInitialized == false)
+                if (_dbInitialized == false)
                 {
                     CreatePhysicalDatabase();
                     CreateTables(); //Maybe check if the db is valid before attempting running the script?
                     _dbInitialized = true;
                 }
                 return GetConnectionNoInit();
-            }catch(Exception ex)
+            }
+            catch (Exception ex)
             {
                 //TODO: Log something
                 throw ex;
             }
-            
+
         }
     }
 }
