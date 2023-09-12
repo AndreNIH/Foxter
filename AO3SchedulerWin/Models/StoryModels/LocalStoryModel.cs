@@ -10,7 +10,7 @@ namespace AO3SchedulerWin.Models.StoryModels
 {
     internal class LocalStoryModel : IStoryModel
     {
-
+        private static readonly log4net.ILog logger = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
         public bool InsertStory(Story story)
         {
             try
@@ -38,8 +38,8 @@ namespace AO3SchedulerWin.Models.StoryModels
                     return true;
                 }
             }
-            catch(SQLiteException ex) { 
-                
+            catch(SQLiteException ex) {
+                logger.Error(ex.Message);
             }
 
             return false;
