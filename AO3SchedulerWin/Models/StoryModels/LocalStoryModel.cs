@@ -13,26 +13,33 @@ namespace AO3SchedulerWin.Models.StoryModels
 
         public bool InsertStory(Story story)
         {
-            using (var connection = ConnectionFactory.GetConnection())
+            try
             {
-                connection.Open();
-                var command = new SQLiteCommand("insert into `STORY_UPDATES` " +
-                                            "(authorId, storyId, title, chapterTitle, publishingDate, chapterSummary, chapterNotes, notesAtTheStart, notesAtTheEnd, storyContent) " +
-                                            "values (@authorId, @storyId, @title, @chapterTitle, @publishingDate, @chapterSummary, @chapterNotes, @notesAtTheStart, @notesAtTheEnd, @storyContent)",
-                                            connection);
-                command.Parameters.AddWithValue("@authorId", story.AuthorId);
-                command.Parameters.AddWithValue("@storyId", story.StoryId);
-                command.Parameters.AddWithValue("@title", story.Title);
-                command.Parameters.AddWithValue("@chapterTitle", story.ChapterTitle);
-                command.Parameters.AddWithValue("@publishingDate", story.PublishingDate.ToString("yyyy-MM-dd HH:mm:ss"));
-                command.Parameters.AddWithValue("@chapterSummary", story.ChapterSummary);
-                command.Parameters.AddWithValue("@chapterNotes", story.ChapterNotes);
-                command.Parameters.AddWithValue("@notesAtTheStart", false);
-                command.Parameters.AddWithValue("@notesAtTheEnd", false);
-                command.Parameters.AddWithValue("@storyContent", story.Contents);
+                using (var connection = ConnectionFactory.GetConnection())
+                {
+                    connection.Open();
+                    var command = new SQLiteCommand("insert into `STORY_UPDATES` " +
+                                                "(authorId, storyId, title, chapterTitle, publishingDate, chapterSummary, chapterNotes, notesAtTheStart, notesAtTheEnd, storyContent) " +
+                                                "values (@authorId, @storyId, @title, @chapterTitle, @publishingDate, @chapterSummary, @chapterNotes, @notesAtTheStart, @notesAtTheEnd, @storyContent)",
+                                                connection);
+                    command.Parameters.AddWithValue("@authorId", story.AuthorId);
+                    command.Parameters.AddWithValue("@storyId", story.StoryId);
+                    command.Parameters.AddWithValue("@title", story.Title);
+                    command.Parameters.AddWithValue("@chapterTitle", story.ChapterTitle);
+                    command.Parameters.AddWithValue("@publishingDate", story.PublishingDate.ToString("yyyy-MM-dd HH:mm:ss"));
+                    command.Parameters.AddWithValue("@chapterSummary", story.ChapterSummary);
+                    command.Parameters.AddWithValue("@chapterNotes", story.ChapterNotes);
+                    command.Parameters.AddWithValue("@notesAtTheStart", false);
+                    command.Parameters.AddWithValue("@notesAtTheEnd", false);
+                    command.Parameters.AddWithValue("@storyContent", story.Contents);
 
-                command.Prepare();
-                return command.ExecuteNonQuery() == 1;
+                    command.Prepare();
+                    command.ExecuteNonQuery();
+                    return true;
+                }
+            }
+            catch(SQLiteException ex) { 
+                
             }
 
             return false;
