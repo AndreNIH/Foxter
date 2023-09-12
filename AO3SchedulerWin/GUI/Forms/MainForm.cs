@@ -15,7 +15,7 @@ namespace AO3SchedulerWin
         private extern static void SendMessage(System.IntPtr hwndm, int msg, int wParam, int lParam);
         //End of external DLL imports
         
-        private IAuthorModel _authorModel = new AuthorTestModel();
+        private IAuthorModel _authorModel = new AuthorLocalModel();
         public MainForm()
         {
             InitializeComponent();

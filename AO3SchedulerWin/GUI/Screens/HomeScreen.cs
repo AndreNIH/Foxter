@@ -18,7 +18,7 @@ namespace AO3SchedulerWin.Forms
         public HomeScreen()
         {
             InitializeComponent();
-            var model = new AuthorTestModel();
+            var model = new AuthorLocalModel();
             _authorController = new LoggedAuthorController(model, new AuthorNameView(authorLabel));
         }
 
