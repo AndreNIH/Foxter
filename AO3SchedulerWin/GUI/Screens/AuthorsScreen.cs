@@ -1,4 +1,5 @@
 ﻿using AO3SchedulerWin.Controllers.AuthorControllers;
+using AO3SchedulerWin.GUI.Forms;
 using AO3SchedulerWin.Models.AuthorModels;
 using AO3SchedulerWin.Views.AuthorViews;
 using System;
@@ -17,7 +18,7 @@ namespace AO3SchedulerWin.GUI.Screens
     {
         private IAuthorController _tableController;
         private IAuthorController _loggedAuthorController;
-        private IAuthorModel _model = new AuthorTestModel();
+        private IAuthorModel _model = new AuthorLocalModel();
 
         public AuthorsScreen()
         {
@@ -42,14 +43,34 @@ namespace AO3SchedulerWin.GUI.Screens
             AuthorCoordinator.Get.ReleaseCoordinatedObject(_tableController);
         }
 
+        //Methods
+        async Task TryLogin()
+        {
+            var httpClient = new HttpClient
+            {
+                BaseAddress = new Uri("https://archiveofourown.org")
+            };
+
+            Dictionary<string, string> loginParams = new Dictionary<string, string>();
+            loginParams.Add("user[login]", "");
+            loginParams.Add("user[password]", "");
+            using HttpResponseMessage loginResponse = await httpClient.PostAsync("users/login/", new FormUrlEncodedContent(null));
+        }
+
+
+
+
+        //Form Events
         private void AuthorsScreen_Load(object sender, EventArgs e)
         {
-            
+
             AuthorCoordinator.Get.NotifyAll();
 
 
         }
 
+
+        //UI Elements
         private void setActiveButton_Click(object sender, EventArgs e)
         {
             var item = usersListView.SelectedItems[0];
@@ -63,6 +84,13 @@ namespace AO3SchedulerWin.GUI.Screens
             }
             //_tableController.SetActiveAuthor(0);
 
+        }
+
+        private void addAccountButton_Click(object sender, EventArgs e)
+        {
+            var form = new Ao3LoginForm();
+            form.StartPosition = FormStartPosition.CenterScreen;
+            form.Show();
         }
     }
 }

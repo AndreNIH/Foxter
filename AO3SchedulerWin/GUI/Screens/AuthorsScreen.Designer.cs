@@ -32,7 +32,7 @@
             setActiveButton = new Button();
             button3 = new Button();
             button2 = new Button();
-            button1 = new Button();
+            addAccountButton = new Button();
             panel2 = new Panel();
             userLabel = new Label();
             usersListView = new ListView();
@@ -48,7 +48,7 @@
             panel1.Controls.Add(setActiveButton);
             panel1.Controls.Add(button3);
             panel1.Controls.Add(button2);
-            panel1.Controls.Add(button1);
+            panel1.Controls.Add(addAccountButton);
             panel1.Dock = DockStyle.Right;
             panel1.Location = new Point(656, 0);
             panel1.Name = "panel1";
@@ -86,15 +86,16 @@
             button2.Text = "Remove account";
             button2.UseVisualStyleBackColor = true;
             // 
-            // button1
+            // addAccountButton
             // 
-            button1.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-            button1.Location = new Point(13, 12);
-            button1.Name = "button1";
-            button1.Size = new Size(119, 49);
-            button1.TabIndex = 0;
-            button1.Text = "Add account";
-            button1.UseVisualStyleBackColor = true;
+            addAccountButton.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            addAccountButton.Location = new Point(13, 12);
+            addAccountButton.Name = "addAccountButton";
+            addAccountButton.Size = new Size(119, 49);
+            addAccountButton.TabIndex = 0;
+            addAccountButton.Text = "Add account";
+            addAccountButton.UseVisualStyleBackColor = true;
+            addAccountButton.Click += addAccountButton_Click;
             // 
             // panel2
             // 
@@ -171,7 +172,7 @@
         private Button setActiveButton;
         private Button button3;
         private Button button2;
-        private Button button1;
+        private Button addAccountButton;
         private Panel panel2;
         private ListView usersListView;
         private ColumnHeader columnHeader1;
