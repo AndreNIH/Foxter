@@ -1,5 +1,6 @@
 using AO3SchedulerWin.Forms;
 using AO3SchedulerWin.GUI.Screens;
+using AO3SchedulerWin.Models.AuthorModels;
 using System.Runtime.InteropServices;
 
 namespace AO3SchedulerWin
@@ -13,12 +14,16 @@ namespace AO3SchedulerWin
         [DllImport("user32.dll", EntryPoint = "SendMessage")]
         private extern static void SendMessage(System.IntPtr hwndm, int msg, int wParam, int lParam);
         //End of external DLL imports
-
+        
+        private IAuthorModel _authorModel = new AuthorTestModel();
         public MainForm()
         {
             InitializeComponent();
             this.MaximizedBounds = Screen.FromHandle(this.Handle).WorkingArea;
-            SetMainContent(new Forms.HomeScreen());
+            Form nextScreen = _authorModel.GetActiveAuthor() == null
+                ? new NoActiveUserScreen()
+                : new HomeScreen();
+            SetMainContent(nextScreen);
         }
 
         //Child Form Loading
@@ -87,12 +92,19 @@ namespace AO3SchedulerWin
         //Sidebar Buttons
         private void homeButton_Click(object sender, EventArgs e)
         {
-            SetMainContent(new HomeScreen());
+
+            Form nextScreen = _authorModel.GetActiveAuthor() == null
+                ? new NoActiveUserScreen()
+                : new HomeScreen();
+            SetMainContent(nextScreen);
         }
 
         private void scheduleButton_Click(object sender, EventArgs e)
         {
-            SetMainContent(new SchedulerScreen());
+            Form nextScreen = _authorModel.GetActiveAuthor() == null
+                ? new NoActiveUserScreen()
+                : new SchedulerScreen();
+            SetMainContent(nextScreen);
         }
 
         private void accountsButton_Click(object sender, EventArgs e)
