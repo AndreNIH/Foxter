@@ -31,7 +31,7 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Ao3LoginForm));
             textBox1 = new TextBox();
             textBox2 = new TextBox();
-            button1 = new Button();
+            loginButton = new Button();
             pictureBox1 = new PictureBox();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
             SuspendLayout();
@@ -39,56 +39,62 @@
             // textBox1
             // 
             textBox1.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
-            textBox1.Location = new Point(12, 207);
+            textBox1.Location = new Point(17, 345);
+            textBox1.Margin = new Padding(4, 5, 4, 5);
             textBox1.Name = "textBox1";
             textBox1.PlaceholderText = "Email / Username";
-            textBox1.Size = new Size(347, 23);
+            textBox1.Size = new Size(494, 31);
             textBox1.TabIndex = 0;
             // 
             // textBox2
             // 
             textBox2.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
-            textBox2.Location = new Point(12, 236);
+            textBox2.Location = new Point(17, 393);
+            textBox2.Margin = new Padding(4, 5, 4, 5);
             textBox2.Name = "textBox2";
             textBox2.PlaceholderText = "Password";
-            textBox2.Size = new Size(347, 23);
+            textBox2.Size = new Size(494, 31);
             textBox2.TabIndex = 1;
             textBox2.UseSystemPasswordChar = true;
             // 
-            // button1
+            // loginButton
             // 
-            button1.Anchor = AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
-            button1.BackColor = Color.FromArgb(153, 0, 0);
-            button1.FlatAppearance.BorderSize = 0;
-            button1.ForeColor = Color.White;
-            button1.Location = new Point(12, 406);
-            button1.Name = "button1";
-            button1.Size = new Size(347, 53);
-            button1.TabIndex = 2;
-            button1.Text = "Log In";
-            button1.UseVisualStyleBackColor = false;
+            loginButton.Anchor = AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            loginButton.BackColor = Color.FromArgb(153, 0, 0);
+            loginButton.FlatAppearance.BorderSize = 0;
+            loginButton.ForeColor = Color.White;
+            loginButton.Location = new Point(17, 677);
+            loginButton.Margin = new Padding(4, 5, 4, 5);
+            loginButton.Name = "loginButton";
+            loginButton.Size = new Size(496, 88);
+            loginButton.TabIndex = 2;
+            loginButton.Text = "Log In";
+            loginButton.UseVisualStyleBackColor = false;
+            loginButton.Click += loginButton_Click;
             // 
             // pictureBox1
             // 
             pictureBox1.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             pictureBox1.Image = (Image)resources.GetObject("pictureBox1.Image");
-            pictureBox1.Location = new Point(12, 114);
+            pictureBox1.Location = new Point(17, 190);
+            pictureBox1.Margin = new Padding(4, 5, 4, 5);
             pictureBox1.Name = "pictureBox1";
-            pictureBox1.Size = new Size(347, 72);
+            pictureBox1.Size = new Size(496, 120);
             pictureBox1.SizeMode = PictureBoxSizeMode.CenterImage;
             pictureBox1.TabIndex = 3;
             pictureBox1.TabStop = false;
             // 
             // Ao3LoginForm
             // 
-            AutoScaleDimensions = new SizeF(7F, 15F);
+            AutoScaleDimensions = new SizeF(10F, 25F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(371, 471);
+            ClientSize = new Size(530, 785);
             Controls.Add(pictureBox1);
-            Controls.Add(button1);
+            Controls.Add(loginButton);
             Controls.Add(textBox2);
             Controls.Add(textBox1);
             FormBorderStyle = FormBorderStyle.FixedSingle;
+            Margin = new Padding(4, 5, 4, 5);
             MaximizeBox = false;
             Name = "Ao3LoginForm";
             Text = "Login";
@@ -101,7 +107,7 @@
 
         private TextBox textBox1;
         private TextBox textBox2;
-        private Button button1;
+        private Button loginButton;
         private PictureBox pictureBox1;
     }
 }
