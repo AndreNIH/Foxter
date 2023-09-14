@@ -37,8 +37,8 @@
             topBarDetailPanel = new Panel();
             tableLayoutPanel1 = new TableLayoutPanel();
             panel2 = new Panel();
-            accountsButton = new Button();
             settingsButton = new Button();
+            accountsButton = new Button();
             scheduleButton = new Button();
             homeButton = new Button();
             sideBarDetailPanel = new Panel();
@@ -166,22 +166,6 @@
             panel2.Size = new Size(243, 367);
             panel2.TabIndex = 4;
             // 
-            // accountsButton
-            // 
-            accountsButton.BackColor = Color.FromArgb(60, 60, 60);
-            accountsButton.Dock = DockStyle.Top;
-            accountsButton.FlatAppearance.BorderSize = 0;
-            accountsButton.FlatStyle = FlatStyle.Flat;
-            accountsButton.ForeColor = SystemColors.ControlLightLight;
-            accountsButton.Location = new Point(0, 184);
-            accountsButton.Margin = new Padding(4, 5, 4, 5);
-            accountsButton.Name = "accountsButton";
-            accountsButton.Size = new Size(243, 92);
-            accountsButton.TabIndex = 3;
-            accountsButton.Text = "Accounts";
-            accountsButton.UseVisualStyleBackColor = false;
-            accountsButton.Click += accountsButton_Click;
-            // 
             // settingsButton
             // 
             settingsButton.BackColor = Color.FromArgb(60, 60, 60);
@@ -197,6 +181,22 @@
             settingsButton.Text = "Settings";
             settingsButton.UseVisualStyleBackColor = false;
             settingsButton.Click += settingsButton_Click;
+            // 
+            // accountsButton
+            // 
+            accountsButton.BackColor = Color.FromArgb(60, 60, 60);
+            accountsButton.Dock = DockStyle.Top;
+            accountsButton.FlatAppearance.BorderSize = 0;
+            accountsButton.FlatStyle = FlatStyle.Flat;
+            accountsButton.ForeColor = SystemColors.ControlLightLight;
+            accountsButton.Location = new Point(0, 184);
+            accountsButton.Margin = new Padding(4, 5, 4, 5);
+            accountsButton.Name = "accountsButton";
+            accountsButton.Size = new Size(243, 92);
+            accountsButton.TabIndex = 3;
+            accountsButton.Text = "Accounts";
+            accountsButton.UseVisualStyleBackColor = false;
+            accountsButton.Click += accountsButton_Click;
             // 
             // scheduleButton
             // 
@@ -277,6 +277,7 @@
             MinimumSize = new Size(1520, 983);
             Name = "MainForm";
             Text = "Form1";
+            WindowState = FormWindowState.Maximized;
             topBarPanel.ResumeLayout(false);
             topBarPanel.PerformLayout();
             tableLayoutPanel1.ResumeLayout(false);

@@ -14,7 +14,7 @@ namespace AO3SchedulerWin
         [DllImport("user32.dll", EntryPoint = "SendMessage")]
         private extern static void SendMessage(System.IntPtr hwndm, int msg, int wParam, int lParam);
         //End of external DLL imports
-        
+
         private IAuthorModel _authorModel = new AuthorLocalModel();
         public MainForm()
         {
@@ -117,6 +117,6 @@ namespace AO3SchedulerWin
 
         }
 
-       
+
     }
 }
