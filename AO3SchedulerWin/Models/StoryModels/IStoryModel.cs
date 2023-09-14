@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace AO3SchedulerWin.Models.StoryModels
 {
-    internal interface IStoryModel
+    public interface IStoryModel
     {
         public bool InsertStory(Story story);
         public bool UpdateStory(int id, Story newStory);

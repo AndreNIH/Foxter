@@ -88,7 +88,7 @@ namespace AO3SchedulerWin.GUI.Screens
 
         private void addAccountButton_Click(object sender, EventArgs e)
         {
-            var form = new Ao3LoginForm();
+            var form = new Ao3LoginForm(_model);
             form.StartPosition = FormStartPosition.CenterScreen;
             form.ShowDialog();
         }

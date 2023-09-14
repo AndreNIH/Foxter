@@ -8,11 +8,11 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Net.Http;
 using HtmlAgilityPack;
+using AO3SchedulerWin.Models;
+using System.Text.RegularExpressions;
 
 namespace AO3SchedulerWin
 {
-    
-    class Ao3LoginException : Exception{}
     
     internal class Ao3Session
     {
@@ -22,7 +22,7 @@ namespace AO3SchedulerWin
         private string _password;
         private bool Authenticated = false;
 
-        private async Task<bool> TryLogin()
+        private async Task<bool> TryLogin(string user, string password)
         {
 
             //It is important to clear all the cookies, otherwise
@@ -40,8 +40,7 @@ namespace AO3SchedulerWin
                 string csrfToken = csrfNode.GetAttributeValue("content", "");
                 if (string.IsNullOrEmpty(csrfToken))
                 {
-                    MessageBox.Show("csrf token was empty", "CSRF token error");
-                    return false;
+                    throw new Ao3GenericException("Missing authenticity token."); ;
                 }
 
                 var loginFormData = new Dictionary<string, string>
@@ -60,6 +59,20 @@ namespace AO3SchedulerWin
                 );
 
                 this.Authenticated = loginFormReq.StatusCode == System.Net.HttpStatusCode.Redirect;
+                if (this.Authenticated)
+                {
+                    string pattern = @"<a href=""https://archiveofourown\.org/users/(?<Username>[^""]+)""";
+                    Match userMatch = Regex.Match(await loginFormReq.Content.ReadAsStringAsync(), pattern);
+                    if (userMatch.Success)
+                    {
+                        _username = userMatch.Groups["username"].Value;
+                        _password = password;
+                    }
+                    else
+                    {
+                        throw new Ao3GenericException("Could not extract username");
+                    }
+                }
                 return this.Authenticated;
             }
 
@@ -71,8 +84,8 @@ namespace AO3SchedulerWin
 
         public static async Task<Ao3Session?> CreateSession(string username, string password)
         {
-            var session = new Ao3Session(username, password);
-            return await session.TryLogin()
+            var session = new Ao3Session();
+            return await session.TryLogin(username, password)
                 ? session
                 : null;
         }
@@ -91,8 +104,7 @@ namespace AO3SchedulerWin
                 string tempWorkId = work.GetAttributeValue("href",null); 
                 if(tempWorkId == null)
                 {
-                    //log the error
-                    return null;
+                    throw new Ao3GenericException("Missing authenticity token."); ;
                 }
                 int workId = Int32.Parse(tempWorkId.Substring(6));
                 string workTitle = work.InnerHtml;
@@ -101,10 +113,19 @@ namespace AO3SchedulerWin
             return storiesList;
         }
 
-        public Ao3Session(string username, string password)
+        public async Task<Author> GetAuthor()
         {
-            _username = username;
-            _password = password;
+            HttpResponseMessage profileBody = await _httpClient.GetAsync($"users/{_username}/profile");
+            var htmlDoc = new HtmlAgilityPack.HtmlDocument();
+            htmlDoc.LoadHtml(await profileBody.Content.ReadAsStringAsync());
+            htmlDoc.DocumentNode.SelectSingleNode("//");
+            
+
+            return null;
+        }
+
+        public Ao3Session()
+        {
             _cookieContainer = new CookieContainer();
             var clientHandler = new HttpClientHandler()
             {
