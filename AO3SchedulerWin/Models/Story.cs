@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace AO3SchedulerWin.Models
 {
-    internal class Story
+    public class Story
     {
         public int Id { get; set; }
         public int AuthorId { get; set; }

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace AO3SchedulerWin.Models.AuthorModels
 {
-    internal interface IAuthorModel
+    public interface IAuthorModel
     {
         bool AddAuthor(Author author);
         bool UpdateAuthor(int id, Author author);

@@ -9,15 +9,19 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using HtmlAgilityPack;
+using AO3SchedulerWin.Models.AuthorModels;
+using AO3SchedulerWin.Models;
 
 namespace AO3SchedulerWin.GUI.Forms
 {
     public partial class Ao3LoginForm : Form
     {
         private static readonly log4net.ILog logger = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
-        public Ao3LoginForm()
+        private IAuthorModel _authorModel;
+        public Ao3LoginForm(IAuthorModel authorModel)
         {
             InitializeComponent();
+            _authorModel = authorModel;
         }
 
 
@@ -29,6 +33,7 @@ namespace AO3SchedulerWin.GUI.Forms
             {
                 loginButton.Enabled = false;
                 Ao3Session? session = await Ao3Session.CreateSession(userTextBox.Text, passwordTextbox.Text);
+                loginButton.Enabled = true;
                 if (session == null)
                 {
                     MessageBox.Show(
@@ -37,7 +42,13 @@ namespace AO3SchedulerWin.GUI.Forms
                         MessageBoxButtons.OK,
                         MessageBoxIcon.Error);
                 }
-                loginButton.Enabled = true;
+
+                Author author = new Author();
+                author.Name = userTextBox.Text;
+                author.Password = passwordTextbox.Text;
+                _authorModel.AddAuthor(author);
+                this.Close();
+               
             }
             catch (HttpRequestException ex)
             {

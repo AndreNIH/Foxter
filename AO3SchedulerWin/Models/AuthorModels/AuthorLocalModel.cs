@@ -21,8 +21,8 @@ namespace AO3SchedulerWin.Models.AuthorModels
                 {
                     connection.Open();
                     var command = new SQLiteCommand("insert into `AUTHORS` (id, username, password) " +
-                                                    "values (@id, @username, @password)"
-                                                    );
+                                                    "values (@id, @username, @password)",
+                                                    connection);
                     command.Parameters.AddWithValue("@id", author.Id);
                     command.Parameters.AddWithValue("@username", author.Name);
                     command.Parameters.AddWithValue("@password", author.Password);
@@ -105,7 +105,23 @@ namespace AO3SchedulerWin.Models.AuthorModels
 
         public bool RemoveAuthor(int authorId)
         {
-            throw new NotImplementedException();
+            try
+            {
+                using (var connection = ConnectionFactory.GetConnection())
+                {
+                    connection.Open();
+                    var command = new SQLiteCommand($"delete from `AUTHORS` where id={authorId}", connection);
+                    command.ExecuteNonQuery();
+                    
+                    return true;
+                }
+
+            }
+            catch (SQLiteException ex)
+            {
+                logger.Error(ex.Message);
+            }
+            return false;
         }
 
         public bool SetActiveUser(int id)
