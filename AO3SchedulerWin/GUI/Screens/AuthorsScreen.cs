@@ -90,7 +90,7 @@ namespace AO3SchedulerWin.GUI.Screens
         {
             var form = new Ao3LoginForm();
             form.StartPosition = FormStartPosition.CenterScreen;
-            form.Show();
+            form.ShowDialog();
         }
     }
 }
