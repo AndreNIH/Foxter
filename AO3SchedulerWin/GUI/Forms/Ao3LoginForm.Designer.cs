@@ -70,6 +70,7 @@
             loginButton.TabIndex = 2;
             loginButton.Text = "Log In";
             loginButton.UseVisualStyleBackColor = false;
+            loginButton.EnabledChanged += loginButton_EnabledChanged;
             loginButton.Click += loginButton_Click;
             // 
             // pictureBox1

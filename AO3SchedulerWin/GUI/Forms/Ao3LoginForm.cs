@@ -20,7 +20,7 @@ namespace AO3SchedulerWin.GUI.Forms
             InitializeComponent();
         }
 
-        
+
 
 
         private async void loginButton_Click(object sender, EventArgs e)
@@ -29,21 +29,28 @@ namespace AO3SchedulerWin.GUI.Forms
             {
                 loginButton.Enabled = false;
                 Ao3Session? session = await Ao3Session.CreateSession(userTextBox.Text, passwordTextbox.Text);
-                if(session == null)
+                if (session == null)
                 {
                     MessageBox.Show(
-                        "Invalid username/password", 
-                        "Login Error", 
-                        MessageBoxButtons.OK, 
+                        "Invalid username/password",
+                        "Login Error",
+                        MessageBoxButtons.OK,
                         MessageBoxIcon.Error);
                 }
                 loginButton.Enabled = true;
             }
-            catch (HttpRequestException ex) 
-            { 
-            
+            catch (HttpRequestException ex)
+            {
+
             }
-            
+
+        }
+
+        private void loginButton_EnabledChanged(object sender, EventArgs e)
+        {
+            Button button = (Button)sender;
+            if (!button.Enabled) loginButton.BackColor = Color.Gray;
+            else loginButton.BackColor = Color.FromArgb(153, 0, 0); 
         }
     }
 }
