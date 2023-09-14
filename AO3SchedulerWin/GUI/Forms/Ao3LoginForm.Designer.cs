@@ -29,33 +29,33 @@
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Ao3LoginForm));
-            textBox1 = new TextBox();
-            textBox2 = new TextBox();
+            userTextBox = new TextBox();
+            passwordTextbox = new TextBox();
             loginButton = new Button();
             pictureBox1 = new PictureBox();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
             SuspendLayout();
             // 
-            // textBox1
+            // userTextBox
             // 
-            textBox1.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
-            textBox1.Location = new Point(17, 345);
-            textBox1.Margin = new Padding(4, 5, 4, 5);
-            textBox1.Name = "textBox1";
-            textBox1.PlaceholderText = "Email / Username";
-            textBox1.Size = new Size(494, 31);
-            textBox1.TabIndex = 0;
+            userTextBox.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            userTextBox.Location = new Point(17, 345);
+            userTextBox.Margin = new Padding(4, 5, 4, 5);
+            userTextBox.Name = "userTextBox";
+            userTextBox.PlaceholderText = "Email / Username";
+            userTextBox.Size = new Size(494, 31);
+            userTextBox.TabIndex = 0;
             // 
-            // textBox2
+            // passwordTextbox
             // 
-            textBox2.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
-            textBox2.Location = new Point(17, 393);
-            textBox2.Margin = new Padding(4, 5, 4, 5);
-            textBox2.Name = "textBox2";
-            textBox2.PlaceholderText = "Password";
-            textBox2.Size = new Size(494, 31);
-            textBox2.TabIndex = 1;
-            textBox2.UseSystemPasswordChar = true;
+            passwordTextbox.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            passwordTextbox.Location = new Point(17, 393);
+            passwordTextbox.Margin = new Padding(4, 5, 4, 5);
+            passwordTextbox.Name = "passwordTextbox";
+            passwordTextbox.PlaceholderText = "Password";
+            passwordTextbox.Size = new Size(494, 31);
+            passwordTextbox.TabIndex = 1;
+            passwordTextbox.UseSystemPasswordChar = true;
             // 
             // loginButton
             // 
@@ -91,8 +91,8 @@
             ClientSize = new Size(530, 785);
             Controls.Add(pictureBox1);
             Controls.Add(loginButton);
-            Controls.Add(textBox2);
-            Controls.Add(textBox1);
+            Controls.Add(passwordTextbox);
+            Controls.Add(userTextBox);
             FormBorderStyle = FormBorderStyle.FixedSingle;
             Margin = new Padding(4, 5, 4, 5);
             MaximizeBox = false;
@@ -105,8 +105,8 @@
 
         #endregion
 
-        private TextBox textBox1;
-        private TextBox textBox2;
+        private TextBox userTextBox;
+        private TextBox passwordTextbox;
         private Button loginButton;
         private PictureBox pictureBox1;
     }

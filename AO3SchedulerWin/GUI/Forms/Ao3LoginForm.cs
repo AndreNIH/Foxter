@@ -20,59 +20,30 @@ namespace AO3SchedulerWin.GUI.Forms
             InitializeComponent();
         }
 
-        public async Task<bool> TryLogin()
-        {
-
-            //It is important to clear all the cookies, otherwise
-            //AO3 will try to redirect us to the dashboard.
-            Ao3HttpClient.Instance.ClearAllCookies();
-            
-            var loginPageReq = await Ao3HttpClient.Instance.Client.GetAsync("users/login/");
-            var htmlDoc = new HtmlAgilityPack.HtmlDocument();
-            htmlDoc.LoadHtml(await loginPageReq.Content.ReadAsStringAsync());
-
-            var csrfNode = htmlDoc.DocumentNode.SelectSingleNode("//meta[@name='csrf-token']");
-            if (csrfNode != null)
-            {
-                string csrfToken = csrfNode.GetAttributeValue("content", "");
-                if (string.IsNullOrEmpty(csrfToken))
-                {
-                    logger.Error("csrf token was empty");
-                    MessageBox.Show("csrf token was empty");
-                    return false;
-                }
-
-                var loginFormData = new Dictionary<string, string>
-                {
-                    { "authenticity_token", csrfToken },
-                    { "user[login]", "drewitwrites@proton.me" },
-                    { "user[password]", "p6A9jDvLEE4Uog" },
-                    { "user[remember_me]", "1" },
-                    { "commit", "Log in" }
-                };
+        
 
 
-                var loginFormReq = await Ao3HttpClient.Instance.Client.PostAsync(
-                    "users/login/", 
-                    new FormUrlEncodedContent(loginFormData)
-                );
-
-                return loginFormReq.StatusCode == System.Net.HttpStatusCode.Redirect;
-                
-                
-            }
-
-            return false;
-
-
-        }
-
-     
         private async void loginButton_Click(object sender, EventArgs e)
         {
-            loginButton.Enabled = false;
-            await TryLogin();
-            loginButton.Enabled = true;
+            try
+            {
+                loginButton.Enabled = false;
+                Ao3Session? session = await Ao3Session.CreateSession(userTextBox.Text, passwordTextbox.Text);
+                if(session == null)
+                {
+                    MessageBox.Show(
+                        "Invalid username/password", 
+                        "Login Error", 
+                        MessageBoxButtons.OK, 
+                        MessageBoxIcon.Error);
+                }
+                loginButton.Enabled = true;
+            }
+            catch (HttpRequestException ex) 
+            { 
+            
+            }
+            
         }
     }
 }
