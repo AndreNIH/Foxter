@@ -111,9 +111,7 @@ namespace AO3SchedulerWin.Models.AuthorModels
                 {
                     connection.Open();
                     var command = new SQLiteCommand($"delete from `AUTHORS` where id={authorId}", connection);
-                    command.ExecuteNonQuery();
-                    
-                    return true;
+                    return command.ExecuteNonQuery() >= 1;
                 }
 
             }
@@ -126,7 +124,19 @@ namespace AO3SchedulerWin.Models.AuthorModels
 
         public bool SetActiveUser(int id)
         {
-            throw new NotImplementedException();
+            try
+            {
+                using(var connection = ConnectionFactory.GetConnection())
+                {
+                    connection.Open();
+                    //var command = new SQLiteCommand("update ")
+                    return false;
+                }
+            }catch(SQLiteException ex)
+            {
+
+            }
+            return true; 
         }
 
         public bool UpdateAuthor(int id, Author author)

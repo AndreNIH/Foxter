@@ -24,9 +24,6 @@ namespace AO3SchedulerWin.GUI.Forms
             _authorModel = authorModel;
         }
 
-
-
-
         private async void loginButton_Click(object sender, EventArgs e)
         {
             try
@@ -41,18 +38,29 @@ namespace AO3SchedulerWin.GUI.Forms
                         "Login Error",
                         MessageBoxButtons.OK,
                         MessageBoxIcon.Error);
+                    return;
                 }
-
-                Author author = new Author();
-                author.Name = userTextBox.Text;
-                author.Password = passwordTextbox.Text;
+                
+                Author author = await session.GetAuthor();
                 _authorModel.AddAuthor(author);
+                _authorModel.SetActiveUser(author.Id);
                 this.Close();
                
             }
             catch (HttpRequestException ex)
             {
-
+                MessageBox.Show(
+                    ex.Message,
+                    "Network Error",
+                    MessageBoxButtons.OK, 
+                    MessageBoxIcon.Error);
+            }catch(Ao3GenericException ex)
+            {
+                MessageBox.Show(
+                        ex.Message,
+                        "AO3 Error",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Error);
             }
 
         }

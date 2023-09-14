@@ -91,6 +91,8 @@ namespace AO3SchedulerWin.GUI.Screens
             var form = new Ao3LoginForm(_model);
             form.StartPosition = FormStartPosition.CenterScreen;
             form.ShowDialog();
+            _tableController.UpdateViews();
+            _loggedAuthorController.UpdateViews();
         }
     }
 }

@@ -18,8 +18,8 @@ namespace AO3SchedulerWin
     {
         private HttpClient _httpClient;
         private CookieContainer _cookieContainer;
-        private string _username;
-        private string _password;
+        private string _username = "";
+        private string _password = "";
         private bool Authenticated = false;
 
         private async Task<bool> TryLogin(string user, string password)
@@ -46,8 +46,8 @@ namespace AO3SchedulerWin
                 var loginFormData = new Dictionary<string, string>
                 {
                     { "authenticity_token", csrfToken },
-                    { "user[login]", _username },
-                    { "user[password]", _password },
+                    { "user[login]", user },
+                    { "user[password]", password },
                     { "user[remember_me]", "1" },
                     { "commit", "Log in" }
                 };
@@ -58,14 +58,17 @@ namespace AO3SchedulerWin
                     new FormUrlEncodedContent(loginFormData)
                 );
 
+
+                string userFromRedirect = await loginFormReq.Content.ReadAsStringAsync();
+
                 this.Authenticated = loginFormReq.StatusCode == System.Net.HttpStatusCode.Redirect;
                 if (this.Authenticated)
                 {
                     string pattern = @"<a href=""https://archiveofourown\.org/users/(?<Username>[^""]+)""";
-                    Match userMatch = Regex.Match(await loginFormReq.Content.ReadAsStringAsync(), pattern);
+                    Match userMatch = Regex.Match(userFromRedirect, pattern);
                     if (userMatch.Success)
                     {
-                        _username = userMatch.Groups["username"].Value;
+                        _username = userMatch.Groups["Username"].Value;
                         _password = password;
                     }
                     else
@@ -118,10 +121,19 @@ namespace AO3SchedulerWin
             HttpResponseMessage profileBody = await _httpClient.GetAsync($"users/{_username}/profile");
             var htmlDoc = new HtmlAgilityPack.HtmlDocument();
             htmlDoc.LoadHtml(await profileBody.Content.ReadAsStringAsync());
-            htmlDoc.DocumentNode.SelectSingleNode("//");
-            
-
-            return null;
+            HtmlNode userId = htmlDoc.DocumentNode.SelectSingleNode("//input[@id='subscription_subscribable_id'][1]/@value");
+            if(userId == null) throw new Ao3GenericException("Could not extract UserId");
+            try
+            {
+                var author = new Author();
+                author.Id = Int32.Parse(userId.GetAttributeValue("value", null));
+                author.Name = _username;
+                author.Password = _password;
+                return author;
+            }catch (FormatException)
+            {
+                throw new Ao3GenericException("UserId contains an invalid value");
+            }
         }
 
         public Ao3Session()
