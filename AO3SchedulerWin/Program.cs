@@ -21,6 +21,7 @@ namespace AO3SchedulerWin
             AllocConsole();
             ApplicationConfiguration.Initialize();
             Application.Run(new MainForm());
+            
         }
     }
 }

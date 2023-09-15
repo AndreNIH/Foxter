@@ -1,5 +1,4 @@
-﻿using AO3SchedulerWin.Utils;
-using log4net.Repository.Hierarchy;
+﻿using log4net.Repository.Hierarchy;
 using System;
 using System.Collections.Generic;
 using System.Linq;

@@ -6,7 +6,6 @@ using System.Text;
 using System.Threading.Tasks;
 using AO3SchedulerWin.Database;
 
-
 namespace AO3SchedulerWin.Models.AuthorModels
 {
     internal class AuthorLocalModel : IAuthorModel
@@ -20,9 +19,9 @@ namespace AO3SchedulerWin.Models.AuthorModels
                 using (var connection = ConnectionFactory.GetConnection())
                 {
                     connection.Open();
-                    var command = new SQLiteCommand("insert into `AUTHORS` (id, username, password) " +
-                                                    "values (@id, @username, @password)",
-                                                    connection);
+                    var command = connection.CreateCommand();
+                    command.CommandText = @"insert into `AUTHORS` (id, username, password) 
+                                            values (@id, @username, @password)";
                     command.Parameters.AddWithValue("@id", author.Id);
                     command.Parameters.AddWithValue("@username", author.Name);
                     command.Parameters.AddWithValue("@password", author.Password);
@@ -46,27 +45,23 @@ namespace AO3SchedulerWin.Models.AuthorModels
                 using (var connection = ConnectionFactory.GetConnection())
                 {
                     connection.Open();
-                    SQLiteCommand loggedUserQuery = new SQLiteCommand("select loggedUserId from `LOCAL_SETTINGS`", connection);
-                    SQLiteDataReader loggedUserRd = loggedUserQuery.ExecuteReader();
-                    if(loggedUserRd.Read())
+                    var command = new SQLiteCommand("select id from `AUTHORS` where active=1", connection);
+                    using (var rd = command.ExecuteReader())
                     {
-                        int activeAuthorId = loggedUserRd.GetInt32(0);
-                        SQLiteCommand authorQuerry = new SQLiteCommand($"select * from `AUTHORS` where id={activeAuthorId}", connection);
-                        SQLiteDataReader authorRd = authorQuerry.ExecuteReader();
-                        if (authorRd.Read())
+                        if (rd.Read())
                         {
-                            Author author = new Author();
-                            author.Id = authorRd.GetInt32(0);
-                            author.Name = authorRd.GetString(1);
-                            author.Password = authorRd.GetString(2);
-                            return author;
+                            int activeAuthorId = rd.GetInt32(0);
+                            return GetAuthorById(activeAuthorId);
                         }
+
                     }
+
                 }
             }catch(SQLiteException ex)
             {
                 logger.Error(ex.Message);
             }
+            
             return null;
         }
 
@@ -78,21 +73,25 @@ namespace AO3SchedulerWin.Models.AuthorModels
                 {
                     connection.Open();
                     var command = new SQLiteCommand("select * from `AUTHORS`", connection);
-                    SQLiteDataReader reader = command.ExecuteReader();
-                    List<Author> authors = new List<Author>();
-                    while (reader.Read())
+                    using (var rd = command.ExecuteReader())
                     {
-                        Author author = new Author();
-                        author.Id = reader.GetInt32(0);
-                        author.Name = reader.GetString(1);
-                        author.Password = reader.GetString(2);
-                        authors.Add(author);
+                        List<Author> authors = new List<Author>();
+                        while (rd.Read())
+                        {
+                            Author author = new Author();
+                            author.Id = rd.GetInt32(0);
+                            author.Name = rd.GetString(1);
+                            author.Password = rd.GetString(2);
+                            authors.Add(author);
+                        }
+                        return authors;
                     }
-                    return authors;
+                    
                 }
                 
             }catch(SQLiteException ex)
             {
+                Console.WriteLine(ex.Message);
                 logger.Error(ex.Message);
             }
             return null;
@@ -100,7 +99,30 @@ namespace AO3SchedulerWin.Models.AuthorModels
 
         public Author? GetAuthorById(int id)
         {
-            throw new NotImplementedException();
+            try
+            {
+                using (var connection =  ConnectionFactory.GetConnection())
+                {
+                    connection.Open();
+                    var command = new SQLiteCommand($"select * from `AUTHORS` where id={id}", connection);
+                    using (var rd = command.ExecuteReader())
+                    {
+                        if (rd.Read())
+                        {
+                            Author author = new Author();
+                            author.Id = rd.GetInt32(0);
+                            author.Name = rd.GetString(1);
+                            author.Password = rd.GetString(2);
+                            return author;
+                        }
+                    }
+                        
+                }
+            }catch(SQLiteException ex)
+            {
+                logger.Error(ex.Message);
+            }
+            return null;
         }
 
         public bool RemoveAuthor(int authorId)
@@ -117,6 +139,7 @@ namespace AO3SchedulerWin.Models.AuthorModels
             }
             catch (SQLiteException ex)
             {
+                MessageBox.Show(ex.Message);
                 logger.Error(ex.Message);
             }
             return false;
@@ -129,14 +152,20 @@ namespace AO3SchedulerWin.Models.AuthorModels
                 using(var connection = ConnectionFactory.GetConnection())
                 {
                     connection.Open();
-                    //var command = new SQLiteCommand("update ")
-                    return false;
+                    var setActiveCommand = new SQLiteCommand($"update `AUTHORS` set active=1 where id={id}", connection);
+                    var resetCommand = new SQLiteCommand($"update `AUTHORS` set active=0 where id!={id}", connection);
+                    int rowsAffected = setActiveCommand.ExecuteNonQuery();
+                    if (rowsAffected < 1) return false;
+                    resetCommand.ExecuteNonQuery();
+                    return true;
+
                 }
             }catch(SQLiteException ex)
             {
-
+                MessageBox.Show(ex.Message);
+                logger.Error(ex.Message);
             }
-            return true; 
+            return false; 
         }
 
         public bool UpdateAuthor(int id, Author author)

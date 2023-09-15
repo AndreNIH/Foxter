@@ -37,6 +37,13 @@ namespace AO3SchedulerWin.Controllers.AuthorControllers
             throw new NotImplementedException();
         }
 
+        public int AuthorIdForTablePosition(int tablePosition)
+        {
+            var allAuthors = _model.GetAllAuthors();
+            if (tablePosition > allAuthors.Count) return -1;
+            return allAuthors[tablePosition].Id;
+        }
+
         public AuthorTableController(IAuthorModel model, IAuthorView view)
         {
             _view = view;

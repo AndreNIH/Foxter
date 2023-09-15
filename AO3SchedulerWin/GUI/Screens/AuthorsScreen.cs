@@ -43,19 +43,6 @@ namespace AO3SchedulerWin.GUI.Screens
             AuthorCoordinator.Get.ReleaseCoordinatedObject(_tableController);
         }
 
-        //Methods
-        async Task TryLogin()
-        {
-            var httpClient = new HttpClient
-            {
-                BaseAddress = new Uri("https://archiveofourown.org")
-            };
-
-            Dictionary<string, string> loginParams = new Dictionary<string, string>();
-            loginParams.Add("user[login]", "");
-            loginParams.Add("user[password]", "");
-            using HttpResponseMessage loginResponse = await httpClient.PostAsync("users/login/", new FormUrlEncodedContent(null));
-        }
 
 
 
@@ -73,10 +60,11 @@ namespace AO3SchedulerWin.GUI.Screens
         //UI Elements
         private void setActiveButton_Click(object sender, EventArgs e)
         {
-            var item = usersListView.SelectedItems[0];
+            var selected = usersListView.SelectedItems;
+            if (selected.Count == 0) return;
             foreach (var author in _model.GetAllAuthors())
             {
-                if (author.Name == item.Text)
+                if (author.Name == selected[0].Text)
                 {
                     _loggedAuthorController.SetActiveAuthor(author.Id);
                     _loggedAuthorController.UpdateViews();
@@ -93,6 +81,22 @@ namespace AO3SchedulerWin.GUI.Screens
             form.ShowDialog();
             _tableController.UpdateViews();
             _loggedAuthorController.UpdateViews();
+        }
+
+        private void removeAccountButton_Click(object sender, EventArgs e)
+        {
+
+            var selected = usersListView.SelectedIndices;
+            var tableController = (AuthorTableController)_tableController;
+            if (selected.Count > 0)
+            {
+                int authorId = tableController.AuthorIdForTablePosition(selected[0]);
+                if(authorId > 0) _model.RemoveAuthor(authorId); //check is unecessary, but just to be safe
+                _tableController.UpdateViews();
+
+            }
+
+
         }
     }
 }

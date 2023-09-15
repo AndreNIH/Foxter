@@ -61,12 +61,7 @@ namespace AO3SchedulerWin.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to CREATE TABLE IF NOT EXISTS &quot;AUTHORS&quot; (
-        ///	&quot;id&quot;	INTEGER,
-        ///	&quot;username&quot;	INTEGER,
-        ///	&quot;password&quot;	INTEGER,
-        ///	PRIMARY KEY(&quot;id&quot;)
-        ///);
+        ///   Looks up a localized string similar to BEGIN TRANSACTION;
         ///CREATE TABLE IF NOT EXISTS &quot;STORY_UPDATES&quot; (
         ///	&quot;id&quot;	INTEGER UNIQUE,
         ///	&quot;authorId&quot;	INTEGER,
@@ -80,7 +75,10 @@ namespace AO3SchedulerWin.Resources {
         ///	&quot;notesAtTheEnd&quot;	NUMERIC DEFAULT 0,
         ///	&quot;storyContent&quot;	TEXT,
         ///	PRIMARY KEY(&quot;id&quot; AUTOINCREMENT),
-        ///	FOREIGN KEY(&quot;authorId&quot;) REFER [rest of string was truncated]&quot;;.
+        ///	FOREIGN KEY(&quot;authorId&quot;) REFERENCES &quot;AUTHORS&quot;(&quot;id&quot;) ON DELETE RESTRICT
+        ///);
+        ///CREATE TABLE IF NOT EXISTS &quot;LOCAL_SETTINGS&quot; (
+        ///	&quot;loggedUse [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string DbCreationScript {
             get {

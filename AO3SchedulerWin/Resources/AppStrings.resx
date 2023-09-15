@@ -118,12 +118,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="DbCreationScript" xml:space="preserve">
-    <value>CREATE TABLE IF NOT EXISTS "AUTHORS" (
-	"id"	INTEGER,
-	"username"	INTEGER,
-	"password"	INTEGER,
-	PRIMARY KEY("id")
-);
+    <value>BEGIN TRANSACTION;
 CREATE TABLE IF NOT EXISTS "STORY_UPDATES" (
 	"id"	INTEGER UNIQUE,
 	"authorId"	INTEGER,
@@ -142,6 +137,14 @@ CREATE TABLE IF NOT EXISTS "STORY_UPDATES" (
 CREATE TABLE IF NOT EXISTS "LOCAL_SETTINGS" (
 	"loggedUserId"	INTEGER,
 	"storageMode"	INTEGER
-);</value>
+);
+CREATE TABLE IF NOT EXISTS "AUTHORS" (
+	"id"	INTEGER,
+	"username"	INTEGER,
+	"password"	INTEGER,
+	"active"	INTEGER DEFAULT 0,
+	PRIMARY KEY("id")
+);
+COMMIT;</value>
   </data>
 </root>
