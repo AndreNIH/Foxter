@@ -91,7 +91,7 @@ namespace AO3SchedulerWin.GUI.Screens
             if (selected.Count > 0)
             {
                 int authorId = tableController.AuthorIdForTablePosition(selected[0]);
-                if(authorId > 0) _model.RemoveAuthor(authorId); //check is unecessary, but just to be safe
+                if (authorId > 0) _model.RemoveAuthor(authorId); //check is unecessary, but just to be safe
                 _tableController.UpdateViews();
 
             }

@@ -12,6 +12,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using AO3SchedulerWin.Models.StoryModels;
 using AO3SchedulerWin.Controllers.StoryControllers;
+using AO3SchedulerWin.Models.AuthorModels;
 
 namespace AO3SchedulerWin.Forms
 {
@@ -23,6 +24,7 @@ namespace AO3SchedulerWin.Forms
             _model = new LocalStoryModel();
             _tableView = new StoryListViewAdapter(storyListContainer);
             _controller = new StoryTableController(_tableView, _model);
+            _authorModel = new AuthorLocalModel();
             _controller.UpdateViews();
 
 
@@ -30,11 +32,11 @@ namespace AO3SchedulerWin.Forms
 
         private void schedulePostButton_Click(object sender, EventArgs e)
         {
-            for (int i = 0; i < 1; i++)
+            /*for (int i = 0; i < 1; i++)
             {
                 var story = new Story();
 
-                story.AuthorId = 0;
+                story.AuthorId = _authorModel.GetActiveAuthor().Id;
                 story.StoryId = 1;
                 story.Title = "Great Story";
                 story.ChapterTitle = "A new Chapter(On digital marketing)";
@@ -44,12 +46,15 @@ namespace AO3SchedulerWin.Forms
                 story.NotesAtStart = false; story.NotesAtEnd = false;
                 story.Contents = "This is the content of the story";
                 _controller.InsertStory(story);
-            }
+            }*/
+            var form = new ScheduleStoryForm();
+            form.ShowDialog();
             _controller.UpdateViews();
         }
 
         IStoryController _controller;
         IStoryModel _model;
+        IAuthorModel _authorModel;
         IStoryView _tableView;
     }
 }
