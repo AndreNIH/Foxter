@@ -15,6 +15,7 @@ namespace AO3SchedulerWin.Database
     {
         private static readonly string _databaseFile = "database.sqlite";
         private static bool _dbInitialized = false;
+        private static log4net.ILog _logger = log4net.LogManager.GetLogger(typeof(ConnectionFactory));
 
         private static string GetDabasePath()
         {
@@ -44,28 +45,22 @@ namespace AO3SchedulerWin.Database
             Directory.CreateDirectory(GetDabasePath());
             if (!File.Exists(GetDabasePath() + _databaseFile))
             {
+                _logger.Info("Creating physical database file");
                 SQLiteConnection.CreateFile(GetDabasePath() + _databaseFile);
             }
         }
 
         public static SQLiteConnection GetConnection()
         {
-            try
+            if (_dbInitialized == false)
             {
-                if (_dbInitialized == false)
-                {
-                    CreatePhysicalDatabase();
-                    CreateTables(); //Maybe check if the db is valid before attempting running the script?
-                    _dbInitialized = true;
-                }
-                return GetConnectionNoInit();
-            }
-            catch (Exception ex)
-            {
-                //TODO: Log something
-                throw ex;
-            }
 
+                CreatePhysicalDatabase();
+                CreateTables(); //Maybe check if the db is valid before attempting running the script?
+                _dbInitialized = true;
+                _logger.Info("Succesfully initialized database");
+            }
+            return GetConnectionNoInit();
         }
     }
 }

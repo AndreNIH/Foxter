@@ -246,6 +246,7 @@
             Name = "MainForm";
             Text = "Form1";
             WindowState = FormWindowState.Maximized;
+            Load += MainForm_Load;
             topBarPanel.ResumeLayout(false);
             topBarPanel.PerformLayout();
             panel2.ResumeLayout(false);

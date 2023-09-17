@@ -50,19 +50,17 @@
             panel1.Controls.Add(removeAccountButton);
             panel1.Controls.Add(addAccountButton);
             panel1.Dock = DockStyle.Right;
-            panel1.Location = new Point(937, 0);
-            panel1.Margin = new Padding(4, 5, 4, 5);
+            panel1.Location = new Point(656, 0);
             panel1.Name = "panel1";
-            panel1.Size = new Size(206, 750);
+            panel1.Size = new Size(144, 450);
             panel1.TabIndex = 0;
             // 
             // setActiveButton
             // 
             setActiveButton.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-            setActiveButton.Location = new Point(19, 295);
-            setActiveButton.Margin = new Padding(4, 5, 4, 5);
+            setActiveButton.Location = new Point(13, 177);
             setActiveButton.Name = "setActiveButton";
-            setActiveButton.Size = new Size(170, 82);
+            setActiveButton.Size = new Size(119, 49);
             setActiveButton.TabIndex = 3;
             setActiveButton.Text = "Set as active";
             setActiveButton.UseVisualStyleBackColor = true;
@@ -71,10 +69,9 @@
             // button3
             // 
             button3.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-            button3.Location = new Point(19, 203);
-            button3.Margin = new Padding(4, 5, 4, 5);
+            button3.Location = new Point(13, 122);
             button3.Name = "button3";
-            button3.Size = new Size(170, 82);
+            button3.Size = new Size(119, 49);
             button3.TabIndex = 2;
             button3.Text = "Update account";
             button3.UseVisualStyleBackColor = true;
@@ -82,10 +79,9 @@
             // removeAccountButton
             // 
             removeAccountButton.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-            removeAccountButton.Location = new Point(19, 112);
-            removeAccountButton.Margin = new Padding(4, 5, 4, 5);
+            removeAccountButton.Location = new Point(13, 67);
             removeAccountButton.Name = "removeAccountButton";
-            removeAccountButton.Size = new Size(170, 82);
+            removeAccountButton.Size = new Size(119, 49);
             removeAccountButton.TabIndex = 1;
             removeAccountButton.Text = "Remove account";
             removeAccountButton.UseVisualStyleBackColor = true;
@@ -94,10 +90,9 @@
             // addAccountButton
             // 
             addAccountButton.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-            addAccountButton.Location = new Point(19, 20);
-            addAccountButton.Margin = new Padding(4, 5, 4, 5);
+            addAccountButton.Location = new Point(13, 12);
             addAccountButton.Name = "addAccountButton";
-            addAccountButton.Size = new Size(170, 82);
+            addAccountButton.Size = new Size(119, 49);
             addAccountButton.TabIndex = 0;
             addAccountButton.Text = "Add account";
             addAccountButton.UseVisualStyleBackColor = true;
@@ -110,19 +105,19 @@
             panel2.Controls.Add(loggedAsLabel);
             panel2.Dock = DockStyle.Fill;
             panel2.Location = new Point(0, 0);
-            panel2.Margin = new Padding(4, 5, 4, 5);
             panel2.Name = "panel2";
-            panel2.Padding = new Padding(14, 17, 14, 17);
-            panel2.Size = new Size(937, 750);
+            panel2.Padding = new Padding(10);
+            panel2.Size = new Size(656, 450);
             panel2.TabIndex = 1;
             // 
             // userLabel
             // 
             userLabel.AutoSize = true;
             userLabel.Font = new Font("Segoe UI", 15.75F, FontStyle.Regular, GraphicsUnit.Point);
-            userLabel.Location = new Point(214, 17);
+            userLabel.Location = new Point(150, 10);
+            userLabel.Margin = new Padding(2, 0, 2, 0);
             userLabel.Name = "userLabel";
-            userLabel.Size = new Size(186, 45);
+            userLabel.Size = new Size(121, 30);
             userLabel.TabIndex = 2;
             userLabel.Text = "Placeholder";
             // 
@@ -131,10 +126,9 @@
             usersListView.Columns.AddRange(new ColumnHeader[] { columnHeader1 });
             usersListView.Dock = DockStyle.Fill;
             usersListView.FullRowSelect = true;
-            usersListView.Location = new Point(14, 72);
-            usersListView.Margin = new Padding(4, 5, 4, 5);
+            usersListView.Location = new Point(10, 46);
             usersListView.Name = "usersListView";
-            usersListView.Size = new Size(909, 661);
+            usersListView.Size = new Size(636, 394);
             usersListView.TabIndex = 0;
             usersListView.UseCompatibleStateImageBehavior = false;
             usersListView.View = View.Details;
@@ -149,21 +143,21 @@
             loggedAsLabel.AutoSize = true;
             loggedAsLabel.Dock = DockStyle.Top;
             loggedAsLabel.Font = new Font("Segoe UI", 15.75F, FontStyle.Regular, GraphicsUnit.Point);
-            loggedAsLabel.Location = new Point(14, 17);
+            loggedAsLabel.Location = new Point(10, 10);
+            loggedAsLabel.Margin = new Padding(2, 0, 2, 0);
             loggedAsLabel.Name = "loggedAsLabel";
-            loggedAsLabel.Padding = new Padding(0, 0, 0, 10);
-            loggedAsLabel.Size = new Size(209, 55);
+            loggedAsLabel.Padding = new Padding(0, 0, 0, 6);
+            loggedAsLabel.Size = new Size(136, 36);
             loggedAsLabel.TabIndex = 1;
             loggedAsLabel.Text = "Logged in as:";
             // 
             // AuthorsScreen
             // 
-            AutoScaleDimensions = new SizeF(10F, 25F);
+            AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(1143, 750);
+            ClientSize = new Size(800, 450);
             Controls.Add(panel2);
             Controls.Add(panel1);
-            Margin = new Padding(4, 5, 4, 5);
             Name = "AuthorsScreen";
             Text = "AuthorsScreen";
             Load += AuthorsScreen_Load;

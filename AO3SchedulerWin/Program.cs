@@ -1,4 +1,5 @@
 using log4net.Repository;
+using System.Net;
 using System.Reflection;
 using System.Runtime.InteropServices;
 

@@ -30,7 +30,7 @@
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ScheduleStoryForm));
             label1 = new Label();
-            comboBox1 = new ComboBox();
+            worksComboBox = new ComboBox();
             dateTimePicker1 = new DateTimePicker();
             label2 = new Label();
             richTextBox1 = new RichTextBox();
@@ -40,17 +40,17 @@
             checkBox1 = new CheckBox();
             checkBox2 = new CheckBox();
             mainContent = new TabControl();
-            tabPage1 = new TabPage();
-            button1 = new Button();
-            tabPage2 = new TabPage();
+            loadingTab = new TabPage();
             label5 = new Label();
             pictureBox1 = new PictureBox();
+            chapterDetailsTab = new TabPage();
+            button1 = new Button();
             tabPage3 = new TabPage();
             richTextBox3 = new RichTextBox();
             mainContent.SuspendLayout();
-            tabPage1.SuspendLayout();
-            tabPage2.SuspendLayout();
+            loadingTab.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
+            chapterDetailsTab.SuspendLayout();
             tabPage3.SuspendLayout();
             SuspendLayout();
             // 
@@ -63,14 +63,15 @@
             label1.TabIndex = 0;
             label1.Text = "Select Story";
             // 
-            // comboBox1
+            // worksComboBox
             // 
-            comboBox1.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
-            comboBox1.FormattingEnabled = true;
-            comboBox1.Location = new Point(107, 15);
-            comboBox1.Name = "comboBox1";
-            comboBox1.Size = new Size(316, 23);
-            comboBox1.TabIndex = 1;
+            worksComboBox.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            worksComboBox.AutoCompleteMode = AutoCompleteMode.Suggest;
+            worksComboBox.FormattingEnabled = true;
+            worksComboBox.Location = new Point(107, 15);
+            worksComboBox.Name = "worksComboBox";
+            worksComboBox.Size = new Size(316, 23);
+            worksComboBox.TabIndex = 1;
             // 
             // dateTimePicker1
             // 
@@ -149,8 +150,8 @@
             // 
             // mainContent
             // 
-            mainContent.Controls.Add(tabPage1);
-            mainContent.Controls.Add(tabPage2);
+            mainContent.Controls.Add(loadingTab);
+            mainContent.Controls.Add(chapterDetailsTab);
             mainContent.Controls.Add(tabPage3);
             mainContent.Dock = DockStyle.Fill;
             mainContent.Location = new Point(0, 0);
@@ -159,48 +160,17 @@
             mainContent.Size = new Size(439, 559);
             mainContent.TabIndex = 10;
             // 
-            // tabPage1
+            // loadingTab
             // 
-            tabPage1.Controls.Add(button1);
-            tabPage1.Controls.Add(checkBox2);
-            tabPage1.Controls.Add(comboBox1);
-            tabPage1.Controls.Add(checkBox1);
-            tabPage1.Controls.Add(label1);
-            tabPage1.Controls.Add(label4);
-            tabPage1.Controls.Add(dateTimePicker1);
-            tabPage1.Controls.Add(richTextBox2);
-            tabPage1.Controls.Add(label2);
-            tabPage1.Controls.Add(label3);
-            tabPage1.Controls.Add(richTextBox1);
-            tabPage1.Location = new Point(4, 24);
-            tabPage1.Name = "tabPage1";
-            tabPage1.Padding = new Padding(3, 3, 3, 3);
-            tabPage1.Size = new Size(431, 531);
-            tabPage1.TabIndex = 0;
-            tabPage1.Text = "tabPage1";
-            tabPage1.UseVisualStyleBackColor = true;
-            // 
-            // button1
-            // 
-            button1.Anchor = AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
-            button1.Location = new Point(31, 478);
-            button1.Name = "button1";
-            button1.Size = new Size(377, 45);
-            button1.TabIndex = 10;
-            button1.Text = "Next";
-            button1.UseVisualStyleBackColor = true;
-            // 
-            // tabPage2
-            // 
-            tabPage2.BackColor = Color.White;
-            tabPage2.Controls.Add(label5);
-            tabPage2.Controls.Add(pictureBox1);
-            tabPage2.Location = new Point(4, 24);
-            tabPage2.Name = "tabPage2";
-            tabPage2.Padding = new Padding(3, 3, 3, 3);
-            tabPage2.Size = new Size(431, 531);
-            tabPage2.TabIndex = 1;
-            tabPage2.Text = "tabPage2";
+            loadingTab.BackColor = Color.White;
+            loadingTab.Controls.Add(label5);
+            loadingTab.Controls.Add(pictureBox1);
+            loadingTab.Location = new Point(4, 24);
+            loadingTab.Name = "loadingTab";
+            loadingTab.Padding = new Padding(3);
+            loadingTab.Size = new Size(431, 531);
+            loadingTab.TabIndex = 1;
+            loadingTab.Text = "tabPage2";
             // 
             // label5
             // 
@@ -220,16 +190,48 @@
             pictureBox1.Location = new Point(117, 77);
             pictureBox1.Name = "pictureBox1";
             pictureBox1.Size = new Size(205, 204);
+            pictureBox1.SizeMode = PictureBoxSizeMode.Zoom;
             pictureBox1.TabIndex = 0;
             pictureBox1.TabStop = false;
+            // 
+            // chapterDetailsTab
+            // 
+            chapterDetailsTab.Controls.Add(button1);
+            chapterDetailsTab.Controls.Add(checkBox2);
+            chapterDetailsTab.Controls.Add(worksComboBox);
+            chapterDetailsTab.Controls.Add(checkBox1);
+            chapterDetailsTab.Controls.Add(label1);
+            chapterDetailsTab.Controls.Add(label4);
+            chapterDetailsTab.Controls.Add(dateTimePicker1);
+            chapterDetailsTab.Controls.Add(richTextBox2);
+            chapterDetailsTab.Controls.Add(label2);
+            chapterDetailsTab.Controls.Add(label3);
+            chapterDetailsTab.Controls.Add(richTextBox1);
+            chapterDetailsTab.Location = new Point(4, 24);
+            chapterDetailsTab.Name = "chapterDetailsTab";
+            chapterDetailsTab.Padding = new Padding(3);
+            chapterDetailsTab.Size = new Size(431, 531);
+            chapterDetailsTab.TabIndex = 0;
+            chapterDetailsTab.Text = "tabPage1";
+            chapterDetailsTab.UseVisualStyleBackColor = true;
+            // 
+            // button1
+            // 
+            button1.Anchor = AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            button1.Location = new Point(31, 478);
+            button1.Name = "button1";
+            button1.Size = new Size(377, 45);
+            button1.TabIndex = 10;
+            button1.Text = "Next";
+            button1.UseVisualStyleBackColor = true;
             // 
             // tabPage3
             // 
             tabPage3.Controls.Add(richTextBox3);
             tabPage3.Location = new Point(4, 24);
-            tabPage3.Margin = new Padding(2, 2, 2, 2);
+            tabPage3.Margin = new Padding(2);
             tabPage3.Name = "tabPage3";
-            tabPage3.Padding = new Padding(2, 2, 2, 2);
+            tabPage3.Padding = new Padding(2);
             tabPage3.Size = new Size(431, 531);
             tabPage3.TabIndex = 2;
             tabPage3.Text = "tabPage3";
@@ -239,7 +241,7 @@
             // 
             richTextBox3.Dock = DockStyle.Fill;
             richTextBox3.Location = new Point(2, 2);
-            richTextBox3.Margin = new Padding(2, 2, 2, 2);
+            richTextBox3.Margin = new Padding(2);
             richTextBox3.Name = "richTextBox3";
             richTextBox3.Size = new Size(427, 527);
             richTextBox3.TabIndex = 0;
@@ -255,11 +257,11 @@
             Text = "ScheduleStoryForm";
             Load += ScheduleStoryForm_Load;
             mainContent.ResumeLayout(false);
-            tabPage1.ResumeLayout(false);
-            tabPage1.PerformLayout();
-            tabPage2.ResumeLayout(false);
-            tabPage2.PerformLayout();
+            loadingTab.ResumeLayout(false);
+            loadingTab.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).EndInit();
+            chapterDetailsTab.ResumeLayout(false);
+            chapterDetailsTab.PerformLayout();
             tabPage3.ResumeLayout(false);
             ResumeLayout(false);
         }
@@ -267,7 +269,7 @@
         #endregion
 
         private Label label1;
-        private ComboBox comboBox1;
+        private ComboBox worksComboBox;
         private DateTimePicker dateTimePicker1;
         private Label label2;
         private RichTextBox richTextBox1;
@@ -277,8 +279,8 @@
         private CheckBox checkBox1;
         private CheckBox checkBox2;
         private TabControl mainContent;
-        private TabPage tabPage2;
-        private TabPage tabPage1;
+        private TabPage loadingTab;
+        private TabPage chapterDetailsTab;
         private Button button1;
         private PictureBox pictureBox1;
         private Label label5;

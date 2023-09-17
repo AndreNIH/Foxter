@@ -15,14 +15,20 @@ namespace AO3SchedulerWin
         private extern static void SendMessage(System.IntPtr hwndm, int msg, int wParam, int lParam);
         //End of external DLL imports
 
+        private static readonly log4net.ILog logger = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
         private IAuthorModel _authorModel = new AuthorLocalModel();
+        private Ao3Session _session;
         public MainForm()
         {
             InitializeComponent();
             this.MaximizedBounds = Screen.FromHandle(this.Handle).WorkingArea;
-            Form nextScreen = _authorModel.GetActiveAuthor() == null
+            var activeAuthor = _authorModel.GetActiveAuthor();
+            Form nextScreen = activeAuthor == null
                 ? new NoActiveUserScreen()
                 : new HomeScreen();
+
+            
+
             SetMainContent(nextScreen);
         }
 
@@ -117,6 +123,27 @@ namespace AO3SchedulerWin
 
         }
 
+        private async void MainForm_Load(object sender, EventArgs e)
+        {
+            var activeAuthor = _authorModel.GetActiveAuthor();
+            if (activeAuthor != null)
+            {
+                //Attempt to restore session
+                var restoredSession = await Ao3Session.RestoreSession();
+                //Attempt to re-log into user account
+                if(restoredSession == null)
+                {
+                    logger.Info($"Re-logging into  '{activeAuthor.Name}'");
+                    _session = await Ao3Session.CreateSession(activeAuthor.Name, activeAuthor.Password);
+                    //Re-login failed
+                    if( _session == null)
+                    {
+                        logger.Warn($"Failed to log in to '{activeAuthor.Name}'");
+                        _authorModel.RemoveAuthor(activeAuthor.Id);
+                    }
+                }
+            }
 
+        }
     }
 }
