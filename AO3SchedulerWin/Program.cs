@@ -1,3 +1,5 @@
+using log4net.Repository;
+using System.Reflection;
 using System.Runtime.InteropServices;
 
 
@@ -18,6 +20,10 @@ namespace AO3SchedulerWin
         {
             // To customize application configuration such as set high DPI settings or default font,
             // see https://aka.ms/applicationconfiguration.
+
+            ILoggerRepository repository = log4net.LogManager.GetRepository(Assembly.GetCallingAssembly());
+            log4net.Config.XmlConfigurator.Configure(repository, new System.IO.FileInfo("log4net.config"));
+
             AllocConsole();
             ApplicationConfiguration.Initialize();
             Application.Run(new MainForm());

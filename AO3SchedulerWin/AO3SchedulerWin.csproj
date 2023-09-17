@@ -9,8 +9,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Utils\**" />
     <Compile Remove="Views\Story\**" />
+    <EmbeddedResource Remove="Utils\**" />
     <EmbeddedResource Remove="Views\Story\**" />
+    <None Remove="Utils\**" />
     <None Remove="Views\Story\**" />
   </ItemGroup>
 
@@ -46,7 +49,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Utils\" />
+    <None Update="log4net.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>
