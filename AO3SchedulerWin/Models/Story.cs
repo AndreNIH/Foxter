@@ -20,5 +20,17 @@ namespace AO3SchedulerWin.Models
         public bool NotesAtEnd { get; set; }
         public string Contents { get; set; }
 
+        public Story()
+        {
+            //Initialize all member string values to empty strings
+            Title = string.Empty; ChapterTitle = string.Empty;
+            ChapterSummary = string.Empty;
+            ChapterNotes = string.Empty;
+            Contents = string.Empty;
+            NotesAtStart = false; NotesAtEnd = false;
+
+
+        }
+
     }
 }

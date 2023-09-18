@@ -23,11 +23,18 @@ namespace AO3SchedulerWin.Forms
             InitializeComponent();
             _model = new LocalStoryModel();
             _tableView = new StoryListViewAdapter(storyListContainer);
-            _controller = new StoryTableController(_tableView, _model);
+            _storyController = new StoryTableController(_tableView, _model);
             _authorModel = new AuthorLocalModel();
-            _controller.UpdateViews();
             _session = session;
+            _storyController.UpdateViews();
+            
 
+        }
+
+        private void reloadScreen()
+        {
+            mainContainer.SelectedIndex = storyListContainer.Controls.Count > 0 ? 1 : 0;
+            _storyController.UpdateViews();
         }
 
         private void schedulePostButton_Click(object sender, EventArgs e)
@@ -47,9 +54,10 @@ namespace AO3SchedulerWin.Forms
                 story.Contents = "This is the content of the story";
                 _controller.InsertStory(story);
             }*/
-            var form = new ScheduleStoryForm(_session);
+            var form = new ScheduleStoryForm(_session, _storyController);
             form.ShowDialog();
-            _controller.UpdateViews();
+            _storyController.UpdateViews();
+            reloadScreen();
         }
 
         private void SchedulerScreen_Load(object sender, EventArgs e)
@@ -57,13 +65,16 @@ namespace AO3SchedulerWin.Forms
             mainContainer.Appearance = TabAppearance.FlatButtons;
             mainContainer.ItemSize = new Size(0, 1);
             mainContainer.SizeMode = TabSizeMode.Fixed;
+
+            reloadScreen();
         }
 
-        private IStoryController _controller;
+        private IStoryController _storyController;
         private IStoryModel _model;
         private IAuthorModel _authorModel;
         private IStoryView _tableView;
         private Ao3Session _session;
+        
 
 
     }

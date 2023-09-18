@@ -19,8 +19,9 @@ namespace AO3SchedulerWin.GUI.Screens
         private IAuthorController _tableController;
         private IAuthorController _loggedAuthorController;
         private IAuthorModel _model = new AuthorLocalModel();
+        private Ao3Session _session;
 
-        public AuthorsScreen()
+        public AuthorsScreen(Ao3Session session)
         {
             InitializeComponent();
             _tableController = AuthorCoordinator.Get.MakeCoorinatedObject(
@@ -33,7 +34,7 @@ namespace AO3SchedulerWin.GUI.Screens
             );
 
             AuthorCoordinator.Get.NotifyAll();
-
+            _session = session;
 
         }
 
@@ -81,6 +82,7 @@ namespace AO3SchedulerWin.GUI.Screens
             form.ShowDialog();
             _tableController.UpdateViews();
             _loggedAuthorController.UpdateViews();
+
         }
 
         private void removeAccountButton_Click(object sender, EventArgs e)
@@ -91,10 +93,10 @@ namespace AO3SchedulerWin.GUI.Screens
             if (selected.Count > 0)
             {
                 int authorId = tableController.AuthorIdForTablePosition(selected[0]);
-                if (authorId > 0) _model.RemoveAuthor(authorId); //check is unecessary, but just to be safe
-                _tableController.UpdateViews();
-
+                if (authorId > 0) tableController.UnregisterAuthor(authorId); //check is unecessary, but just to be safe
             }
+            _tableController.UpdateViews();
+            _loggedAuthorController.UpdateViews();
 
 
         }

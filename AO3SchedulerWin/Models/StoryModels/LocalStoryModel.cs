@@ -63,19 +63,25 @@ namespace AO3SchedulerWin.Models.StoryModels
 
                 while (reader.Read())
                 {
-                    var story = new Story();
-                    story.Id = reader.GetInt32(0);
-                    story.AuthorId = reader.GetInt32(1);
-                    story.StoryId = reader.GetInt32(2);
-                    story.Title = reader.GetString(3);
-                    story.ChapterTitle = reader.GetString(4);
-                    story.PublishingDate = reader.GetDateTime(5);
-                    story.ChapterSummary = reader.GetString(6);
-                    story.ChapterNotes = reader.GetString(7);
-                    story.NotesAtStart = reader.GetBoolean(8);
-                    story.NotesAtEnd = reader.GetBoolean(9);
-                    story.Contents = reader.GetString(10);
-                    stories.Add(story);
+                    try
+                    {
+                        var story = new Story();
+                        story.Id = reader.GetInt32(0);
+                        story.AuthorId = reader.GetInt32(1);
+                        story.StoryId = reader.GetInt32(2);
+                        story.Title = reader.GetString(3);
+                        story.ChapterTitle = reader.GetString(4);
+                        story.PublishingDate = reader.GetDateTime(5);
+                        story.ChapterSummary = reader.GetString(6);
+                        story.ChapterNotes = reader.GetString(7);
+                        story.NotesAtStart = reader.GetBoolean(8);
+                        story.NotesAtEnd = reader.GetBoolean(9);
+                        story.Contents = reader.GetString(10);
+                        stories.Add(story);
+                    }catch(InvalidCastException ex)
+                    {
+                        Console.WriteLine("Could not construct Story object: " + ex.Message);
+                    }
                 }
                 return stories;
             }

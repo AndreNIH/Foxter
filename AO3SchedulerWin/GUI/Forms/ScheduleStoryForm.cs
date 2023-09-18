@@ -1,4 +1,5 @@
-﻿using AO3SchedulerWin.Models;
+﻿using AO3SchedulerWin.Controllers.StoryControllers;
+using AO3SchedulerWin.Models;
 using AO3SchedulerWin.Models.AuthorModels;
 using System;
 using System.Collections.Generic;
@@ -15,15 +16,14 @@ namespace AO3SchedulerWin.Forms
     public partial class ScheduleStoryForm : Form
     {
         private static readonly log4net.ILog _logger = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
-        private IAuthorModel _authorModel;
+        private IStoryController _storyController;
         private Ao3Session _session;
 
-        public ScheduleStoryForm(Ao3Session session)
+        public ScheduleStoryForm(Ao3Session session, IStoryController storyController)
         {
             InitializeComponent();
             _session = session;
-            _authorModel = new AuthorLocalModel();
-
+            _storyController = storyController;
 
             mainContainer.Appearance = TabAppearance.FlatButtons;
             mainContainer.ItemSize = new Size(0, 1);
@@ -77,6 +77,24 @@ namespace AO3SchedulerWin.Forms
                 _logger.Error("session object was null");
                 Close();
             }
+        }
+
+        private void detailsNextButton_Click(object sender, EventArgs e)
+        {
+            mainContainer.SelectedIndex += 1;
+        }
+
+        private void convertFixNextButton_Click(object sender, EventArgs e)
+        {
+            //MessageBox.Show("Pretend this actually works. *Handwavy magic*");
+            Story story = new Story();
+            story.Title = worksComboBox.Text;
+            story.ChapterTitle = chapterTitleTextbox.Text;
+            story.PublishingDate = publishingDatePicker.Value;
+            story.AuthorId = _session.GetAuthor().Id;
+
+            _storyController.InsertStory(story);
+            Close();
         }
     }
 }

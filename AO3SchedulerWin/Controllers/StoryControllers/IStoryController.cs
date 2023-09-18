@@ -7,7 +7,7 @@ using AO3SchedulerWin.Models;
 
 namespace AO3SchedulerWin.Controllers.StoryControllers
 {
-    internal interface IStoryController
+    public interface IStoryController
     {
         public bool InsertStory(Story story);
         public bool UpdateStory(int id, Story newStory);
