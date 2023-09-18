@@ -26,7 +26,7 @@ namespace AO3SchedulerWin.Forms
             _controller = new StoryTableController(_tableView, _model);
             _authorModel = new AuthorLocalModel();
             _controller.UpdateViews();
-            _session = session; 
+            _session = session;
 
         }
 
@@ -52,10 +52,19 @@ namespace AO3SchedulerWin.Forms
             _controller.UpdateViews();
         }
 
+        private void SchedulerScreen_Load(object sender, EventArgs e)
+        {
+            mainContainer.Appearance = TabAppearance.FlatButtons;
+            mainContainer.ItemSize = new Size(0, 1);
+            mainContainer.SizeMode = TabSizeMode.Fixed;
+        }
+
         private IStoryController _controller;
         private IStoryModel _model;
         private IAuthorModel _authorModel;
         private IStoryView _tableView;
         private Ao3Session _session;
+
+
     }
 }
