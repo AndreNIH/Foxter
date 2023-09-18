@@ -109,7 +109,7 @@ namespace AO3SchedulerWin
         {
             Form nextScreen = _authorModel.GetActiveAuthor() == null
                 ? new NoActiveUserScreen()
-                : new SchedulerScreen();
+                : new SchedulerScreen(_session);
             SetMainContent(nextScreen);
         }
 
@@ -130,7 +130,8 @@ namespace AO3SchedulerWin
             {
                 //Attempt to restore session
                 var restoredSession = await Ao3Session.RestoreSession();
-                //Attempt to re-log into user account
+                
+                //Cookie session restoration failed. Attempt to re-log into user account
                 if(restoredSession == null)
                 {
                     logger.Info($"Re-logging into  '{activeAuthor.Name}'");
@@ -142,6 +143,16 @@ namespace AO3SchedulerWin
                         _authorModel.SetActiveUser(-1);
                     }
                 }
+                else
+                {
+                    //Restore session
+                    _session = restoredSession;
+                }
+
+            }
+            else
+            {
+                logger.Info("No active users in model. Skipping session loading");
             }
 
         }

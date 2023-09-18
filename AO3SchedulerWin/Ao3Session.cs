@@ -203,29 +203,49 @@ namespace AO3SchedulerWin
         public async Task<IEnumerable<Ao3Work>> GetAllAuthorWorks()
         {
             _username = "J_Shute";
-            HttpResponseMessage worksBody = await httpClient.GetAsync($"users/{_username}/works/");
-            var htmlDoc = new HtmlAgilityPack.HtmlDocument();
-            htmlDoc.LoadHtml(await worksBody.Content.ReadAsStringAsync());
-
-            HtmlNodeCollection userWorks = htmlDoc.DocumentNode.SelectNodes("//li[contains(@class, 'blurb')]/descendant::a[1]");
             var getUserWorksTasks = new List<Task<Ao3Work>>();
-            foreach(var work in userWorks)
+            for(int pageNumber=1; ;pageNumber++)
             {
-                try
+
+                _logger.Info($"Fetching all works on page {pageNumber} for user {_username}");
+                HttpResponseMessage worksBody = await httpClient.GetAsync($"users/{_username}/works/");
+                var htmlDoc = new HtmlAgilityPack.HtmlDocument();
+                htmlDoc.LoadHtml(await worksBody.Content.ReadAsStringAsync());
+
+                HtmlNodeCollection userWorks = htmlDoc.DocumentNode.SelectNodes("//li[contains(@class, 'blurb')]/descendant::a[1]");
+                foreach (var work in userWorks)
                 {
-                    string tempWorkId = work.GetAttributeValue("href", null);
-                    if (tempWorkId == null)
+                    try
                     {
-                        throw new Ao3GenericException("Missing authenticity token."); ;
+                        string tempWorkId = work.GetAttributeValue("href", null);
+                        if (tempWorkId == null)
+                        {
+                            throw new Ao3GenericException("Missing authenticity token."); ;
+                        }
+                        int workId = Int32.Parse(tempWorkId.Substring(7));
+                        getUserWorksTasks.Add(Ao3Work.GetWorkFromId(this, workId));
                     }
-                    int workId = Int32.Parse(tempWorkId.Substring(7));
-                    getUserWorksTasks.Add(Ao3Work.GetWorkFromId(this, workId));
-                }catch(FormatException)
+                    catch (FormatException)
+                    {
+                        _logger.Error("WorkId contains an invalid value: " + work.GetAttributeValue("href", ""));
+                    }
+                    catch (Ao3GenericException ex)
+                    {
+                        _logger.Error(ex.Message);
+                    }
+
+                }
+
+                //Check for pagination. Exit loop if there is no NEXT button
+                HtmlNode navNode = htmlDoc.DocumentNode.SelectSingleNode("//ol[@class='pagination actions'][1]/li[@class='next'][1]/@class");
+                var nextNode = navNode.SelectSingleNode("//li[@class='next'][1]/a[1]");
+                if(navNode == null || nextNode == null)
                 {
-                    _logger.Error("WorkId contains an invalid value: " + work.GetAttributeValue("href", ""));
-                }catch(Ao3GenericException ex)
+                    break;
+                }
+                else
                 {
-                    _logger.Error(ex.Message);
+                    _logger.Debug(navNode.InnerHtml);
                 }
                 
             }
@@ -270,12 +290,12 @@ namespace AO3SchedulerWin
         private Ao3Session()
         {
 
-            var proxy = new WebProxy
+            /*var proxy = new WebProxy
             {
                 Address = new Uri($"http://127.0.0.1:8080"),
                 BypassProxyOnLocal = false,
                 UseDefaultCredentials = false,
-            };
+            };*/
 
 
             _appStorePath = Path.Combine(
@@ -288,8 +308,8 @@ namespace AO3SchedulerWin
             {
                 AllowAutoRedirect = false,
                 CookieContainer = _cookieContainer,
-                UseProxy = true,
-                Proxy = proxy
+                UseProxy = true
+                //Proxy = proxy
 
             };
 
@@ -297,8 +317,8 @@ namespace AO3SchedulerWin
             {
                 AllowAutoRedirect = true,
                 CookieContainer = _cookieContainer,
-                UseProxy = true,
-                Proxy = proxy
+                UseProxy = true
+                //Proxy = proxy
             };
 
             var uri = new Uri("https://archiveofourown.org/");

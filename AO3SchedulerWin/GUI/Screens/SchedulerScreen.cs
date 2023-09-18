@@ -18,7 +18,7 @@ namespace AO3SchedulerWin.Forms
 {
     public partial class SchedulerScreen : Form
     {
-        public SchedulerScreen()
+        public SchedulerScreen(Ao3Session session)
         {
             InitializeComponent();
             _model = new LocalStoryModel();
@@ -26,7 +26,7 @@ namespace AO3SchedulerWin.Forms
             _controller = new StoryTableController(_tableView, _model);
             _authorModel = new AuthorLocalModel();
             _controller.UpdateViews();
-
+            _session = session; 
 
         }
 
@@ -47,14 +47,15 @@ namespace AO3SchedulerWin.Forms
                 story.Contents = "This is the content of the story";
                 _controller.InsertStory(story);
             }*/
-            var form = new ScheduleStoryForm();
+            var form = new ScheduleStoryForm(_session);
             form.ShowDialog();
             _controller.UpdateViews();
         }
 
-        IStoryController _controller;
-        IStoryModel _model;
-        IAuthorModel _authorModel;
-        IStoryView _tableView;
+        private IStoryController _controller;
+        private IStoryModel _model;
+        private IAuthorModel _authorModel;
+        private IStoryView _tableView;
+        private Ao3Session _session;
     }
 }

@@ -80,7 +80,7 @@ namespace AO3SchedulerWin
                 throw new Ao3ForbiddenException(exceptMsg);
             }
 
-            _logger.Info($"Success.");
+            _logger.Info($"Successfully retrieved data for Work {workId}");
             return work;
         }
 
