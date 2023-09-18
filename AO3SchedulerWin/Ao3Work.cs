@@ -84,6 +84,12 @@ namespace AO3SchedulerWin
             return work;
         }
 
+        public static Ao3Work CreateWork(Ao3Session session, int workId, string workName)
+        {
+            var work = new Ao3Work(session, workId);
+            work._workName = workName;
+            return work;
+        }
 
         private Ao3Work(Ao3Session session, int workId)
         {

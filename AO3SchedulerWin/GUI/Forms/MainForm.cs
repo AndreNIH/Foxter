@@ -129,7 +129,7 @@ namespace AO3SchedulerWin
             if (activeAuthor != null)
             {
                 //Attempt to restore session
-                var restoredSession = await Ao3Session.RestoreSession();
+                var restoredSession = await Ao3Session.RestoreSession(_authorModel);
                 
                 //Cookie session restoration failed. Attempt to re-log into user account
                 if(restoredSession == null)

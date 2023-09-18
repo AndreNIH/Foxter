@@ -11,6 +11,7 @@ using AO3SchedulerWin.Models;
 using System.Text.RegularExpressions;
 using System.Runtime.Serialization.Formatters.Binary;
 using Newtonsoft.Json;
+using AO3SchedulerWin.Models.AuthorModels;
 
 namespace AO3SchedulerWin
 {
@@ -28,7 +29,7 @@ namespace AO3SchedulerWin
         private bool authenticated = false;
 
 
-        public async Task<bool> RestoreCookiesFromDisk()
+        public async Task<bool> RestoreCookiesFromDisk(IAuthorModel authorModel)
         {
             try
             {
@@ -42,9 +43,6 @@ namespace AO3SchedulerWin
                         {
                             _cookieContainer.Add(httpClient.BaseAddress, c);
                         }
-                        
-
-
                     }
                     //Cookies are loaded. Now we need the user's username
                     _logger.Info("Loaded cookies cookies");
@@ -53,14 +51,21 @@ namespace AO3SchedulerWin
                     var username = await FetchUsernameFromSession();
                     if(username != null)
                     {
-                        _logger.Info("Cookies hold valid session data. Attemping to create Author object");
-                        //Create an Auhtor from the USERNAME
-                        var author = await GetAuthorObjectFromUser(username);
-                        _username = author.Name;
-                        _password = author.Password;
-                        _logger.Info("Session restored successfully");
-                        return true;
-
+                        _logger.Info($"Session corresponds to user '{username}'");
+                        var restoredAuthor = authorModel.GetAllAuthors().Find(uname => uname.Name == username);
+                        if(restoredAuthor != null)
+                        {
+                            _logger.Info("Session restored successfully");
+                            _username = restoredAuthor.Name;
+                            _password = restoredAuthor.Password;
+                            authorModel.SetActiveUser(restoredAuthor.Id);
+                            return true;
+                        }
+                        else
+                        {
+                            _logger.Warn("Author isn't registed in the application database");
+                        }
+                        return false;
                     }
                     else
                     {
@@ -202,13 +207,12 @@ namespace AO3SchedulerWin
         //Return a list of tuples containing WorkId, WorkTitle
         public async Task<IEnumerable<Ao3Work>> GetAllAuthorWorks()
         {
-            _username = "J_Shute";
-            var getUserWorksTasks = new List<Task<Ao3Work>>();
+            var userWorksList = new List<Ao3Work>();
             for(int pageNumber=1; ;pageNumber++)
             {
 
                 _logger.Info($"Fetching all works on page {pageNumber} for user {_username}");
-                HttpResponseMessage worksBody = await httpClient.GetAsync($"users/{_username}/works/");
+                HttpResponseMessage worksBody = await httpClient.GetAsync($"users/{_username}/works?page={pageNumber}");
                 var htmlDoc = new HtmlAgilityPack.HtmlDocument();
                 htmlDoc.LoadHtml(await worksBody.Content.ReadAsStringAsync());
 
@@ -223,7 +227,9 @@ namespace AO3SchedulerWin
                             throw new Ao3GenericException("Missing authenticity token."); ;
                         }
                         int workId = Int32.Parse(tempWorkId.Substring(7));
-                        getUserWorksTasks.Add(Ao3Work.GetWorkFromId(this, workId));
+                        string title = work.InnerText;
+                        _logger.Info("Creating Ao3Work object for " + workId);
+                        userWorksList.Add(Ao3Work.CreateWork(this, workId, title));
                     }
                     catch (FormatException)
                     {
@@ -233,23 +239,27 @@ namespace AO3SchedulerWin
                     {
                         _logger.Error(ex.Message);
                     }
+                    
 
                 }
 
                 //Check for pagination. Exit loop if there is no NEXT button
                 HtmlNode navNode = htmlDoc.DocumentNode.SelectSingleNode("//ol[@class='pagination actions'][1]/li[@class='next'][1]/@class");
-                var nextNode = navNode.SelectSingleNode("//li[@class='next'][1]/a[1]");
-                if(navNode == null || nextNode == null)
+                if(navNode != null)
                 {
-                    break;
+                    HtmlNode nextNode = navNode.SelectSingleNode("//li[@class='next'][1]/a[1]");
+                    if(nextNode == null) break;
                 }
                 else
                 {
-                    _logger.Debug(navNode.InnerHtml);
+                    break;
                 }
                 
+                
+               //Delay to avoid getting rate limited
+                await Task.Delay(500);
             }
-            return await Task.WhenAll(getUserWorksTasks);
+            return userWorksList;
         }
 
 
@@ -279,10 +289,10 @@ namespace AO3SchedulerWin
             return await GetAuthorObjectFromUser(_username);
         }
 
-        public static async Task<Ao3Session?> RestoreSession()
+        public static async Task<Ao3Session?> RestoreSession(IAuthorModel authorModel)
         {
             var session = new Ao3Session();
-            return await session.RestoreCookiesFromDisk()
+            return await session.RestoreCookiesFromDisk(authorModel)
                 ? session
                 : null;
         }
@@ -290,12 +300,12 @@ namespace AO3SchedulerWin
         private Ao3Session()
         {
 
-            /*var proxy = new WebProxy
+            var proxy = new WebProxy
             {
                 Address = new Uri($"http://127.0.0.1:8080"),
                 BypassProxyOnLocal = false,
                 UseDefaultCredentials = false,
-            };*/
+            };
 
 
             _appStorePath = Path.Combine(
@@ -309,7 +319,6 @@ namespace AO3SchedulerWin
                 AllowAutoRedirect = false,
                 CookieContainer = _cookieContainer,
                 UseProxy = true
-                //Proxy = proxy
 
             };
 
@@ -318,8 +327,10 @@ namespace AO3SchedulerWin
                 AllowAutoRedirect = true,
                 CookieContainer = _cookieContainer,
                 UseProxy = true
-                //Proxy = proxy
             };
+
+            clientHandler.Proxy = proxy;
+            clientHandlerNoRedirect.Proxy = proxy;
 
             var uri = new Uri("https://archiveofourown.org/");
             clientHandler.ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator;
