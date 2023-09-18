@@ -39,7 +39,7 @@
             richTextBox2 = new RichTextBox();
             checkBox1 = new CheckBox();
             checkBox2 = new CheckBox();
-            mainContent = new TabControl();
+            mainContainer = new TabControl();
             loadingTab = new TabPage();
             label5 = new Label();
             pictureBox1 = new PictureBox();
@@ -47,7 +47,7 @@
             button1 = new Button();
             tabPage3 = new TabPage();
             richTextBox3 = new RichTextBox();
-            mainContent.SuspendLayout();
+            mainContainer.SuspendLayout();
             loadingTab.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
             chapterDetailsTab.SuspendLayout();
@@ -148,17 +148,17 @@
             checkBox2.Text = "Notes at the end";
             checkBox2.UseVisualStyleBackColor = true;
             // 
-            // mainContent
+            // mainContainer
             // 
-            mainContent.Controls.Add(loadingTab);
-            mainContent.Controls.Add(chapterDetailsTab);
-            mainContent.Controls.Add(tabPage3);
-            mainContent.Dock = DockStyle.Fill;
-            mainContent.Location = new Point(0, 0);
-            mainContent.Name = "mainContent";
-            mainContent.SelectedIndex = 0;
-            mainContent.Size = new Size(439, 559);
-            mainContent.TabIndex = 10;
+            mainContainer.Controls.Add(loadingTab);
+            mainContainer.Controls.Add(chapterDetailsTab);
+            mainContainer.Controls.Add(tabPage3);
+            mainContainer.Dock = DockStyle.Fill;
+            mainContainer.Location = new Point(0, 0);
+            mainContainer.Name = "mainContainer";
+            mainContainer.SelectedIndex = 0;
+            mainContainer.Size = new Size(439, 559);
+            mainContainer.TabIndex = 10;
             // 
             // loadingTab
             // 
@@ -252,11 +252,11 @@
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(439, 559);
-            Controls.Add(mainContent);
+            Controls.Add(mainContainer);
             Name = "ScheduleStoryForm";
-            Text = "ScheduleStoryForm";
+            Text = "Upload New Chapter";
             Load += ScheduleStoryForm_Load;
-            mainContent.ResumeLayout(false);
+            mainContainer.ResumeLayout(false);
             loadingTab.ResumeLayout(false);
             loadingTab.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).EndInit();
@@ -278,7 +278,7 @@
         private RichTextBox richTextBox2;
         private CheckBox checkBox1;
         private CheckBox checkBox2;
-        private TabControl mainContent;
+        private TabControl mainContainer;
         private TabPage loadingTab;
         private TabPage chapterDetailsTab;
         private Button button1;

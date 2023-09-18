@@ -25,9 +25,9 @@ namespace AO3SchedulerWin.Forms
             _authorModel = new AuthorLocalModel();
 
 
-            /*mainContent.Appearance = TabAppearance.FlatButtons;
-            mainContent.ItemSize = new Size(0, 1);
-            mainContent.SizeMode = TabSizeMode.Fixed;*/
+            mainContainer.Appearance = TabAppearance.FlatButtons;
+            mainContainer.ItemSize = new Size(0, 1);
+            mainContainer.SizeMode = TabSizeMode.Fixed;
         }
 
         private async Task<bool> LoadStories()
@@ -50,7 +50,7 @@ namespace AO3SchedulerWin.Forms
             }
             catch (HttpRequestException ex)
             {
-                
+
                 _logger.Error(ex.Message);
                 MessageBox.Show(
                      ex.Message,
@@ -67,10 +67,10 @@ namespace AO3SchedulerWin.Forms
         //Form Events
         private async void ScheduleStoryForm_Load(object sender, EventArgs e)
         {
-            if(_session != null)
+            if (_session != null)
             {
                 if (await LoadStories() == false) Close();
-                else mainContent.SelectedIndex = 1;
+                else mainContainer.SelectedIndex = 1;
             }
             else
             {
