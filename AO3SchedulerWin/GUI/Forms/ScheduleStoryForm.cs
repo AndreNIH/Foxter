@@ -71,7 +71,7 @@ namespace AO3SchedulerWin.Forms
         {
             try
             {
-                var works = await _session.GetAllAuthorStories();
+                var works = await _session.GetAllAuthorWorks();
                 if (works != null)
                 {
                     foreach (Ao3Work work in works)

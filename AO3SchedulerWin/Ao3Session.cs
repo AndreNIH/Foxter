@@ -200,7 +200,7 @@ namespace AO3SchedulerWin
         }
 
         //Return a list of tuples containing WorkId, WorkTitle
-        public async Task<IEnumerable<Ao3Work>> GetAllAuthorStories()
+        public async Task<IEnumerable<Ao3Work>> GetAllAuthorWorks()
         {
             _username = "J_Shute";
             HttpResponseMessage worksBody = await httpClient.GetAsync($"users/{_username}/works/");
