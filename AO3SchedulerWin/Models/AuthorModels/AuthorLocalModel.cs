@@ -155,7 +155,7 @@ namespace AO3SchedulerWin.Models.AuthorModels
                     var setActiveCommand = new SQLiteCommand($"update `AUTHORS` set active=1 where id={id}", connection);
                     var resetCommand = new SQLiteCommand($"update `AUTHORS` set active=0 where id!={id}", connection);
                     int rowsAffected = setActiveCommand.ExecuteNonQuery();
-                    if (rowsAffected < 1) return false;
+                    if (rowsAffected < 1 && id >= 0) return false;
                     resetCommand.ExecuteNonQuery();
                     return true;
 

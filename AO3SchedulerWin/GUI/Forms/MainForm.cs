@@ -139,7 +139,7 @@ namespace AO3SchedulerWin
                     if( _session == null)
                     {
                         logger.Warn($"Failed to log in to '{activeAuthor.Name}'");
-                        _authorModel.RemoveAuthor(activeAuthor.Id);
+                        _authorModel.SetActiveUser(-1);
                     }
                 }
             }
