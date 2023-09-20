@@ -1,3 +1,4 @@
+using AO3SchedulerWin.GUI.Forms;
 using log4net.Repository;
 using System.Net;
 using System.Reflection;
@@ -28,7 +29,7 @@ namespace AO3SchedulerWin
 
                 AllocConsole();
                 ApplicationConfiguration.Initialize();
-                Application.Run(new MainForm());
+                Application.Run(new AppLoaderForm());
 
             }
             catch(Exception ex)
