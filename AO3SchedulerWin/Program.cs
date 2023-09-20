@@ -21,13 +21,25 @@ namespace AO3SchedulerWin
         {
             // To customize application configuration such as set high DPI settings or default font,
             // see https://aka.ms/applicationconfiguration.
+            try
+            {
+                ILoggerRepository repository = log4net.LogManager.GetRepository(Assembly.GetCallingAssembly());
+                log4net.Config.XmlConfigurator.Configure(repository, new System.IO.FileInfo("log4net.config"));
 
-            ILoggerRepository repository = log4net.LogManager.GetRepository(Assembly.GetCallingAssembly());
-            log4net.Config.XmlConfigurator.Configure(repository, new System.IO.FileInfo("log4net.config"));
+                AllocConsole();
+                ApplicationConfiguration.Initialize();
+                Application.Run(new MainForm());
 
-            AllocConsole();
-            ApplicationConfiguration.Initialize();
-            Application.Run(new MainForm());
+            }
+            catch(Exception ex)
+            {
+                MessageBox.Show("Something went wrong. The application will close\n\r " +
+                                "Details:\n\r" + ex.Message,
+                                "Fatal Error", 
+                                MessageBoxButtons.OK, 
+                                MessageBoxIcon.Error);
+            }
+            
             
         }
     }

@@ -21,7 +21,7 @@ namespace AO3SchedulerWin.GUI.Screens
         private IAuthorModel _model = new AuthorLocalModel();
         private Ao3Session _session;
 
-        public AuthorsScreen(Ao3Session session)
+        public AuthorsScreen(ref Ao3Session session)
         {
             InitializeComponent();
             _tableController = AuthorCoordinator.Get.MakeCoorinatedObject(

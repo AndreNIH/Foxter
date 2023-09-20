@@ -12,6 +12,7 @@ using System.Text.RegularExpressions;
 using System.Runtime.Serialization.Formatters.Binary;
 using Newtonsoft.Json;
 using AO3SchedulerWin.Models.AuthorModels;
+using System.Net.Sockets;
 
 namespace AO3SchedulerWin
 {
@@ -80,9 +81,6 @@ namespace AO3SchedulerWin
             catch (FileNotFoundException ex)
             {
                 _logger.Warn("Could not restore previous session from cookies. " + ex.Message);
-            }catch(Exception ex)
-            {
-                _logger.Warn(ex);
             }
             return false;
         }
@@ -125,6 +123,10 @@ namespace AO3SchedulerWin
             }catch(HttpRequestException ex)
             {
                 _logger.Error(ex.Message);
+            }catch(SocketException ex)
+            {
+                _logger.Error(ex.Message);
+                MessageBox.Show(ex.Message, "Network Error");
             }
             return null;
         }
@@ -132,27 +134,29 @@ namespace AO3SchedulerWin
         private async Task<bool> TryLogin(string user, string password)
         {
 
-            _logger.Info($"Trying to log in. User: {user}");
-
-            //It is important to clear all the cookies, otherwise
-            //AO3 will try to redirect us to the dashboard if we
-            //are already logged in.
-            _cookieContainer.GetAllCookies().Clear();
-
-            var loginPageReq = await httpClient.GetAsync("users/login/");
-            var htmlDoc = new HtmlAgilityPack.HtmlDocument();
-            htmlDoc.LoadHtml(await loginPageReq.Content.ReadAsStringAsync());
-
-            var csrfNode = htmlDoc.DocumentNode.SelectSingleNode("//meta[@name='csrf-token']");
-            if (csrfNode != null)
+            try
             {
-                string csrfToken = csrfNode.GetAttributeValue("content", "");
-                if (string.IsNullOrEmpty(csrfToken))
-                {
-                    throw new Ao3GenericException("Missing authenticity token."); ;
-                }
+                _logger.Info($"Trying to log in. User: {user}");
 
-                var loginFormData = new Dictionary<string, string>
+                //It is important to clear all the cookies, otherwise
+                //AO3 will try to redirect us to the dashboard if we
+                //are already logged in.
+                _cookieContainer.GetAllCookies().Clear();
+
+                var loginPageReq = await httpClient.GetAsync("users/login/");
+                var htmlDoc = new HtmlAgilityPack.HtmlDocument();
+                htmlDoc.LoadHtml(await loginPageReq.Content.ReadAsStringAsync());
+
+                var csrfNode = htmlDoc.DocumentNode.SelectSingleNode("//meta[@name='csrf-token']");
+                if (csrfNode != null)
+                {
+                    string csrfToken = csrfNode.GetAttributeValue("content", "");
+                    if (string.IsNullOrEmpty(csrfToken))
+                    {
+                        throw new Ao3GenericException("Missing authenticity token."); ;
+                    }
+
+                    var loginFormData = new Dictionary<string, string>
                 {
                     { "authenticity_token", csrfToken },
                     { "user[login]", user },
@@ -162,35 +166,47 @@ namespace AO3SchedulerWin
                 };
 
 
-                var loginFormReq = await httpClient.PostAsync(
-                    "users/login/",
-                    new FormUrlEncodedContent(loginFormData)
-                );
+                    var loginFormReq = await httpClient.PostAsync(
+                        "users/login/",
+                        new FormUrlEncodedContent(loginFormData)
+                    );
 
 
-                string userFromRedirect = await loginFormReq.Content.ReadAsStringAsync();
-                bool authenticated = loginFormReq.StatusCode == System.Net.HttpStatusCode.Redirect;
+                    string userFromRedirect = await loginFormReq.Content.ReadAsStringAsync();
+                    bool authenticated = loginFormReq.StatusCode == System.Net.HttpStatusCode.Redirect;
 
-                if (authenticated)
-                {
-                    string pattern = @"<a href=""https://archiveofourown\.org/users/(?<Username>[^""]+)""";
-                    Match userMatch = Regex.Match(userFromRedirect, pattern);
-                    if (userMatch.Success)
+                    if (authenticated)
                     {
-                        _username = userMatch.Groups["Username"].Value;
-                        _password = password;
+                        string pattern = @"<a href=""https://archiveofourown\.org/users/(?<Username>[^""]+)""";
+                        Match userMatch = Regex.Match(userFromRedirect, pattern);
+                        if (userMatch.Success)
+                        {
+                            _username = userMatch.Groups["Username"].Value;
+                            _password = password;
+                        }
+                        else
+                        {
+                            throw new Ao3GenericException("Could not extract username");
+                        }
                     }
-                    else
-                    {
-                        throw new Ao3GenericException("Could not extract username");
-                    }
+                    _logger.Info("Login " + (authenticated ? "successful" : "failed"));
+
+
+                    await WriteCookiesToDisk();
+                    return authenticated;
                 }
-                _logger.Info("Login " + (authenticated ? "successful" : "failed"));
-
-
-                await WriteCookiesToDisk();
-                return authenticated;
             }
+            catch(HttpRequestException ex)
+            {
+                _logger.Error(ex.Message);
+                MessageBox.Show(ex.Message, "Request Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            catch (SocketException ex)
+            {
+                _logger.Error(ex.Message);
+                MessageBox.Show(ex.Message, "Network Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            
 
             return false;
         }
@@ -282,6 +298,17 @@ namespace AO3SchedulerWin
             {
                 throw new Ao3GenericException("UserId contains an invalid value");
             }
+            catch (HttpRequestException ex)
+            {
+                _logger.Error(ex.Message);
+                MessageBox.Show(ex.Message, "Request Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            catch (SocketException ex)
+            {
+                _logger.Error(ex.Message);
+                MessageBox.Show(ex.Message, "Network Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            return null;
         }
 
         public async Task<Author> GetAuthor()

@@ -116,7 +116,7 @@ namespace AO3SchedulerWin
         private async void accountsButton_Click(object sender, EventArgs e)
         {
             
-            SetMainContent(new AuthorsScreen(_session));
+            SetMainContent(new AuthorsScreen(ref _session));
             
             
         }
