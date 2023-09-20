@@ -109,54 +109,44 @@ namespace AO3SchedulerWin
 
         private async Task<string?> FetchUsernameFromSession()
         {
-            try
-            {
-                var loginPageReq = await httpClient.GetAsync("users/login/");
-                var htmlDoc = new HtmlAgilityPack.HtmlDocument();
-                htmlDoc.LoadHtml(await loginPageReq.Content.ReadAsStringAsync());
-                var csrfNode = htmlDoc.DocumentNode.SelectSingleNode("//meta[@name='csrf-token']");
 
-                string pattern = @"<a href=""https://archiveofourown\.org/users/(?<Username>[^""]+)""";
-                string userFromRedirect = await loginPageReq.Content.ReadAsStringAsync();
-                Match userMatch = Regex.Match(userFromRedirect, pattern);
-                if (userMatch.Success) return userMatch.Groups["Username"].Value;
-            }catch(HttpRequestException ex)
-            {
-                _logger.Error(ex.Message);
-            }catch(SocketException ex)
-            {
-                _logger.Error(ex.Message);
-                MessageBox.Show(ex.Message, "Network Error");
-            }
+            var loginPageReq = await httpClient.GetAsync("users/login/");
+            var htmlDoc = new HtmlAgilityPack.HtmlDocument();
+            htmlDoc.LoadHtml(await loginPageReq.Content.ReadAsStringAsync());
+            var csrfNode = htmlDoc.DocumentNode.SelectSingleNode("//meta[@name='csrf-token']");
+
+            string pattern = @"<a href=""https://archiveofourown\.org/users/(?<Username>[^""]+)""";
+            string userFromRedirect = await loginPageReq.Content.ReadAsStringAsync();
+            Match userMatch = Regex.Match(userFromRedirect, pattern);
+            if (userMatch.Success) return userMatch.Groups["Username"].Value;
             return null;
         }
-        
-        private async Task<bool> TryLogin(string user, string password)
+
+        public async Task<bool> TryLogin(string user, string password)
         {
 
-            try
+
+            _logger.Info($"Trying to log in. User: {user}");
+
+            //It is important to clear all the cookies, otherwise
+            //AO3 will try to redirect us to the dashboard if we
+            //are already logged in.
+            _cookieContainer.GetAllCookies().Clear();
+
+            var loginPageReq = await httpClient.GetAsync("users/login/");
+            var htmlDoc = new HtmlAgilityPack.HtmlDocument();
+            htmlDoc.LoadHtml(await loginPageReq.Content.ReadAsStringAsync());
+
+            var csrfNode = htmlDoc.DocumentNode.SelectSingleNode("//meta[@name='csrf-token']");
+            if (csrfNode != null)
             {
-                _logger.Info($"Trying to log in. User: {user}");
-
-                //It is important to clear all the cookies, otherwise
-                //AO3 will try to redirect us to the dashboard if we
-                //are already logged in.
-                _cookieContainer.GetAllCookies().Clear();
-
-                var loginPageReq = await httpClient.GetAsync("users/login/");
-                var htmlDoc = new HtmlAgilityPack.HtmlDocument();
-                htmlDoc.LoadHtml(await loginPageReq.Content.ReadAsStringAsync());
-
-                var csrfNode = htmlDoc.DocumentNode.SelectSingleNode("//meta[@name='csrf-token']");
-                if (csrfNode != null)
+                string csrfToken = csrfNode.GetAttributeValue("content", "");
+                if (string.IsNullOrEmpty(csrfToken))
                 {
-                    string csrfToken = csrfNode.GetAttributeValue("content", "");
-                    if (string.IsNullOrEmpty(csrfToken))
-                    {
-                        throw new Ao3GenericException("Missing authenticity token."); ;
-                    }
+                    throw new Ao3GenericException("Missing authenticity token."); ;
+                }
 
-                    var loginFormData = new Dictionary<string, string>
+                var loginFormData = new Dictionary<string, string>
                 {
                     { "authenticity_token", csrfToken },
                     { "user[login]", user },
@@ -166,59 +156,41 @@ namespace AO3SchedulerWin
                 };
 
 
-                    var loginFormReq = await httpClient.PostAsync(
-                        "users/login/",
-                        new FormUrlEncodedContent(loginFormData)
-                    );
+                var loginFormReq = await httpClient.PostAsync(
+                    "users/login/",
+                    new FormUrlEncodedContent(loginFormData)
+                );
 
 
-                    string userFromRedirect = await loginFormReq.Content.ReadAsStringAsync();
-                    bool authenticated = loginFormReq.StatusCode == System.Net.HttpStatusCode.Redirect;
+                string userFromRedirect = await loginFormReq.Content.ReadAsStringAsync();
+                bool authenticated = loginFormReq.StatusCode == System.Net.HttpStatusCode.Redirect;
 
-                    if (authenticated)
+                if (authenticated)
+                {
+                    string pattern = @"<a href=""https://archiveofourown\.org/users/(?<Username>[^""]+)""";
+                    Match userMatch = Regex.Match(userFromRedirect, pattern);
+                    if (userMatch.Success)
                     {
-                        string pattern = @"<a href=""https://archiveofourown\.org/users/(?<Username>[^""]+)""";
-                        Match userMatch = Regex.Match(userFromRedirect, pattern);
-                        if (userMatch.Success)
-                        {
-                            _username = userMatch.Groups["Username"].Value;
-                            _password = password;
-                        }
-                        else
-                        {
-                            throw new Ao3GenericException("Could not extract username");
-                        }
+                        _username = userMatch.Groups["Username"].Value;
+                        _password = password;
                     }
-                    _logger.Info("Login " + (authenticated ? "successful" : "failed"));
-
-
-                    await WriteCookiesToDisk();
-                    return authenticated;
+                    else
+                    {
+                        throw new Ao3GenericException("Could not extract username");
+                    }
                 }
+                _logger.Info("Login " + (authenticated ? "successful" : "failed"));
+
+
+                await WriteCookiesToDisk();
+                return authenticated;
             }
-            catch(HttpRequestException ex)
-            {
-                _logger.Error(ex.Message);
-                MessageBox.Show(ex.Message, "Request Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-            catch (SocketException ex)
-            {
-                _logger.Error(ex.Message);
-                MessageBox.Show(ex.Message, "Network Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-            
+
 
             return false;
         }
-       
 
-        public static async Task<Ao3Session?> CreateSession(string username, string password)
-        {
-            var session = new Ao3Session();
-            return await session.TryLogin(username, password)
-                ? session
-                : null;
-        }
+
 
         //Return a list of tuples containing WorkId, WorkTitle
         public async Task<IEnumerable<Ao3Work>> GetAllAuthorWorks()
@@ -324,7 +296,7 @@ namespace AO3SchedulerWin
                 : null;
         }
 
-        private Ao3Session()
+        public Ao3Session()
         {
 
             var proxy = new WebProxy
@@ -340,12 +312,13 @@ namespace AO3SchedulerWin
                 "AO3S"
             );
 
+            bool useProxy = false;
             _cookieContainer = new CookieContainer();
             var clientHandler = new HttpClientHandler()
             {
                 AllowAutoRedirect = false,
                 CookieContainer = _cookieContainer,
-                UseProxy = true
+                UseProxy = useProxy
 
             };
 
@@ -353,7 +326,7 @@ namespace AO3SchedulerWin
             {
                 AllowAutoRedirect = true,
                 CookieContainer = _cookieContainer,
-                UseProxy = true
+                UseProxy = useProxy
             };
 
             clientHandler.Proxy = proxy;

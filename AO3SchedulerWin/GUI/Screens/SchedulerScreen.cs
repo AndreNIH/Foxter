@@ -26,41 +26,24 @@ namespace AO3SchedulerWin.Forms
             _storyController = new StoryTableController(_tableView, _model);
             _authorModel = new AuthorLocalModel();
             _session = session;
-            _storyController.UpdateViews();
-            
+
 
         }
 
         private void reloadScreen()
         {
-            mainContainer.SelectedIndex = storyListContainer.Controls.Count > 0 ? 1 : 0;
+            mainContainer.SelectedIndex = 1; //storyListContainer.Controls.Count > 0 ? 1 : 0;
             _storyController.UpdateViews();
         }
 
         private void schedulePostButton_Click(object sender, EventArgs e)
         {
-            /*for (int i = 0; i < 1; i++)
-            {
-                var story = new Story();
-
-                story.AuthorId = _authorModel.GetActiveAuthor().Id;
-                story.StoryId = 1;
-                story.Title = "Great Story";
-                story.ChapterTitle = "A new Chapter(On digital marketing)";
-                story.PublishingDate = DateTime.Now;
-                story.ChapterSummary = "Summary";
-                story.ChapterNotes = "Notes";
-                story.NotesAtStart = false; story.NotesAtEnd = false;
-                story.Contents = "This is the content of the story";
-                _controller.InsertStory(story);
-            }*/
             var form = new ScheduleStoryForm(_session, _storyController);
             form.ShowDialog();
-            _storyController.UpdateViews();
             reloadScreen();
         }
 
-        private void SchedulerScreen_Load(object sender, EventArgs e)
+        protected override void OnLoad(EventArgs e)
         {
             mainContainer.Appearance = TabAppearance.FlatButtons;
             mainContainer.ItemSize = new Size(0, 1);
@@ -74,7 +57,7 @@ namespace AO3SchedulerWin.Forms
         private IAuthorModel _authorModel;
         private IStoryView _tableView;
         private Ao3Session _session;
-        
+
 
 
     }

@@ -16,11 +16,14 @@ namespace AO3SchedulerWin.GUI.Forms
     public partial class Ao3LoginForm : Form
     {
         private static readonly log4net.ILog logger = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+        private Ao3Session _session;
         private IAuthorModel _authorModel;
-        public Ao3LoginForm(IAuthorModel authorModel)
+
+        public Ao3LoginForm(IAuthorModel authorModel, ref Ao3Session session)
         {
             InitializeComponent();
             _authorModel = authorModel;
+            _session = session;
         }
 
         private async void loginButton_Click(object sender, EventArgs e)
@@ -28,9 +31,9 @@ namespace AO3SchedulerWin.GUI.Forms
             try
             {
                 loginButton.Enabled = false;
-                Ao3Session? session = await Ao3Session.CreateSession(userTextBox.Text, passwordTextbox.Text);
+                bool loginSucccess = await _session.TryLogin(userTextBox.Text, passwordTextbox.Text);
                 loginButton.Enabled = true;
-                if (session == null)
+                if (!loginSucccess)
                 {
                     MessageBox.Show(
                         "Invalid username/password",
@@ -40,7 +43,7 @@ namespace AO3SchedulerWin.GUI.Forms
                     return;
                 }
                 
-                Author author = await session.GetAuthor();
+                Author author = await _session.GetAuthor();
                 _authorModel.AddAuthor(author);
                 _authorModel.SetActiveUser(author.Id);
                 this.Close();

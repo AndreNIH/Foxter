@@ -47,9 +47,10 @@
             schedulePostButton.FlatStyle = FlatStyle.Flat;
             schedulePostButton.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
             schedulePostButton.ForeColor = Color.White;
-            schedulePostButton.Location = new Point(0, 398);
+            schedulePostButton.Location = new Point(0, 663);
+            schedulePostButton.Margin = new Padding(4, 5, 4, 5);
             schedulePostButton.Name = "schedulePostButton";
-            schedulePostButton.Size = new Size(800, 52);
+            schedulePostButton.Size = new Size(1143, 87);
             schedulePostButton.TabIndex = 0;
             schedulePostButton.Text = "Schedule New Post";
             schedulePostButton.UseVisualStyleBackColor = false;
@@ -62,19 +63,21 @@
             storyListContainer.ColumnCount = 1;
             storyListContainer.ColumnStyles.Add(new ColumnStyle());
             storyListContainer.Dock = DockStyle.Fill;
-            storyListContainer.Location = new Point(3, 3);
+            storyListContainer.Location = new Point(4, 5);
+            storyListContainer.Margin = new Padding(4, 5, 4, 5);
             storyListContainer.Name = "storyListContainer";
             storyListContainer.RowCount = 1;
             storyListContainer.RowStyles.Add(new RowStyle());
-            storyListContainer.Size = new Size(786, 332);
+            storyListContainer.Size = new Size(1127, 562);
             storyListContainer.TabIndex = 1;
             // 
             // padding
             // 
             padding.Dock = DockStyle.Bottom;
-            padding.Location = new Point(0, 366);
+            padding.Location = new Point(0, 610);
+            padding.Margin = new Padding(4, 5, 4, 5);
             padding.Name = "padding";
-            padding.Size = new Size(800, 32);
+            padding.Size = new Size(1143, 53);
             padding.TabIndex = 0;
             // 
             // mainContainer
@@ -87,17 +90,18 @@
             mainContainer.Name = "mainContainer";
             mainContainer.Padding = new Point(0, 0);
             mainContainer.SelectedIndex = 0;
-            mainContainer.Size = new Size(800, 366);
+            mainContainer.Size = new Size(1143, 610);
             mainContainer.TabIndex = 0;
             // 
             // nothingPage
             // 
             nothingPage.BackColor = SystemColors.Control;
             nothingPage.Controls.Add(label1);
-            nothingPage.Location = new Point(4, 24);
+            nothingPage.Location = new Point(4, 34);
+            nothingPage.Margin = new Padding(4, 5, 4, 5);
             nothingPage.Name = "nothingPage";
-            nothingPage.Padding = new Padding(3);
-            nothingPage.Size = new Size(792, 338);
+            nothingPage.Padding = new Padding(4, 5, 4, 5);
+            nothingPage.Size = new Size(1135, 572);
             nothingPage.TabIndex = 1;
             nothingPage.Text = "tabPage2";
             // 
@@ -105,9 +109,10 @@
             // 
             label1.Dock = DockStyle.Fill;
             label1.Font = new Font("Century Gothic", 20F, FontStyle.Regular, GraphicsUnit.Point);
-            label1.Location = new Point(3, 3);
+            label1.Location = new Point(4, 5);
+            label1.Margin = new Padding(4, 0, 4, 0);
             label1.Name = "label1";
-            label1.Size = new Size(786, 332);
+            label1.Size = new Size(1127, 562);
             label1.TabIndex = 0;
             label1.Text = "Nothing to post...";
             label1.TextAlign = ContentAlignment.MiddleCenter;
@@ -116,24 +121,25 @@
             // 
             schedulePage.BackColor = SystemColors.Control;
             schedulePage.Controls.Add(storyListContainer);
-            schedulePage.Location = new Point(4, 24);
+            schedulePage.Location = new Point(4, 34);
+            schedulePage.Margin = new Padding(4, 5, 4, 5);
             schedulePage.Name = "schedulePage";
-            schedulePage.Padding = new Padding(3);
-            schedulePage.Size = new Size(792, 338);
+            schedulePage.Padding = new Padding(4, 5, 4, 5);
+            schedulePage.Size = new Size(1135, 572);
             schedulePage.TabIndex = 0;
             schedulePage.Text = "tabPage1";
             // 
             // SchedulerScreen
             // 
-            AutoScaleDimensions = new SizeF(7F, 15F);
+            AutoScaleDimensions = new SizeF(10F, 25F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(800, 450);
+            ClientSize = new Size(1143, 750);
             Controls.Add(mainContainer);
             Controls.Add(padding);
             Controls.Add(schedulePostButton);
+            Margin = new Padding(4, 5, 4, 5);
             Name = "SchedulerScreen";
             Text = "SchedulerForm";
-            Load += SchedulerScreen_Load;
             mainContainer.ResumeLayout(false);
             nothingPage.ResumeLayout(false);
             schedulePage.ResumeLayout(false);

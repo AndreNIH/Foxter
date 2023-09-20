@@ -1,3 +1,4 @@
+using AO3SchedulerWin.Factories;
 using AO3SchedulerWin.Forms;
 using AO3SchedulerWin.GUI.Screens;
 using AO3SchedulerWin.Models.AuthorModels;
@@ -18,7 +19,7 @@ namespace AO3SchedulerWin
         private static readonly log4net.ILog logger = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
         private IAuthorModel _authorModel = new AuthorLocalModel();
         private Ao3Session _session;
-        public MainForm()
+        public MainForm(IAppServiceFactory serviceFactory)
         {
             InitializeComponent();
             this.MaximizedBounds = Screen.FromHandle(this.Handle).WorkingArea;
@@ -27,6 +28,8 @@ namespace AO3SchedulerWin
                 ? new NoActiveUserScreen()
                 : new HomeScreen();
 
+            _authorModel = serviceFactory.CreateAuthorModel();
+            _session = serviceFactory.GetSession();
             
 
             SetMainContent(nextScreen);
@@ -128,35 +131,7 @@ namespace AO3SchedulerWin
 
         private async void MainForm_Load(object sender, EventArgs e)
         {
-            var activeAuthor = _authorModel.GetActiveAuthor();
-            if (activeAuthor != null)
-            {
-                //Attempt to restore session
-                var restoredSession = await Ao3Session.RestoreSession(_authorModel);
-                
-                //Cookie session restoration failed. Attempt to re-log into user account
-                if(restoredSession == null)
-                {
-                    logger.Info($"Re-logging into  '{activeAuthor.Name}'");
-                    _session = await Ao3Session.CreateSession(activeAuthor.Name, activeAuthor.Password);
-                    //Re-login failed
-                    if( _session == null)
-                    {
-                        logger.Warn($"Failed to log in to '{activeAuthor.Name}'");
-                        _authorModel.SetActiveUser(-1);
-                    }
-                }
-                else
-                {
-                    //Restore session
-                    _session = restoredSession;
-                }
-
-            }
-            else
-            {
-                logger.Info("No active users in model. Skipping session loading");
-            }
+            
 
         }
     }
