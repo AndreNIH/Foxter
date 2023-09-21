@@ -170,7 +170,28 @@ namespace AO3SchedulerWin.Models.AuthorModels
 
         public bool UpdateAuthor(int id, Author author)
         {
-            throw new NotImplementedException();
+            try
+            {
+                using (var connection = ConnectionFactory.GetConnection())
+                {
+                    connection.Open();
+                    var command = connection.CreateCommand();
+                    command.CommandText = @"update `AUTHORS` set username=@username, password=@password 
+                                            where id=@id";
+                    command.Parameters.AddWithValue("@id", author.Id);
+                    command.Parameters.AddWithValue("@username", author.Name);
+                    command.Parameters.AddWithValue("@password", author.Password);
+                    command.Prepare();
+                    return command.ExecuteNonQuery() == 1;
+                    
+                }
+            }
+            catch (SQLiteException ex)
+            {
+                logger.Error(ex.Message);
+            }
+
+            return false;
         }
     }
 }
