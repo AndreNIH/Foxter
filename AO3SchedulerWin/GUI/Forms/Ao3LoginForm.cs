@@ -10,6 +10,7 @@ using System.Windows.Forms;
 using HtmlAgilityPack;
 using AO3SchedulerWin.Models.AuthorModels;
 using AO3SchedulerWin.Models;
+using AO3SchedulerWin.Controllers.AuthorControllers;
 
 namespace AO3SchedulerWin.GUI.Forms
 {
@@ -17,13 +18,19 @@ namespace AO3SchedulerWin.GUI.Forms
     {
         private static readonly log4net.ILog logger = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
         private Ao3Session _session;
-        private IAuthorModel _authorModel;
-
-        public Ao3LoginForm(IAuthorModel authorModel, ref Ao3Session session)
+        private IAuthorController _authorController;
+        private int? _preloadId;
+        public Ao3LoginForm(IAuthorModel authorModel, ref Ao3Session session, int? preloadId)
         {
             InitializeComponent();
-            _authorModel = authorModel;
+            _authorController = new AuthorFormController(
+                authorModel,
+                userTextBox,
+                passwordTextbox,
+                preloadId);
             _session = session;
+            _preloadId = preloadId;
+            _authorController.UpdateViews();
         }
 
         private async void loginButton_Click(object sender, EventArgs e)
@@ -44,9 +51,10 @@ namespace AO3SchedulerWin.GUI.Forms
                 }
                 
                 Author author = await _session.GetAuthor();
-                _authorModel.AddAuthor(author);
-                _authorModel.SetActiveUser(author.Id);
-                this.Close();
+                if (_preloadId.HasValue) _authorController.UpdateAuthor(author.Id, author);
+                else _authorController.RegisterAuthor(author);
+                _authorController.SetActiveAuthor(author.Id);
+                Close();
                
             }
             catch (HttpRequestException ex)

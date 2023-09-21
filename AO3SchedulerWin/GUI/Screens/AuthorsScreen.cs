@@ -77,7 +77,7 @@ namespace AO3SchedulerWin.GUI.Screens
 
         private void addAccountButton_Click(object sender, EventArgs e)
         {
-            var form = new Ao3LoginForm(_model, ref _session);
+            var form = new Ao3LoginForm(_model, ref _session, null);
             form.StartPosition = FormStartPosition.CenterScreen;
             form.ShowDialog();
             _tableController.UpdateViews();
@@ -99,6 +99,21 @@ namespace AO3SchedulerWin.GUI.Screens
             _loggedAuthorController.UpdateViews();
 
 
+        }
+
+        private void updateAccountButton_Click(object sender, EventArgs e)
+        {
+            var selected = usersListView.SelectedIndices;
+            var tableController = (AuthorTableController)_tableController;
+            if (selected.Count > 0)
+            {
+                int authorId = tableController.AuthorIdForTablePosition(selected[0]);
+                var form = new Ao3LoginForm(_model, ref _session, authorId);
+                form.ShowDialog();
+                _tableController.UpdateViews();
+                _loggedAuthorController.UpdateViews();
+
+            }
         }
     }
 }

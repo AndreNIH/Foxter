@@ -1,4 +1,5 @@
-﻿using AO3SchedulerWin.Models.AuthorModels;
+﻿using AO3SchedulerWin.Models;
+using AO3SchedulerWin.Models.AuthorModels;
 using AO3SchedulerWin.Views.AuthorViews;
 using System;
 using System.Collections.Generic;
@@ -10,7 +11,7 @@ namespace AO3SchedulerWin.Controllers.AuthorControllers
 {
     internal class LoggedAuthorController : IAuthorController
     {
-        public bool RegisterAuthor(int authorId, string user, string password)
+        public bool RegisterAuthor(Author author)
         {
             throw new NotImplementedException();
         }
@@ -31,6 +32,12 @@ namespace AO3SchedulerWin.Controllers.AuthorControllers
             var author = _model.GetActiveAuthor();
             _view.QueueViewChange(author);
             _view.ApplyChanges();
+        }
+
+     
+        public bool UpdateAuthor(int authorId, Author newAuthorData)
+        {
+            throw new NotImplementedException();
         }
 
         public LoggedAuthorController(IAuthorModel model, IAuthorView view)

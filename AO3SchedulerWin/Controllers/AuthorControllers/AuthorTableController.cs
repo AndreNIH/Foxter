@@ -11,12 +11,8 @@ namespace AO3SchedulerWin.Controllers.AuthorControllers
 {
     internal class AuthorTableController : IAuthorController
     {
-        public bool RegisterAuthor(int authorId, string name, string password)
+        public bool RegisterAuthor(Author author)
         {
-            Author author = new Author();
-            author.Id = authorId;
-            author.Name = name;
-            author.Password = password;
             return _model.AddAuthor(author);
         }
 
@@ -42,6 +38,11 @@ namespace AO3SchedulerWin.Controllers.AuthorControllers
             var allAuthors = _model.GetAllAuthors();
             if (tablePosition > allAuthors.Count) return -1;
             return allAuthors[tablePosition].Id;
+        }
+
+        public bool UpdateAuthor(int authorId, Author newAuthorData)
+        {
+            throw new NotImplementedException();
         }
 
         public AuthorTableController(IAuthorModel model, IAuthorView view)

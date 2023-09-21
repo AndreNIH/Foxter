@@ -63,10 +63,10 @@ namespace AO3SchedulerWin.GUI.Forms
 
         protected async override void OnLoad(EventArgs e)
         {
+            var factory = this.CreateAppServiceFactory();
+            var authorModel = factory.CreateAuthorModel();
             try
             {
-                var factory = this.CreateAppServiceFactory();
-                var authorModel = factory.CreateAuthorModel();
                 var session = factory.GetSession();
                 bool success = await session.RestoreCookiesFromDisk(authorModel);
 
@@ -83,10 +83,6 @@ namespace AO3SchedulerWin.GUI.Forms
                     }
 
                 }
-                var form = new MainForm(factory);
-                this.Hide();
-                form.Show();
-
             }
             catch(HttpRequestException ex)
             {
@@ -97,7 +93,11 @@ namespace AO3SchedulerWin.GUI.Forms
                             MessageBoxIcon.Warning
                             );
             }
-            
+
+            var form = new MainForm(factory);
+            Hide();
+            form.Show();
+
 
         }
 

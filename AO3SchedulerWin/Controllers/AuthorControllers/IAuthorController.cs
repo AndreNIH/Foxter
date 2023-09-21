@@ -1,4 +1,5 @@
-﻿using System;
+﻿using AO3SchedulerWin.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,7 +9,8 @@ namespace AO3SchedulerWin.Controllers.AuthorControllers
 {
     internal interface IAuthorController
     {
-        bool RegisterAuthor(int authorId, string user, string password);
+        bool RegisterAuthor(Author author);
+        bool UpdateAuthor(int authorId, Author newAuthorData);
         bool UnregisterAuthor(int authorId);
         bool SetActiveAuthor(int authorId);
         void UpdateViews();

@@ -29,7 +29,7 @@ namespace AO3SchedulerWin
         
         private bool authenticated = false;
 
-
+        //Cookies Read/Write methods
         public async Task<bool> RestoreCookiesFromDisk(IAuthorModel authorModel)
         {
             try
@@ -107,21 +107,7 @@ namespace AO3SchedulerWin
             return false; 
         }
 
-        private async Task<string?> FetchUsernameFromSession()
-        {
-
-            var loginPageReq = await httpClient.GetAsync("users/login/");
-            var htmlDoc = new HtmlAgilityPack.HtmlDocument();
-            htmlDoc.LoadHtml(await loginPageReq.Content.ReadAsStringAsync());
-            var csrfNode = htmlDoc.DocumentNode.SelectSingleNode("//meta[@name='csrf-token']");
-
-            string pattern = @"<a href=""https://archiveofourown\.org/users/(?<Username>[^""]+)""";
-            string userFromRedirect = await loginPageReq.Content.ReadAsStringAsync();
-            Match userMatch = Regex.Match(userFromRedirect, pattern);
-            if (userMatch.Success) return userMatch.Groups["Username"].Value;
-            return null;
-        }
-
+        //Session Methods
         public async Task<bool> TryLogin(string user, string password)
         {
 
@@ -131,7 +117,7 @@ namespace AO3SchedulerWin
             //It is important to clear all the cookies, otherwise
             //AO3 will try to redirect us to the dashboard if we
             //are already logged in.
-            _cookieContainer.GetAllCookies().Clear();
+            RefreshSession();
 
             var loginPageReq = await httpClient.GetAsync("users/login/");
             var htmlDoc = new HtmlAgilityPack.HtmlDocument();
@@ -185,14 +171,33 @@ namespace AO3SchedulerWin
                 await WriteCookiesToDisk();
                 return authenticated;
             }
+            else
+            {
+                _logger.Warn("csrf token missing");
+                _logger.Debug(htmlDoc.Text);
+            }
 
 
             return false;
         }
 
+        
+        private async Task<string?> FetchUsernameFromSession()
+        {
 
+            var loginPageReq = await httpClient.GetAsync("users/login/");
+            var htmlDoc = new HtmlAgilityPack.HtmlDocument();
+            htmlDoc.LoadHtml(await loginPageReq.Content.ReadAsStringAsync());
+            var csrfNode = htmlDoc.DocumentNode.SelectSingleNode("//meta[@name='csrf-token']");
 
-        //Return a list of tuples containing WorkId, WorkTitle
+            string pattern = @"<a href=""https://archiveofourown\.org/users/(?<Username>[^""]+)""";
+            string userFromRedirect = await loginPageReq.Content.ReadAsStringAsync();
+            Match userMatch = Regex.Match(userFromRedirect, pattern);
+            if (userMatch.Success) return userMatch.Groups["Username"].Value;
+            return null;
+        }
+
+        //Session Query Methods
         public async Task<IEnumerable<Ao3Work>> GetAllAuthorWorks()
         {
             var userWorksList = new List<Ao3Work>();
@@ -288,17 +293,9 @@ namespace AO3SchedulerWin
             return await GetAuthorObjectFromUser(_username);
         }
 
-        public static async Task<Ao3Session?> RestoreSession(IAuthorModel authorModel)
+        //Session Creation
+        private void RefreshSession()
         {
-            var session = new Ao3Session();
-            return await session.RestoreCookiesFromDisk(authorModel)
-                ? session
-                : null;
-        }
-
-        public Ao3Session()
-        {
-
             var proxy = new WebProxy
             {
                 Address = new Uri($"http://127.0.0.1:8080"),
@@ -307,12 +304,9 @@ namespace AO3SchedulerWin
             };
 
 
-            _appStorePath = Path.Combine(
-                Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
-                "AO3S"
-            );
+            
 
-            bool useProxy = false;
+            bool useProxy = true;
             _cookieContainer = new CookieContainer();
             var clientHandler = new HttpClientHandler()
             {
@@ -336,7 +330,18 @@ namespace AO3SchedulerWin
             clientHandler.ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator;
             clientHandlerNoRedirect.ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator;
             httpClient = new HttpClient(clientHandler) { BaseAddress = uri };
-            httpClientRedirect = new HttpClient(clientHandlerNoRedirect) { BaseAddress= uri };
+            httpClientRedirect = new HttpClient(clientHandlerNoRedirect) { BaseAddress = uri };
+            _logger.Info("Created new AO3 Session");
+        }
+        
+        public Ao3Session()
+        {
+
+            _appStorePath = Path.Combine(
+                Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
+                "AO3S"
+            );
+            RefreshSession();
         }
 
     }

@@ -30,7 +30,7 @@
         {
             panel1 = new Panel();
             setActiveButton = new Button();
-            button3 = new Button();
+            updateAccountButton = new Button();
             removeAccountButton = new Button();
             addAccountButton = new Button();
             panel2 = new Panel();
@@ -46,7 +46,7 @@
             // 
             panel1.BackColor = Color.Brown;
             panel1.Controls.Add(setActiveButton);
-            panel1.Controls.Add(button3);
+            panel1.Controls.Add(updateAccountButton);
             panel1.Controls.Add(removeAccountButton);
             panel1.Controls.Add(addAccountButton);
             panel1.Dock = DockStyle.Right;
@@ -68,16 +68,17 @@
             setActiveButton.UseVisualStyleBackColor = true;
             setActiveButton.Click += setActiveButton_Click;
             // 
-            // button3
+            // updateAccountButton
             // 
-            button3.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-            button3.Location = new Point(19, 203);
-            button3.Margin = new Padding(4, 5, 4, 5);
-            button3.Name = "button3";
-            button3.Size = new Size(170, 82);
-            button3.TabIndex = 2;
-            button3.Text = "Update account";
-            button3.UseVisualStyleBackColor = true;
+            updateAccountButton.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            updateAccountButton.Location = new Point(19, 203);
+            updateAccountButton.Margin = new Padding(4, 5, 4, 5);
+            updateAccountButton.Name = "updateAccountButton";
+            updateAccountButton.Size = new Size(170, 82);
+            updateAccountButton.TabIndex = 2;
+            updateAccountButton.Text = "Update account";
+            updateAccountButton.UseVisualStyleBackColor = true;
+            updateAccountButton.Click += updateAccountButton_Click;
             // 
             // removeAccountButton
             // 
@@ -177,7 +178,7 @@
 
         private Panel panel1;
         private Button setActiveButton;
-        private Button button3;
+        private Button updateAccountButton;
         private Button removeAccountButton;
         private Button addAccountButton;
         private Panel panel2;
