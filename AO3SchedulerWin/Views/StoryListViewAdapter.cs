@@ -21,10 +21,8 @@ namespace AO3SchedulerWin.Views
             _layoutPanel.Controls.Clear();
             foreach (var story in stories)
             {
+                //#TODO: Find a way to pass around model/session data to this
                 StoryListItem item = new StoryListItem();
-                item.Title = story.Title;
-                item.ChapterTitle = story.ChapterTitle;
-                item.PublishingDate = DateTime.Now;
                 item.Anchor = AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Top;
                 _layoutPanel.Controls.Add(item);
             }

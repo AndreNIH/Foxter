@@ -33,17 +33,19 @@
             worksComboBox = new ComboBox();
             publishingDatePicker = new DateTimePicker();
             label2 = new Label();
-            richTextBox1 = new RichTextBox();
+            chapterSummaryTextbox = new RichTextBox();
             label3 = new Label();
             label4 = new Label();
-            richTextBox2 = new RichTextBox();
-            checkBox1 = new CheckBox();
-            checkBox2 = new CheckBox();
+            chapterNotesTextbox = new RichTextBox();
+            notesAtStartCheckbox = new CheckBox();
+            notesAtEndCheckbox = new CheckBox();
             mainContainer = new TabControl();
             loadingTab = new TabPage();
             label5 = new Label();
             pictureBox1 = new PictureBox();
             chapterDetailsTab = new TabPage();
+            chapterTitleTextbox = new TextBox();
+            label8 = new Label();
             detailsNextButton = new Button();
             tabPage3 = new TabPage();
             button3 = new Button();
@@ -63,8 +65,6 @@
             button4 = new Button();
             textBox1 = new TextBox();
             label7 = new Label();
-            label8 = new Label();
-            chapterTitleTextbox = new TextBox();
             mainContainer.SuspendLayout();
             loadingTab.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
@@ -77,9 +77,10 @@
             // label1
             // 
             label1.AutoSize = true;
-            label1.Location = new Point(10, 19);
+            label1.Location = new Point(14, 32);
+            label1.Margin = new Padding(4, 0, 4, 0);
             label1.Name = "label1";
-            label1.Size = new Size(71, 15);
+            label1.Size = new Size(108, 25);
             label1.TabIndex = 0;
             label1.Text = "Select Story:";
             // 
@@ -88,9 +89,10 @@
             worksComboBox.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
             worksComboBox.AutoCompleteMode = AutoCompleteMode.Suggest;
             worksComboBox.FormattingEnabled = true;
-            worksComboBox.Location = new Point(107, 15);
+            worksComboBox.Location = new Point(153, 25);
+            worksComboBox.Margin = new Padding(4, 5, 4, 5);
             worksComboBox.Name = "worksComboBox";
-            worksComboBox.Size = new Size(316, 23);
+            worksComboBox.Size = new Size(450, 33);
             worksComboBox.TabIndex = 1;
             // 
             // publishingDatePicker
@@ -98,75 +100,83 @@
             publishingDatePicker.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
             publishingDatePicker.CustomFormat = "dd MMM yy hh:mm tt";
             publishingDatePicker.Format = DateTimePickerFormat.Custom;
-            publishingDatePicker.Location = new Point(107, 71);
+            publishingDatePicker.Location = new Point(153, 118);
+            publishingDatePicker.Margin = new Padding(4, 5, 4, 5);
             publishingDatePicker.Name = "publishingDatePicker";
-            publishingDatePicker.Size = new Size(316, 23);
+            publishingDatePicker.Size = new Size(450, 31);
             publishingDatePicker.TabIndex = 2;
             // 
             // label2
             // 
             label2.AutoSize = true;
-            label2.Location = new Point(10, 75);
+            label2.Location = new Point(14, 125);
+            label2.Margin = new Padding(4, 0, 4, 0);
             label2.Name = "label2";
-            label2.Size = new Size(93, 15);
+            label2.Size = new Size(140, 25);
             label2.TabIndex = 3;
             label2.Text = "Publishing Date:";
             // 
-            // richTextBox1
+            // chapterSummaryTextbox
             // 
-            richTextBox1.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
-            richTextBox1.Location = new Point(8, 119);
-            richTextBox1.Name = "richTextBox1";
-            richTextBox1.Size = new Size(415, 131);
-            richTextBox1.TabIndex = 4;
-            richTextBox1.Text = "";
+            chapterSummaryTextbox.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            chapterSummaryTextbox.Location = new Point(11, 198);
+            chapterSummaryTextbox.Margin = new Padding(4, 5, 4, 5);
+            chapterSummaryTextbox.Name = "chapterSummaryTextbox";
+            chapterSummaryTextbox.Size = new Size(591, 216);
+            chapterSummaryTextbox.TabIndex = 4;
+            chapterSummaryTextbox.Text = "";
             // 
             // label3
             // 
             label3.AutoSize = true;
-            label3.Location = new Point(8, 101);
+            label3.Location = new Point(11, 168);
+            label3.Margin = new Padding(4, 0, 4, 0);
             label3.Name = "label3";
-            label3.Size = new Size(103, 15);
+            label3.Size = new Size(155, 25);
             label3.TabIndex = 5;
             label3.Text = "Chapter Summary";
             // 
             // label4
             // 
             label4.AutoSize = true;
-            label4.Location = new Point(8, 263);
+            label4.Location = new Point(11, 438);
+            label4.Margin = new Padding(4, 0, 4, 0);
             label4.Name = "label4";
-            label4.Size = new Size(83, 15);
+            label4.Size = new Size(126, 25);
             label4.TabIndex = 7;
             label4.Text = "Chapter Notes";
             // 
-            // richTextBox2
+            // chapterNotesTextbox
             // 
-            richTextBox2.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
-            richTextBox2.Location = new Point(8, 281);
-            richTextBox2.Name = "richTextBox2";
-            richTextBox2.Size = new Size(415, 131);
-            richTextBox2.TabIndex = 6;
-            richTextBox2.Text = "";
+            chapterNotesTextbox.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            chapterNotesTextbox.Location = new Point(11, 468);
+            chapterNotesTextbox.Margin = new Padding(4, 5, 4, 5);
+            chapterNotesTextbox.Name = "chapterNotesTextbox";
+            chapterNotesTextbox.Size = new Size(591, 216);
+            chapterNotesTextbox.TabIndex = 6;
+            chapterNotesTextbox.Text = "";
             // 
-            // checkBox1
+            // notesAtStartCheckbox
             // 
-            checkBox1.AutoSize = true;
-            checkBox1.Location = new Point(8, 419);
-            checkBox1.Name = "checkBox1";
-            checkBox1.Size = new Size(147, 19);
-            checkBox1.TabIndex = 8;
-            checkBox1.Text = "Notes at the beginning";
-            checkBox1.UseVisualStyleBackColor = true;
+            notesAtStartCheckbox.AutoSize = true;
+            notesAtStartCheckbox.Location = new Point(11, 698);
+            notesAtStartCheckbox.Margin = new Padding(4, 5, 4, 5);
+            notesAtStartCheckbox.Name = "notesAtStartCheckbox";
+            notesAtStartCheckbox.Size = new Size(220, 29);
+            notesAtStartCheckbox.TabIndex = 8;
+            notesAtStartCheckbox.Text = "Notes at the beginning";
+            notesAtStartCheckbox.UseVisualStyleBackColor = true;
             // 
-            // checkBox2
+            // notesAtEndCheckbox
             // 
-            checkBox2.AutoSize = true;
-            checkBox2.Location = new Point(8, 444);
-            checkBox2.Name = "checkBox2";
-            checkBox2.Size = new Size(113, 19);
-            checkBox2.TabIndex = 9;
-            checkBox2.Text = "Notes at the end";
-            checkBox2.UseVisualStyleBackColor = true;
+            notesAtEndCheckbox.AutoSize = true;
+            notesAtEndCheckbox.Location = new Point(11, 740);
+            notesAtEndCheckbox.Margin = new Padding(4, 5, 4, 5);
+            notesAtEndCheckbox.Name = "notesAtEndCheckbox";
+            notesAtEndCheckbox.Size = new Size(170, 29);
+            notesAtEndCheckbox.TabIndex = 9;
+            notesAtEndCheckbox.Text = "Notes at the end";
+            notesAtEndCheckbox.UseVisualStyleBackColor = true;
             // 
             // mainContainer
             // 
@@ -175,9 +185,10 @@
             mainContainer.Controls.Add(tabPage3);
             mainContainer.Dock = DockStyle.Fill;
             mainContainer.Location = new Point(0, 0);
+            mainContainer.Margin = new Padding(4, 5, 4, 5);
             mainContainer.Name = "mainContainer";
             mainContainer.SelectedIndex = 0;
-            mainContainer.Size = new Size(439, 559);
+            mainContainer.Size = new Size(627, 932);
             mainContainer.TabIndex = 10;
             // 
             // loadingTab
@@ -185,10 +196,11 @@
             loadingTab.BackColor = Color.White;
             loadingTab.Controls.Add(label5);
             loadingTab.Controls.Add(pictureBox1);
-            loadingTab.Location = new Point(4, 24);
+            loadingTab.Location = new Point(4, 34);
+            loadingTab.Margin = new Padding(4, 5, 4, 5);
             loadingTab.Name = "loadingTab";
-            loadingTab.Padding = new Padding(3);
-            loadingTab.Size = new Size(431, 531);
+            loadingTab.Padding = new Padding(4, 5, 4, 5);
+            loadingTab.Size = new Size(619, 894);
             loadingTab.TabIndex = 1;
             loadingTab.Text = "tabPage2";
             // 
@@ -197,9 +209,10 @@
             label5.AutoSize = true;
             label5.Font = new Font("Calibri", 18F, FontStyle.Regular, GraphicsUnit.Point);
             label5.ForeColor = SystemColors.ControlDarkDark;
-            label5.Location = new Point(122, 292);
+            label5.Location = new Point(174, 487);
+            label5.Margin = new Padding(4, 0, 4, 0);
             label5.Name = "label5";
-            label5.Size = new Size(194, 29);
+            label5.Size = new Size(290, 44);
             label5.TabIndex = 1;
             label5.Text = "Retrieving works...";
             // 
@@ -207,9 +220,10 @@
             // 
             pictureBox1.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
             pictureBox1.Image = (Image)resources.GetObject("pictureBox1.Image");
-            pictureBox1.Location = new Point(117, 77);
+            pictureBox1.Location = new Point(167, 128);
+            pictureBox1.Margin = new Padding(4, 5, 4, 5);
             pictureBox1.Name = "pictureBox1";
-            pictureBox1.Size = new Size(205, 204);
+            pictureBox1.Size = new Size(293, 340);
             pictureBox1.SizeMode = PictureBoxSizeMode.Zoom;
             pictureBox1.TabIndex = 0;
             pictureBox1.TabStop = false;
@@ -219,30 +233,50 @@
             chapterDetailsTab.Controls.Add(chapterTitleTextbox);
             chapterDetailsTab.Controls.Add(label8);
             chapterDetailsTab.Controls.Add(detailsNextButton);
-            chapterDetailsTab.Controls.Add(checkBox2);
+            chapterDetailsTab.Controls.Add(notesAtEndCheckbox);
             chapterDetailsTab.Controls.Add(worksComboBox);
-            chapterDetailsTab.Controls.Add(checkBox1);
+            chapterDetailsTab.Controls.Add(notesAtStartCheckbox);
             chapterDetailsTab.Controls.Add(label1);
             chapterDetailsTab.Controls.Add(label4);
             chapterDetailsTab.Controls.Add(publishingDatePicker);
-            chapterDetailsTab.Controls.Add(richTextBox2);
+            chapterDetailsTab.Controls.Add(chapterNotesTextbox);
             chapterDetailsTab.Controls.Add(label2);
             chapterDetailsTab.Controls.Add(label3);
-            chapterDetailsTab.Controls.Add(richTextBox1);
-            chapterDetailsTab.Location = new Point(4, 24);
+            chapterDetailsTab.Controls.Add(chapterSummaryTextbox);
+            chapterDetailsTab.Location = new Point(4, 34);
+            chapterDetailsTab.Margin = new Padding(4, 5, 4, 5);
             chapterDetailsTab.Name = "chapterDetailsTab";
-            chapterDetailsTab.Padding = new Padding(3);
-            chapterDetailsTab.Size = new Size(431, 531);
+            chapterDetailsTab.Padding = new Padding(4, 5, 4, 5);
+            chapterDetailsTab.Size = new Size(619, 894);
             chapterDetailsTab.TabIndex = 0;
             chapterDetailsTab.Text = "tabPage1";
             chapterDetailsTab.UseVisualStyleBackColor = true;
             // 
+            // chapterTitleTextbox
+            // 
+            chapterTitleTextbox.Location = new Point(153, 70);
+            chapterTitleTextbox.Margin = new Padding(4, 5, 4, 5);
+            chapterTitleTextbox.Name = "chapterTitleTextbox";
+            chapterTitleTextbox.Size = new Size(450, 31);
+            chapterTitleTextbox.TabIndex = 12;
+            // 
+            // label8
+            // 
+            label8.AutoSize = true;
+            label8.Location = new Point(14, 77);
+            label8.Margin = new Padding(4, 0, 4, 0);
+            label8.Name = "label8";
+            label8.Size = new Size(115, 25);
+            label8.TabIndex = 11;
+            label8.Text = "Chapter Title:";
+            // 
             // detailsNextButton
             // 
             detailsNextButton.Anchor = AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
-            detailsNextButton.Location = new Point(31, 478);
+            detailsNextButton.Location = new Point(44, 797);
+            detailsNextButton.Margin = new Padding(4, 5, 4, 5);
             detailsNextButton.Name = "detailsNextButton";
-            detailsNextButton.Size = new Size(377, 45);
+            detailsNextButton.Size = new Size(539, 75);
             detailsNextButton.TabIndex = 10;
             detailsNextButton.Text = "Next";
             detailsNextButton.UseVisualStyleBackColor = true;
@@ -255,11 +289,10 @@
             tabPage3.Controls.Add(label6);
             tabPage3.Controls.Add(groupBox2);
             tabPage3.Controls.Add(groupBox1);
-            tabPage3.Location = new Point(4, 24);
-            tabPage3.Margin = new Padding(2);
+            tabPage3.Location = new Point(4, 34);
             tabPage3.Name = "tabPage3";
-            tabPage3.Padding = new Padding(2);
-            tabPage3.Size = new Size(431, 531);
+            tabPage3.Padding = new Padding(3, 3, 3, 3);
+            tabPage3.Size = new Size(619, 894);
             tabPage3.TabIndex = 2;
             tabPage3.Text = "tabPage3";
             tabPage3.UseVisualStyleBackColor = true;
@@ -267,9 +300,10 @@
             // button3
             // 
             button3.Anchor = AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
-            button3.Location = new Point(31, 427);
+            button3.Location = new Point(44, 712);
+            button3.Margin = new Padding(4, 5, 4, 5);
             button3.Name = "button3";
-            button3.Size = new Size(377, 45);
+            button3.Size = new Size(539, 75);
             button3.TabIndex = 13;
             button3.Text = "Back";
             button3.UseVisualStyleBackColor = true;
@@ -277,9 +311,10 @@
             // convertFixNextButton
             // 
             convertFixNextButton.Anchor = AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
-            convertFixNextButton.Location = new Point(31, 478);
+            convertFixNextButton.Location = new Point(44, 797);
+            convertFixNextButton.Margin = new Padding(4, 5, 4, 5);
             convertFixNextButton.Name = "convertFixNextButton";
-            convertFixNextButton.Size = new Size(377, 45);
+            convertFixNextButton.Size = new Size(539, 75);
             convertFixNextButton.TabIndex = 12;
             convertFixNextButton.Text = "Next";
             convertFixNextButton.UseVisualStyleBackColor = true;
@@ -288,9 +323,10 @@
             // label6
             // 
             label6.AutoSize = true;
-            label6.Location = new Point(13, 275);
+            label6.Location = new Point(19, 458);
+            label6.Margin = new Padding(4, 0, 4, 0);
             label6.Name = "label6";
-            label6.Size = new Size(350, 15);
+            label6.Size = new Size(526, 25);
             label6.TabIndex = 11;
             label6.Text = "* Document to HTML converter powered by AOYeet (@daemuth)";
             // 
@@ -305,9 +341,11 @@
             groupBox2.Controls.Add(checkBox9);
             groupBox2.Controls.Add(checkBox6);
             groupBox2.Controls.Add(checkBox7);
-            groupBox2.Location = new Point(13, 107);
+            groupBox2.Location = new Point(19, 178);
+            groupBox2.Margin = new Padding(4, 5, 4, 5);
             groupBox2.Name = "groupBox2";
-            groupBox2.Size = new Size(410, 165);
+            groupBox2.Padding = new Padding(4, 5, 4, 5);
+            groupBox2.Size = new Size(586, 275);
             groupBox2.TabIndex = 10;
             groupBox2.TabStop = false;
             groupBox2.Text = "Options";
@@ -317,9 +355,10 @@
             checkBox8.AutoSize = true;
             checkBox8.Checked = true;
             checkBox8.CheckState = CheckState.Checked;
-            checkBox8.Location = new Point(183, 22);
+            checkBox8.Location = new Point(261, 37);
+            checkBox8.Margin = new Padding(4, 5, 4, 5);
             checkBox8.Name = "checkBox8";
-            checkBox8.Size = new Size(154, 19);
+            checkBox8.Size = new Size(230, 29);
             checkBox8.TabIndex = 5;
             checkBox8.Text = "Set Heading Alignments";
             checkBox8.UseVisualStyleBackColor = true;
@@ -329,9 +368,10 @@
             checkBox3.AutoSize = true;
             checkBox3.Checked = true;
             checkBox3.CheckState = CheckState.Checked;
-            checkBox3.Location = new Point(6, 22);
+            checkBox3.Location = new Point(9, 37);
+            checkBox3.Margin = new Padding(4, 5, 4, 5);
             checkBox3.Name = "checkBox3";
-            checkBox3.Size = new Size(129, 19);
+            checkBox3.Size = new Size(191, 29);
             checkBox3.TabIndex = 0;
             checkBox3.Text = "Remove comments";
             checkBox3.UseVisualStyleBackColor = true;
@@ -341,9 +381,10 @@
             checkBox11.AutoSize = true;
             checkBox11.Checked = true;
             checkBox11.CheckState = CheckState.Checked;
-            checkBox11.Location = new Point(183, 97);
+            checkBox11.Location = new Point(261, 162);
+            checkBox11.Margin = new Padding(4, 5, 4, 5);
             checkBox11.Name = "checkBox11";
-            checkBox11.Size = new Size(119, 19);
+            checkBox11.Size = new Size(177, 29);
             checkBox11.TabIndex = 8;
             checkBox11.Text = "Keep Empty Lines";
             checkBox11.UseVisualStyleBackColor = true;
@@ -353,9 +394,10 @@
             checkBox4.AutoSize = true;
             checkBox4.Checked = true;
             checkBox4.CheckState = CheckState.Checked;
-            checkBox4.Location = new Point(6, 47);
+            checkBox4.Location = new Point(9, 78);
+            checkBox4.Margin = new Padding(4, 5, 4, 5);
             checkBox4.Name = "checkBox4";
-            checkBox4.Size = new Size(163, 19);
+            checkBox4.Size = new Size(243, 29);
             checkBox4.TabIndex = 1;
             checkBox4.Text = "Set Paragraph Alignments";
             checkBox4.UseVisualStyleBackColor = true;
@@ -365,9 +407,10 @@
             checkBox10.AutoSize = true;
             checkBox10.Checked = true;
             checkBox10.CheckState = CheckState.Checked;
-            checkBox10.Location = new Point(183, 72);
+            checkBox10.Location = new Point(261, 120);
+            checkBox10.Margin = new Padding(4, 5, 4, 5);
             checkBox10.Name = "checkBox10";
-            checkBox10.Size = new Size(143, 19);
+            checkBox10.Size = new Size(212, 29);
             checkBox10.TabIndex = 7;
             checkBox10.Text = "Convert Strikethrough";
             checkBox10.UseVisualStyleBackColor = true;
@@ -377,9 +420,10 @@
             checkBox5.AutoSize = true;
             checkBox5.Checked = true;
             checkBox5.CheckState = CheckState.Checked;
-            checkBox5.Location = new Point(6, 72);
+            checkBox5.Location = new Point(9, 120);
+            checkBox5.Margin = new Padding(4, 5, 4, 5);
             checkBox5.Name = "checkBox5";
-            checkBox5.Size = new Size(95, 19);
+            checkBox5.Size = new Size(141, 29);
             checkBox5.TabIndex = 2;
             checkBox5.Text = "Convert Bold";
             checkBox5.UseVisualStyleBackColor = true;
@@ -389,9 +433,10 @@
             checkBox9.AutoSize = true;
             checkBox9.Checked = true;
             checkBox9.CheckState = CheckState.Checked;
-            checkBox9.Location = new Point(183, 47);
+            checkBox9.Location = new Point(261, 78);
+            checkBox9.Margin = new Padding(4, 5, 4, 5);
             checkBox9.Name = "checkBox9";
-            checkBox9.Size = new Size(96, 19);
+            checkBox9.Size = new Size(141, 29);
             checkBox9.TabIndex = 6;
             checkBox9.Text = "Convert Italic";
             checkBox9.UseVisualStyleBackColor = true;
@@ -401,9 +446,10 @@
             checkBox6.AutoSize = true;
             checkBox6.Checked = true;
             checkBox6.CheckState = CheckState.Checked;
-            checkBox6.Location = new Point(6, 97);
+            checkBox6.Location = new Point(9, 162);
+            checkBox6.Margin = new Padding(4, 5, 4, 5);
             checkBox6.Name = "checkBox6";
-            checkBox6.Size = new Size(122, 19);
+            checkBox6.Size = new Size(180, 29);
             checkBox6.TabIndex = 3;
             checkBox6.Text = "Convert Underline";
             checkBox6.UseVisualStyleBackColor = true;
@@ -413,9 +459,10 @@
             checkBox7.AutoSize = true;
             checkBox7.Checked = true;
             checkBox7.CheckState = CheckState.Checked;
-            checkBox7.Location = new Point(6, 122);
+            checkBox7.Location = new Point(9, 203);
+            checkBox7.Margin = new Padding(4, 5, 4, 5);
             checkBox7.Name = "checkBox7";
-            checkBox7.Size = new Size(164, 19);
+            checkBox7.Size = new Size(244, 29);
             checkBox7.TabIndex = 4;
             checkBox7.Text = "Remove class declarations";
             checkBox7.UseVisualStyleBackColor = true;
@@ -425,61 +472,51 @@
             groupBox1.Controls.Add(button4);
             groupBox1.Controls.Add(textBox1);
             groupBox1.Controls.Add(label7);
-            groupBox1.Location = new Point(13, 5);
+            groupBox1.Location = new Point(19, 8);
+            groupBox1.Margin = new Padding(4, 5, 4, 5);
             groupBox1.Name = "groupBox1";
-            groupBox1.Size = new Size(410, 96);
+            groupBox1.Padding = new Padding(4, 5, 4, 5);
+            groupBox1.Size = new Size(586, 160);
             groupBox1.TabIndex = 9;
             groupBox1.TabStop = false;
             groupBox1.Text = "File";
             // 
             // button4
             // 
-            button4.Location = new Point(6, 51);
+            button4.Location = new Point(9, 85);
+            button4.Margin = new Padding(4, 5, 4, 5);
             button4.Name = "button4";
-            button4.Size = new Size(398, 23);
+            button4.Size = new Size(569, 38);
             button4.TabIndex = 2;
             button4.Text = "Select File";
             button4.UseVisualStyleBackColor = true;
             // 
             // textBox1
             // 
-            textBox1.Location = new Point(46, 22);
+            textBox1.Location = new Point(66, 37);
+            textBox1.Margin = new Padding(4, 5, 4, 5);
             textBox1.Name = "textBox1";
             textBox1.PlaceholderText = "C:/Users/Documents/Fanfic.html";
-            textBox1.Size = new Size(358, 23);
+            textBox1.Size = new Size(510, 31);
             textBox1.TabIndex = 1;
             // 
             // label7
             // 
             label7.AutoSize = true;
-            label7.Location = new Point(6, 26);
+            label7.Location = new Point(9, 43);
+            label7.Margin = new Padding(4, 0, 4, 0);
             label7.Name = "label7";
-            label7.Size = new Size(34, 15);
+            label7.Size = new Size(50, 25);
             label7.TabIndex = 0;
             label7.Text = "Path:";
             // 
-            // label8
-            // 
-            label8.AutoSize = true;
-            label8.Location = new Point(10, 46);
-            label8.Name = "label8";
-            label8.Size = new Size(77, 15);
-            label8.TabIndex = 11;
-            label8.Text = "Chapter Title:";
-            // 
-            // chapterTitleTextbox
-            // 
-            chapterTitleTextbox.Location = new Point(107, 42);
-            chapterTitleTextbox.Name = "chapterTitleTextbox";
-            chapterTitleTextbox.Size = new Size(316, 23);
-            chapterTitleTextbox.TabIndex = 12;
-            // 
             // ScheduleStoryForm
             // 
-            AutoScaleDimensions = new SizeF(7F, 15F);
+            AutoScaleDimensions = new SizeF(10F, 25F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(439, 559);
+            ClientSize = new Size(627, 932);
             Controls.Add(mainContainer);
+            Margin = new Padding(4, 5, 4, 5);
             Name = "ScheduleStoryForm";
             Text = "Upload New Chapter";
             Load += ScheduleStoryForm_Load;
@@ -504,12 +541,12 @@
         private ComboBox worksComboBox;
         private DateTimePicker publishingDatePicker;
         private Label label2;
-        private RichTextBox richTextBox1;
+        private RichTextBox chapterSummaryTextbox;
         private Label label3;
         private Label label4;
-        private RichTextBox richTextBox2;
-        private CheckBox checkBox1;
-        private CheckBox checkBox2;
+        private RichTextBox chapterNotesTextbox;
+        private CheckBox notesAtStartCheckbox;
+        private CheckBox notesAtEndCheckbox;
         private TabControl mainContainer;
         private TabPage loadingTab;
         private TabPage chapterDetailsTab;

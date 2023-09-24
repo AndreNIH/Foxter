@@ -1,6 +1,7 @@
 ﻿using AO3SchedulerWin.Controllers.StoryControllers;
 using AO3SchedulerWin.Models;
 using AO3SchedulerWin.Models.AuthorModels;
+using AO3SchedulerWin.Models.StoryModels;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -16,14 +17,28 @@ namespace AO3SchedulerWin.Forms
     public partial class ScheduleStoryForm : Form
     {
         private static readonly log4net.ILog _logger = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+        private IStoryModel _storyModel;
         private IStoryController _storyController;
         private Ao3Session _session;
 
-        public ScheduleStoryForm(Ao3Session session, IStoryController storyController)
+        public ScheduleStoryForm(Ao3Session session, IStoryModel storyModel, int? preloadId=null)
         {
             InitializeComponent();
+
             _session = session;
-            _storyController = storyController;
+            _storyModel = storyModel;
+            _storyController = new StoryFormController(_storyModel,
+                worksComboBox,
+                chapterTitleTextbox,
+                publishingDatePicker,
+                chapterSummaryTextbox,
+                chapterNotesTextbox,
+                notesAtStartCheckbox,
+                notesAtEndCheckbox,
+                preloadId);
+            
+            _storyController.UpdateViews();
+
 
             mainContainer.Appearance = TabAppearance.FlatButtons;
             mainContainer.ItemSize = new Size(0, 1);

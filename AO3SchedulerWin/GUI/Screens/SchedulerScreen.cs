@@ -38,7 +38,7 @@ namespace AO3SchedulerWin.Forms
 
         private void schedulePostButton_Click(object sender, EventArgs e)
         {
-            var form = new ScheduleStoryForm(_session, _storyController);
+            var form = new ScheduleStoryForm(_session, _model);
             form.ShowDialog();
             reloadScreen();
         }
