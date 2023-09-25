@@ -24,22 +24,22 @@ namespace AO3SchedulerWin.Controllers.StoryControllers
 
         public bool DeleteStory(int id)
         {
-            throw new NotImplementedException();
+            return _model.DeleteStory(id);
         }
 
         public Story? GetStory(int id)
         {
-            throw new NotImplementedException();
+            return _model.GetStoryByWorkId(id);
         }
 
         public bool InsertStory(Story story)
         {
-            throw new NotImplementedException();
+            return _model.InsertStory(story);
         }
 
         public bool UpdateStory(int id, Story newStory)
         {
-            throw new NotImplementedException();
+            return _model.UpdateStory(id, newStory);
         }
 
         public void UpdateViews()
@@ -50,11 +50,13 @@ namespace AO3SchedulerWin.Controllers.StoryControllers
                 if(story != null)
                 {
                     _storyCombobox.Items.Add(story.Title);
-                    _storyCombobox.SelectedIndex = 1;
+                    _storyCombobox.SelectedIndex = 0;
                     _chapterTitleTextbox.Text = story.ChapterTitle;
                     _publishDatePicker.Value = story.PublishingDate;
-                    _notesAtStartCheckbox.Enabled = story.NotesAtStart;
-                    _notesAtEndCheckbox.Enabled = story.NotesAtEnd;
+                    _chapterSummaryTextbox.Text = story.ChapterSummary;
+                    _chapterNotesTextbox.Text = story.ChapterNotes;
+                    _notesAtStartCheckbox.Checked = story.NotesAtStart;
+                    _notesAtEndCheckbox.Checked = story.NotesAtEnd;
                 }
                 else
                 {

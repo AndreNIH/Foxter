@@ -24,7 +24,7 @@ namespace AO3SchedulerWin.Controllers.StoryControllers
 
         public Story? GetStory(int id)
         {
-            return _model.GetStory(id);
+            return _model.GetStoryByWorkId(id);
         }
 
         public bool InsertStory(Story story)

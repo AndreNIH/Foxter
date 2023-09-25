@@ -13,6 +13,7 @@ namespace AO3SchedulerWin.Models.StoryModels
         public bool UpdateStory(int id, Story newStory);
         public bool DeleteStory(int id);
         public List<Story> GetStories();
+        public Story? GetStoryByWorkId(int id);
         public Story? GetStory(int id);
     }
 }

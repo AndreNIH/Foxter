@@ -519,7 +519,6 @@
             Margin = new Padding(4, 5, 4, 5);
             Name = "ScheduleStoryForm";
             Text = "Upload New Chapter";
-            Load += ScheduleStoryForm_Load;
             mainContainer.ResumeLayout(false);
             loadingTab.ResumeLayout(false);
             loadingTab.PerformLayout();

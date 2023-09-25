@@ -22,10 +22,10 @@ namespace AO3SchedulerWin.Forms
         {
             InitializeComponent();
             _model = new LocalStoryModel();
-            _tableView = new StoryListViewAdapter(storyListContainer);
-            _storyController = new StoryTableController(_tableView, _model);
             _authorModel = new AuthorLocalModel();
             _session = session;
+            _tableView = new StoryListViewAdapter(storyListContainer, _session, _model);
+            _storyController = new StoryTableController(_tableView, _model);
 
 
         }

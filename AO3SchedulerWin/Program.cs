@@ -39,8 +39,9 @@ namespace AO3SchedulerWin
                                 "Fatal Error", 
                                 MessageBoxButtons.OK, 
                                 MessageBoxIcon.Error);
+                log4net.LogManager.GetLogger(typeof(Program)).Fatal(ex.Message);
             }
-            
+
             
         }
     }

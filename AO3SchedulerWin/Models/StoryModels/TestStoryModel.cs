@@ -30,9 +30,14 @@ namespace AO3SchedulerWin.Models.StoryModels
         {
             return _storyList;
         }
-        public Story? GetStory(int id)
+        public Story? GetStoryByWorkId(int id)
         {
             return _storyList.Find(e => e.StoryId == id);
+        }
+
+        public Story? GetStory(int id)
+        {
+            throw new NotImplementedException();
         }
 
         public TestStoryModel()

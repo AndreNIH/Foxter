@@ -306,7 +306,7 @@ namespace AO3SchedulerWin
 
             
 
-            bool useProxy = true;
+            bool useProxy = false;
             _cookieContainer = new CookieContainer();
             var clientHandler = new HttpClientHandler()
             {

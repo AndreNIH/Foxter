@@ -1,4 +1,5 @@
-﻿using AO3SchedulerWin.Controllers.StoryControllers;
+﻿using System.Linq;
+using AO3SchedulerWin.Controllers.StoryControllers;
 using AO3SchedulerWin.Models;
 using AO3SchedulerWin.Models.AuthorModels;
 using AO3SchedulerWin.Models.StoryModels;
@@ -20,7 +21,10 @@ namespace AO3SchedulerWin.Forms
         private IStoryModel _storyModel;
         private IStoryController _storyController;
         private Ao3Session _session;
-
+        private List<Ao3Work> _works = new List<Ao3Work>();
+        private List<int> _workIndexToIdVec = new List<int>();
+        private bool _updatePost = false;
+        private int? _preloadId = null;
         public ScheduleStoryForm(Ao3Session session, IStoryModel storyModel, int? preloadId=null)
         {
             InitializeComponent();
@@ -36,36 +40,80 @@ namespace AO3SchedulerWin.Forms
                 notesAtStartCheckbox,
                 notesAtEndCheckbox,
                 preloadId);
-            
+            _preloadId = preloadId;
             _storyController.UpdateViews();
-
+            
 
             mainContainer.Appearance = TabAppearance.FlatButtons;
             mainContainer.ItemSize = new Size(0, 1);
             mainContainer.SizeMode = TabSizeMode.Fixed;
+            _updatePost = preloadId.HasValue;
         }
 
-        private async Task<bool> LoadStories()
+        private async Task<bool> LoadAllAuthorStories()
+        {
+            var workEnumerable = await _session.GetAllAuthorWorks();
+            _works = workEnumerable.ToList();
+            if (_works != null)
+            {
+                foreach (Ao3Work work in _works)
+                {
+                    worksComboBox.Items.Add(work.WorkTitle);
+                    _workIndexToIdVec.Add(work.WorkId);
+                }
+            }
+            return true;
+
+        }
+
+        private async Task<bool> LoadOneStory(int workId)
+        {
+            var work = await Ao3Work.GetWorkFromId(_session, workId);
+            worksComboBox.Items.Add(work.WorkTitle);
+            _workIndexToIdVec.Add(work.WorkId);
+            return true;
+        }
+
+        //Form Load 
+        protected async override void OnLoad(EventArgs e) 
         {
             try
             {
-                var works = await _session.GetAllAuthorWorks();
-                if (works != null)
+                if (_updatePost)
                 {
-                    foreach (Ao3Work work in works)
+                    _logger.Info($"Updating scheduled post(internal id={_preloadId}). Skipped AO3 Work fetch cycle. Retrieving single story");
+                    var story = _storyModel.GetStory(_preloadId.Value);
+                    if(story != null)
                     {
-                        worksComboBox.Items.Add(work.WorkTitle);
+                        worksComboBox.SelectedItem = 0;
+                        mainContainer.SelectedIndex = 1;
+                        return;
+                        //We wont get stories from Ao3, we'll fetch it from the model
+                        //we'll just update the model at startup
+                        /*if(await LoadOneStory(story.Id))
+                        {
+                            worksComboBox.SelectedItem = 0;
+                            mainContainer.SelectedIndex = 1;
+                            return;
+                        }*/
                     }
-                    return true;
+                    else
+                    {
+                        _logger.Error($"The story with internal id {_preloadId.Value} is missing on the database");
+                    }
+                }
+                else
+                {
+                    _logger.Info("Fetching Works from AO3");
+                    if (await LoadAllAuthorStories())
+                    {
+                        mainContainer.SelectedIndex = 1;
+                        return;
+                    }
                 }
             }
-            catch (Ao3GenericException ex)
+            catch(HttpRequestException ex)
             {
-                _logger.Error(ex.Message);
-            }
-            catch (HttpRequestException ex)
-            {
-
                 _logger.Error(ex.Message);
                 MessageBox.Show(
                      ex.Message,
@@ -74,41 +122,82 @@ namespace AO3SchedulerWin.Forms
                     MessageBoxIcon.Warning
                     );
             }
+            catch (Ao3NotFoundException ex)
+            {
+                _logger.Error(ex.Message);
+                if (_updatePost)
+                {
+                    var res = MessageBox.Show(
+                       "The story you want to update no longer exists in Archive Of Our Own.\n\r" +
+                       "Do you want to remove it from the application's update list? This action cannot be undone",
+                       "Delete missing story",
+                       MessageBoxButtons.YesNo,
+                       MessageBoxIcon.Warning);
+                    if(res == DialogResult.Yes)
+                    {
+                        if (_storyModel.DeleteStory(_preloadId.Value))
+                        {
+                            _logger.Info($"Scheduled story deleted, internal id {_preloadId.Value}");
+                        }
+                        else
+                        {
+                            _logger.Error($"Failed to delete scheduled story, internal id {_preloadId.Value}");
+                        }
+                    }
+                }
+                
+            }
 
-            return false;
+            Close();
         }
-
 
         //Form Events
-        private async void ScheduleStoryForm_Load(object sender, EventArgs e)
-        {
-            if (_session != null)
-            {
-                if (await LoadStories() == false) Close();
-                else mainContainer.SelectedIndex = 1;
-            }
-            else
-            {
-                _logger.Error("session object was null");
-                Close();
-            }
-        }
-
         private void detailsNextButton_Click(object sender, EventArgs e)
         {
             mainContainer.SelectedIndex += 1;
         }
 
-        private void convertFixNextButton_Click(object sender, EventArgs e)
+        private async void convertFixNextButton_Click(object sender, EventArgs e)
         {
             //MessageBox.Show("Pretend this actually works. *Handwavy magic*");
+
+
+            bool result = false;
             Story story = new Story();
-            story.Title = worksComboBox.Text;
             story.ChapterTitle = chapterTitleTextbox.Text;
             story.PublishingDate = publishingDatePicker.Value;
-            story.AuthorId = _session.GetAuthor().Id;
+            story.ChapterSummary = chapterSummaryTextbox.Text;
+            story.ChapterNotes = chapterNotesTextbox.Text;
+            story.NotesAtStart = notesAtStartCheckbox.Checked;
+            story.NotesAtEnd = notesAtEndCheckbox.Checked;
+            story.Title = worksComboBox.Text;
 
-            _storyController.InsertStory(story);
+            if (_updatePost)
+            {
+                story.Id = _preloadId.Value;
+                result = _storyController.UpdateStory(0, story);
+            }
+            else
+            {
+                story.AuthorId = _session.GetAuthor().Id;
+                story.StoryId = _workIndexToIdVec[worksComboBox.SelectedIndex];
+                result = _storyController.InsertStory(story);
+            }
+
+            if(!result)
+            {
+                MessageBox.Show(
+                    "Failed to schedule story update. Check error log for more details.",
+                    "Couldn't schedule post",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+                _logger.Error($"Failed to schedule story update, internal id={story.Id}, work id={story.StoryId}");
+            }
+            else
+            {
+                _logger.Info($"Scheduled story update, internal id={story.Id}, work id={story.StoryId}");
+            }
+
             Close();
         }
     }

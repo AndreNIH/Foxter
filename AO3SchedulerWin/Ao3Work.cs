@@ -88,6 +88,7 @@ namespace AO3SchedulerWin
         {
             var work = new Ao3Work(session, workId);
             work._workName = workName;
+            _logger.Info("Created Ao3Work for " + work.WorkId);
             return work;
         }
 
