@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace AO3SchedulerWin.Views
 {
-    internal class StoryListViewAdapter : IStoryView
+    public class StoryListViewAdapter : IStoryView
     {
         
         public StoryListViewAdapter(TableLayoutPanel layoutPanel, Ao3Session ao3Session, IStoryModel storyModel)
@@ -25,7 +25,7 @@ namespace AO3SchedulerWin.Views
             _layoutPanel.Controls.Clear();
             foreach (var story in stories)
             {
-                StoryListItem item = new StoryListItem(_ao3Session,_storyModel, story.Id);
+                StoryListItem item = new StoryListItem(this, _ao3Session,_storyModel, story.Id);
                 item.Anchor = AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Top;
                 _layoutPanel.Controls.Add(item);
             }

@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using AO3SchedulerWin.Database;
+using log4net.Repository.Hierarchy;
 
 namespace AO3SchedulerWin.Models.StoryModels
 {
@@ -89,7 +90,22 @@ namespace AO3SchedulerWin.Models.StoryModels
         }
         public bool DeleteStory(int id)
         {
-            throw new NotImplementedException();
+            try
+            {
+                using (var connection = ConnectionFactory.GetConnection())
+                {
+                    connection.Open();
+                    var command = new SQLiteCommand($"delete from `STORY_UPDATES` where id={id}", connection);
+                    return command.ExecuteNonQuery() >= 1;
+                }
+
+            }
+            catch (SQLiteException ex)
+            {
+                MessageBox.Show(ex.Message);
+                _logger.Error(ex.Message);
+            }
+            return false;
         }
         public List<Story> GetStories()
         {

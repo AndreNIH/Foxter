@@ -25,7 +25,7 @@ namespace AO3SchedulerWin.Forms
         private List<int> _workIndexToIdVec = new List<int>();
         private bool _updatePost = false;
         private int? _preloadId = null;
-        public ScheduleStoryForm(Ao3Session session, IStoryModel storyModel, int? preloadId=null)
+        public ScheduleStoryForm(Ao3Session session, IStoryModel storyModel, int? preloadId = null)
         {
             InitializeComponent();
 
@@ -42,7 +42,7 @@ namespace AO3SchedulerWin.Forms
                 preloadId);
             _preloadId = preloadId;
             _storyController.UpdateViews();
-            
+
 
             mainContainer.Appearance = TabAppearance.FlatButtons;
             mainContainer.ItemSize = new Size(0, 1);
@@ -75,15 +75,16 @@ namespace AO3SchedulerWin.Forms
         }
 
         //Form Load 
-        protected async override void OnLoad(EventArgs e) 
+        protected async override void OnLoad(EventArgs e)
         {
             try
             {
                 if (_updatePost)
                 {
+                    deleteButton.Visible = true;
                     _logger.Info($"Updating scheduled post(internal id={_preloadId}). Skipped AO3 Work fetch cycle. Retrieving single story");
                     var story = _storyModel.GetStory(_preloadId.Value);
-                    if(story != null)
+                    if (story != null)
                     {
                         worksComboBox.SelectedItem = 0;
                         mainContainer.SelectedIndex = 1;
@@ -112,7 +113,7 @@ namespace AO3SchedulerWin.Forms
                     }
                 }
             }
-            catch(HttpRequestException ex)
+            catch (HttpRequestException ex)
             {
                 _logger.Error(ex.Message);
                 MessageBox.Show(
@@ -133,7 +134,7 @@ namespace AO3SchedulerWin.Forms
                        "Delete missing story",
                        MessageBoxButtons.YesNo,
                        MessageBoxIcon.Warning);
-                    if(res == DialogResult.Yes)
+                    if (res == DialogResult.Yes)
                     {
                         if (_storyModel.DeleteStory(_preloadId.Value))
                         {
@@ -145,7 +146,7 @@ namespace AO3SchedulerWin.Forms
                         }
                     }
                 }
-                
+
             }
 
             Close();
@@ -184,7 +185,7 @@ namespace AO3SchedulerWin.Forms
                 result = _storyController.InsertStory(story);
             }
 
-            if(!result)
+            if (!result)
             {
                 MessageBox.Show(
                     "Failed to schedule story update. Check error log for more details.",
@@ -198,6 +199,30 @@ namespace AO3SchedulerWin.Forms
                 _logger.Info($"Scheduled story update, internal id={story.Id}, work id={story.StoryId}");
             }
 
+            Close();
+        }
+
+        private void deleteButton_Click(object sender, EventArgs e)
+        {
+            var res = MessageBox.Show(
+                       "Are you sure you want to delete this story update? This action cannot be undone",
+                       "Delete story",
+                       MessageBoxButtons.YesNo,
+                       MessageBoxIcon.Warning);
+            if (res == DialogResult.Yes)
+            {
+                if (_storyController.DeleteStory(_preloadId.Value))
+                {
+                    _logger.Info($"Scheduled story deleted, internal id {_preloadId.Value}");
+                }
+                else
+                {
+                    _logger.Error($"Failed to delete scheduled story, internal id {_preloadId.Value}");
+                }
+            }
+
+
+            
             Close();
         }
     }

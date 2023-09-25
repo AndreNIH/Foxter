@@ -1,4 +1,5 @@
 ﻿using AO3SchedulerWin.Models.StoryModels;
+using AO3SchedulerWin.Views;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
@@ -17,14 +18,15 @@ namespace AO3SchedulerWin.Forms
         private IStoryModel _model;
         private Ao3Session _session;
         private int _storyPostId; //Corresponds to the internal id of the story in the database(not the Work ID on AO3)
+        StoryListViewAdapter _layout;
         private static log4net.ILog _logger = log4net.LogManager.GetLogger(typeof(StoryListItem));
-        public StoryListItem(Ao3Session session, IStoryModel model, int id)
+        public StoryListItem(StoryListViewAdapter layout, Ao3Session session, IStoryModel model, int id)
         {
             InitializeComponent();
+            _layout = layout;
             _model = model;
             _storyPostId = id;
             _session = session;
-
             var story = _model.GetStory(_storyPostId);
             storyTitleLabelRHS.Text = story.Title;
             chapterTitleLabelRHS.Text = story.ChapterTitle;
@@ -37,6 +39,8 @@ namespace AO3SchedulerWin.Forms
         {
             var form = new ScheduleStoryForm(_session, _model, _storyPostId);
             form.ShowDialog();
+            //aaaaaaah this is so bad
+            _layout.UpdateView(_model.GetStories()); 
         }
 
 
