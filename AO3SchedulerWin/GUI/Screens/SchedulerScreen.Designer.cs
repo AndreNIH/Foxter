@@ -96,7 +96,7 @@
             nothingPage.Controls.Add(label1);
             nothingPage.Location = new Point(4, 24);
             nothingPage.Name = "nothingPage";
-            nothingPage.Padding = new Padding(3, 3, 3, 3);
+            nothingPage.Padding = new Padding(3);
             nothingPage.Size = new Size(792, 338);
             nothingPage.TabIndex = 1;
             nothingPage.Text = "tabPage2";
@@ -118,7 +118,7 @@
             schedulePage.Controls.Add(storyListContainer);
             schedulePage.Location = new Point(4, 24);
             schedulePage.Name = "schedulePage";
-            schedulePage.Padding = new Padding(3, 3, 3, 3);
+            schedulePage.Padding = new Padding(3);
             schedulePage.Size = new Size(792, 338);
             schedulePage.TabIndex = 0;
             schedulePage.Text = "tabPage1";
@@ -133,7 +133,6 @@
             Controls.Add(schedulePostButton);
             Name = "SchedulerScreen";
             Text = "SchedulerForm";
-            Resize += SchedulerScreen_Resize;
             mainContainer.ResumeLayout(false);
             nothingPage.ResumeLayout(false);
             schedulePage.ResumeLayout(false);
