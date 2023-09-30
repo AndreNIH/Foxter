@@ -222,7 +222,7 @@ namespace AO3SchedulerWin.Forms
             }
 
 
-            
+
             Close();
         }
     }

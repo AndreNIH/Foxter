@@ -28,31 +28,29 @@
         /// </summary>
         private void InitializeComponent()
         {
-            label4 = new Label();
+            queueLabel = new Label();
             authorLabel = new Label();
             label2 = new Label();
             SuspendLayout();
             // 
-            // label4
+            // queueLabel
             // 
-            label4.AutoSize = true;
-            label4.Font = new Font("Segoe UI", 20F, FontStyle.Regular, GraphicsUnit.Point);
-            label4.Location = new Point(17, 98);
-            label4.Margin = new Padding(4, 0, 4, 0);
-            label4.Name = "label4";
-            label4.Size = new Size(633, 54);
-            label4.TabIndex = 8;
-            label4.Text = "You have: 0 pending story uploads";
+            queueLabel.AutoSize = true;
+            queueLabel.Font = new Font("Segoe UI", 20F, FontStyle.Regular, GraphicsUnit.Point);
+            queueLabel.Location = new Point(12, 59);
+            queueLabel.Name = "queueLabel";
+            queueLabel.Size = new Size(425, 37);
+            queueLabel.TabIndex = 8;
+            queueLabel.Text = "You have: 0 pending story uploads";
             // 
             // authorLabel
             // 
             authorLabel.AutoSize = true;
             authorLabel.Font = new Font("Segoe UI", 27.75F, FontStyle.Regular, GraphicsUnit.Point);
             authorLabel.ForeColor = Color.FromArgb(153, 0, 0);
-            authorLabel.Location = new Point(427, 15);
-            authorLabel.Margin = new Padding(4, 0, 4, 0);
+            authorLabel.Location = new Point(299, 9);
             authorLabel.Name = "authorLabel";
-            authorLabel.Size = new Size(142, 74);
+            authorLabel.Size = new Size(95, 50);
             authorLabel.TabIndex = 7;
             authorLabel.Text = "User";
             // 
@@ -60,32 +58,29 @@
             // 
             label2.AutoSize = true;
             label2.Font = new Font("Segoe UI Semibold", 27.75F, FontStyle.Bold, GraphicsUnit.Point);
-            label2.Location = new Point(17, 15);
-            label2.Margin = new Padding(4, 0, 4, 0);
+            label2.Location = new Point(12, 9);
             label2.Name = "label2";
-            label2.Size = new Size(417, 74);
+            label2.Size = new Size(276, 50);
             label2.TabIndex = 6;
             label2.Text = "Welcome back,";
             // 
             // HomeScreen
             // 
-            AutoScaleDimensions = new SizeF(10F, 25F);
+            AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(1143, 750);
-            Controls.Add(label4);
+            ClientSize = new Size(800, 450);
+            Controls.Add(queueLabel);
             Controls.Add(authorLabel);
             Controls.Add(label2);
-            Margin = new Padding(4, 5, 4, 5);
             Name = "HomeScreen";
             Text = "HomeScreen";
-            Load += HomeScreen_Load;
             ResumeLayout(false);
             PerformLayout();
         }
 
         #endregion
 
-        private Label label4;
+        private Label queueLabel;
         private Label authorLabel;
         private Label label2;
     }

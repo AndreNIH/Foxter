@@ -62,9 +62,8 @@
             detailPanel.Controls.Add(pictureBox1);
             detailPanel.Dock = DockStyle.Left;
             detailPanel.Location = new Point(0, 0);
-            detailPanel.Margin = new Padding(4, 5, 4, 5);
             detailPanel.Name = "detailPanel";
-            detailPanel.Size = new Size(214, 250);
+            detailPanel.Size = new Size(150, 150);
             detailPanel.TabIndex = 0;
             // 
             // pictureBox1
@@ -72,10 +71,9 @@
             pictureBox1.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             pictureBox1.BackColor = Color.Transparent;
             pictureBox1.Image = (Image)resources.GetObject("pictureBox1.Image");
-            pictureBox1.Location = new Point(23, 25);
-            pictureBox1.Margin = new Padding(4, 5, 4, 5);
+            pictureBox1.Location = new Point(16, 15);
             pictureBox1.Name = "pictureBox1";
-            pictureBox1.Size = new Size(170, 202);
+            pictureBox1.Size = new Size(119, 121);
             pictureBox1.SizeMode = PictureBoxSizeMode.StretchImage;
             pictureBox1.TabIndex = 0;
             pictureBox1.TabStop = false;
@@ -85,15 +83,14 @@
             outerContainerLayout.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
             outerContainerLayout.ColumnCount = 2;
             outerContainerLayout.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
-            outerContainerLayout.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 214F));
+            outerContainerLayout.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 150F));
             outerContainerLayout.Controls.Add(innerElementsContainer, 0, 0);
             outerContainerLayout.Controls.Add(editButton, 1, 0);
-            outerContainerLayout.Location = new Point(214, 0);
-            outerContainerLayout.Margin = new Padding(4, 5, 4, 5);
+            outerContainerLayout.Location = new Point(150, 0);
             outerContainerLayout.Name = "outerContainerLayout";
             outerContainerLayout.RowCount = 1;
             outerContainerLayout.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
-            outerContainerLayout.Size = new Size(941, 250);
+            outerContainerLayout.Size = new Size(659, 150);
             outerContainerLayout.TabIndex = 1;
             // 
             // innerElementsContainer
@@ -105,15 +102,14 @@
             innerElementsContainer.Controls.Add(chapterContainer, 0, 1);
             innerElementsContainer.Controls.Add(titleContainer, 0, 0);
             innerElementsContainer.Dock = DockStyle.Fill;
-            innerElementsContainer.Location = new Point(4, 5);
-            innerElementsContainer.Margin = new Padding(4, 5, 4, 5);
+            innerElementsContainer.Location = new Point(3, 3);
             innerElementsContainer.Name = "innerElementsContainer";
             innerElementsContainer.RowCount = 4;
             innerElementsContainer.RowStyles.Add(new RowStyle());
             innerElementsContainer.RowStyles.Add(new RowStyle());
             innerElementsContainer.RowStyles.Add(new RowStyle());
             innerElementsContainer.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-            innerElementsContainer.Size = new Size(719, 240);
+            innerElementsContainer.Size = new Size(503, 144);
             innerElementsContainer.TabIndex = 0;
             // 
             // dateContainer
@@ -126,13 +122,12 @@
             dateContainer.Controls.Add(publishingDateLabelLHS, 0, 0);
             dateContainer.Controls.Add(publishingDateLabelRHS, 1, 0);
             dateContainer.Dock = DockStyle.Fill;
-            dateContainer.Location = new Point(4, 155);
-            dateContainer.Margin = new Padding(4, 5, 4, 5);
+            dateContainer.Location = new Point(3, 80);
             dateContainer.Name = "dateContainer";
             dateContainer.RowCount = 1;
             dateContainer.RowStyles.Add(new RowStyle());
-            dateContainer.RowStyles.Add(new RowStyle(SizeType.Absolute, 67F));
-            dateContainer.Size = new Size(711, 40);
+            dateContainer.RowStyles.Add(new RowStyle(SizeType.Absolute, 15F));
+            dateContainer.Size = new Size(497, 25);
             dateContainer.TabIndex = 2;
             // 
             // publishingDateLabelLHS
@@ -143,7 +138,7 @@
             publishingDateLabelLHS.Location = new Point(0, 0);
             publishingDateLabelLHS.Margin = new Padding(0);
             publishingDateLabelLHS.Name = "publishingDateLabelLHS";
-            publishingDateLabelLHS.Size = new Size(213, 40);
+            publishingDateLabelLHS.Size = new Size(140, 25);
             publishingDateLabelLHS.TabIndex = 0;
             publishingDateLabelLHS.Text = "Publishing on:";
             publishingDateLabelLHS.TextAlign = ContentAlignment.MiddleLeft;
@@ -153,10 +148,9 @@
             publishingDateLabelRHS.AutoSize = true;
             publishingDateLabelRHS.Dock = DockStyle.Fill;
             publishingDateLabelRHS.Font = new Font("Segoe UI", 9.75F, FontStyle.Regular, GraphicsUnit.Point);
-            publishingDateLabelRHS.Location = new Point(217, 0);
-            publishingDateLabelRHS.Margin = new Padding(4, 0, 4, 0);
+            publishingDateLabelRHS.Location = new Point(143, 0);
             publishingDateLabelRHS.Name = "publishingDateLabelRHS";
-            publishingDateLabelRHS.Size = new Size(490, 40);
+            publishingDateLabelRHS.Size = new Size(351, 25);
             publishingDateLabelRHS.TabIndex = 1;
             publishingDateLabelRHS.Text = "March 14, 2024. 15:00 PST";
             publishingDateLabelRHS.TextAlign = ContentAlignment.MiddleLeft;
@@ -171,12 +165,11 @@
             chapterContainer.Controls.Add(chapterTitleLabelLHS, 0, 0);
             chapterContainer.Controls.Add(chapterTitleLabelRHS, 1, 0);
             chapterContainer.Dock = DockStyle.Fill;
-            chapterContainer.Location = new Point(4, 105);
-            chapterContainer.Margin = new Padding(4, 5, 4, 5);
+            chapterContainer.Location = new Point(3, 49);
             chapterContainer.Name = "chapterContainer";
             chapterContainer.RowCount = 1;
             chapterContainer.RowStyles.Add(new RowStyle());
-            chapterContainer.Size = new Size(711, 40);
+            chapterContainer.Size = new Size(497, 25);
             chapterContainer.TabIndex = 1;
             // 
             // chapterTitleLabelLHS
@@ -187,7 +180,7 @@
             chapterTitleLabelLHS.Location = new Point(0, 0);
             chapterTitleLabelLHS.Margin = new Padding(0);
             chapterTitleLabelLHS.Name = "chapterTitleLabelLHS";
-            chapterTitleLabelLHS.Size = new Size(217, 40);
+            chapterTitleLabelLHS.Size = new Size(140, 25);
             chapterTitleLabelLHS.TabIndex = 0;
             chapterTitleLabelLHS.Text = "Chapter Title:  ";
             chapterTitleLabelLHS.TextAlign = ContentAlignment.MiddleLeft;
@@ -197,10 +190,9 @@
             chapterTitleLabelRHS.AutoSize = true;
             chapterTitleLabelRHS.Dock = DockStyle.Fill;
             chapterTitleLabelRHS.Font = new Font("Segoe UI", 9.75F, FontStyle.Regular, GraphicsUnit.Point);
-            chapterTitleLabelRHS.Location = new Point(221, 0);
-            chapterTitleLabelRHS.Margin = new Padding(4, 0, 4, 0);
+            chapterTitleLabelRHS.Location = new Point(143, 0);
             chapterTitleLabelRHS.Name = "chapterTitleLabelRHS";
-            chapterTitleLabelRHS.Size = new Size(486, 40);
+            chapterTitleLabelRHS.Size = new Size(351, 25);
             chapterTitleLabelRHS.TabIndex = 1;
             chapterTitleLabelRHS.Text = "This is a chapter";
             chapterTitleLabelRHS.TextAlign = ContentAlignment.MiddleLeft;
@@ -215,12 +207,11 @@
             titleContainer.Controls.Add(storyTitleLabelLHS, 0, 0);
             titleContainer.Controls.Add(storyTitleLabelRHS, 1, 0);
             titleContainer.Dock = DockStyle.Fill;
-            titleContainer.Location = new Point(4, 5);
-            titleContainer.Margin = new Padding(4, 5, 4, 5);
+            titleContainer.Location = new Point(3, 3);
             titleContainer.Name = "titleContainer";
             titleContainer.RowCount = 1;
             titleContainer.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-            titleContainer.Size = new Size(711, 90);
+            titleContainer.Size = new Size(497, 40);
             titleContainer.TabIndex = 0;
             // 
             // storyTitleLabelLHS
@@ -231,20 +222,19 @@
             storyTitleLabelLHS.Location = new Point(0, 0);
             storyTitleLabelLHS.Margin = new Padding(0);
             storyTitleLabelLHS.Name = "storyTitleLabelLHS";
-            storyTitleLabelLHS.Size = new Size(149, 90);
+            storyTitleLabelLHS.Size = new Size(98, 40);
             storyTitleLabelLHS.TabIndex = 0;
             storyTitleLabelLHS.Text = "Story:";
             storyTitleLabelLHS.TextAlign = ContentAlignment.MiddleRight;
             // 
             // storyTitleLabelRHS
             // 
-            storyTitleLabelRHS.AutoSize = true;
+            storyTitleLabelRHS.AutoEllipsis = true;
             storyTitleLabelRHS.Dock = DockStyle.Fill;
             storyTitleLabelRHS.Font = new Font("Segoe UI", 15.75F, FontStyle.Regular, GraphicsUnit.Point);
-            storyTitleLabelRHS.Location = new Point(153, 0);
-            storyTitleLabelRHS.Margin = new Padding(4, 0, 4, 0);
+            storyTitleLabelRHS.Location = new Point(101, 0);
             storyTitleLabelRHS.Name = "storyTitleLabelRHS";
-            storyTitleLabelRHS.Size = new Size(554, 90);
+            storyTitleLabelRHS.Size = new Size(393, 40);
             storyTitleLabelRHS.TabIndex = 1;
             storyTitleLabelRHS.Text = "This is a story with a really long title so long in fact it overflows";
             storyTitleLabelRHS.TextAlign = ContentAlignment.MiddleLeft;
@@ -256,10 +246,9 @@
             editButton.BackgroundImageLayout = ImageLayout.Stretch;
             editButton.FlatAppearance.BorderSize = 0;
             editButton.FlatStyle = FlatStyle.Flat;
-            editButton.Location = new Point(782, 65);
-            editButton.Margin = new Padding(4, 5, 4, 5);
+            editButton.Location = new Point(548, 39);
             editButton.Name = "editButton";
-            editButton.Size = new Size(103, 120);
+            editButton.Size = new Size(72, 72);
             editButton.TabIndex = 1;
             editButton.UseVisualStyleBackColor = true;
             editButton.Click += editButton_Click;
@@ -286,7 +275,7 @@
             label5.Location = new Point(0, 0);
             label5.Margin = new Padding(0);
             label5.Name = "label5";
-            label5.Size = new Size(201, 40);
+            label5.Size = new Size(130, 25);
             label5.TabIndex = 0;
             label5.Text = "Chapter Title:";
             label5.TextAlign = ContentAlignment.TopCenter;
@@ -303,14 +292,13 @@
             // 
             // StoryListItem
             // 
-            AutoScaleDimensions = new SizeF(10F, 25F);
+            AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = SystemColors.ControlLightLight;
             Controls.Add(outerContainerLayout);
             Controls.Add(detailPanel);
-            Margin = new Padding(4, 5, 4, 5);
             Name = "StoryListItem";
-            Size = new Size(1156, 250);
+            Size = new Size(809, 150);
             detailPanel.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)pictureBox1).EndInit();
             outerContainerLayout.ResumeLayout(false);

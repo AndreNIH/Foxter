@@ -299,7 +299,7 @@
             // button3
             // 
             button3.Anchor = AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
-            button3.Location = new Point(31, 427);
+            button3.Location = new Point(31, 478);
             button3.Name = "button3";
             button3.Size = new Size(377, 45);
             button3.TabIndex = 13;
@@ -309,7 +309,7 @@
             // convertFixNextButton
             // 
             convertFixNextButton.Anchor = AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
-            convertFixNextButton.Location = new Point(31, 478);
+            convertFixNextButton.Location = new Point(31, 529);
             convertFixNextButton.Name = "convertFixNextButton";
             convertFixNextButton.Size = new Size(377, 45);
             convertFixNextButton.TabIndex = 12;

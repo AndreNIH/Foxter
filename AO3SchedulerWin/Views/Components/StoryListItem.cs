@@ -10,6 +10,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace AO3SchedulerWin.Forms
 {
@@ -27,6 +28,7 @@ namespace AO3SchedulerWin.Forms
             _model = model;
             _storyPostId = id;
             _session = session;
+
             var story = _model.GetStory(_storyPostId);
             storyTitleLabelRHS.Text = story.Title;
             chapterTitleLabelRHS.Text = story.ChapterTitle;
@@ -40,7 +42,7 @@ namespace AO3SchedulerWin.Forms
             var form = new ScheduleStoryForm(_session, _model, _storyPostId);
             form.ShowDialog();
             //aaaaaaah this is so bad
-            _layout.UpdateView(_model.GetStories()); 
+            _layout.UpdateView(_model.GetStories());
         }
 
 

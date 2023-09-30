@@ -58,7 +58,8 @@ namespace AO3SchedulerWin.Forms
         private IStoryView _tableView;
         private Ao3Session _session;
 
-
-
+        private void SchedulerScreen_Resize(object sender, EventArgs e)
+        {
+        }
     }
 }
