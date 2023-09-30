@@ -1,4 +1,5 @@
-﻿using AO3SchedulerWin.Models.AuthorModels;
+﻿using AO3SchedulerWin.AO3;
+using AO3SchedulerWin.Models.AuthorModels;
 using AO3SchedulerWin.Models.StoryModels;
 using System;
 using System.Collections.Generic;

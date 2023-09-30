@@ -11,6 +11,7 @@ using HtmlAgilityPack;
 using AO3SchedulerWin.Models.AuthorModels;
 using AO3SchedulerWin.Models;
 using AO3SchedulerWin.Controllers.AuthorControllers;
+using AO3SchedulerWin.AO3;
 
 namespace AO3SchedulerWin.GUI.Forms
 {

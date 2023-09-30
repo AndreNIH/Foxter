@@ -1,4 +1,5 @@
-﻿using AO3SchedulerWin.Models.StoryModels;
+﻿using AO3SchedulerWin.AO3;
+using AO3SchedulerWin.Models.StoryModels;
 using AO3SchedulerWin.Views;
 using Newtonsoft.Json.Linq;
 using System;

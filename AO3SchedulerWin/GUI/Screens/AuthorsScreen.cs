@@ -1,4 +1,5 @@
-﻿using AO3SchedulerWin.Controllers.AuthorControllers;
+﻿using AO3SchedulerWin.AO3;
+using AO3SchedulerWin.Controllers.AuthorControllers;
 using AO3SchedulerWin.GUI.Forms;
 using AO3SchedulerWin.Models.AuthorModels;
 using AO3SchedulerWin.Views.AuthorViews;

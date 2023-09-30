@@ -14,9 +14,9 @@ using Newtonsoft.Json;
 using AO3SchedulerWin.Models.AuthorModels;
 using System.Net.Sockets;
 
-namespace AO3SchedulerWin
+namespace AO3SchedulerWin.AO3
 {
-    
+
     public class Ao3Session
     {
         private static readonly log4net.ILog _logger = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
@@ -26,7 +26,7 @@ namespace AO3SchedulerWin
         private CookieContainer _cookieContainer;
         private string _username = "";
         private string _password = "";
-        
+
         private bool authenticated = false;
 
         //Cookies Read/Write methods
@@ -40,21 +40,21 @@ namespace AO3SchedulerWin
                     using (var sr = new StreamReader(fs))
                     {
                         var cookies = JsonConvert.DeserializeObject<List<Cookie>>(await sr.ReadToEndAsync());
-                        foreach(var c in cookies)
+                        foreach (var c in cookies)
                         {
                             _cookieContainer.Add(httpClient.BaseAddress, c);
                         }
                     }
                     //Cookies are loaded. Now we need the user's username
                     _logger.Info("Loaded cookies cookies");
-                    
+
                     //Fetch the USERNAME from from the current session
                     var username = await FetchUsernameFromSession();
-                    if(username != null)
+                    if (username != null)
                     {
                         _logger.Info($"Session corresponds to user '{username}'");
                         var restoredAuthor = authorModel.GetAllAuthors().Find(uname => uname.Name == username);
-                        if(restoredAuthor != null)
+                        if (restoredAuthor != null)
                         {
                             _logger.Info("Session restored successfully");
                             _username = restoredAuthor.Name;
@@ -72,9 +72,10 @@ namespace AO3SchedulerWin
                     {
                         _logger.Warn("Could not fetch username from session cookies.");
                     }
-        
+
                 }
-            }catch(JsonException ex)
+            }
+            catch (JsonException ex)
             {
                 _logger.Warn("Could not parse cookie store: " + ex.Message);
             }
@@ -100,11 +101,12 @@ namespace AO3SchedulerWin
                         return true;
                     }
                 }
-            }catch (Exception ex)
+            }
+            catch (Exception ex)
             {
                 _logger.Warn("Could not write cookies to disk: " + ex.Message);
             }
-            return false; 
+            return false;
         }
 
         //Session Methods
@@ -149,7 +151,7 @@ namespace AO3SchedulerWin
 
 
                 string userFromRedirect = await loginFormReq.Content.ReadAsStringAsync();
-                bool authenticated = loginFormReq.StatusCode == System.Net.HttpStatusCode.Redirect;
+                bool authenticated = loginFormReq.StatusCode == HttpStatusCode.Redirect;
 
                 if (authenticated)
                 {
@@ -181,7 +183,7 @@ namespace AO3SchedulerWin
             return false;
         }
 
-        
+
         private async Task<string?> FetchUsernameFromSession()
         {
 
@@ -201,7 +203,7 @@ namespace AO3SchedulerWin
         public async Task<IEnumerable<Ao3Work>> GetAllAuthorWorks()
         {
             var userWorksList = new List<Ao3Work>();
-            for(int pageNumber=1; ;pageNumber++)
+            for (int pageNumber = 1; ; pageNumber++)
             {
 
                 _logger.Info($"Fetching all works on page {pageNumber} for user {_username}");
@@ -219,7 +221,7 @@ namespace AO3SchedulerWin
                         {
                             throw new Ao3GenericException("Missing authenticity token."); ;
                         }
-                        int workId = Int32.Parse(tempWorkId.Substring(7));
+                        int workId = int.Parse(tempWorkId.Substring(7));
                         string title = work.InnerText;
                         _logger.Info("Creating Ao3Work object for " + workId);
                         userWorksList.Add(Ao3Work.CreateWork(this, workId, title));
@@ -232,24 +234,24 @@ namespace AO3SchedulerWin
                     {
                         _logger.Error(ex.Message);
                     }
-                    
+
 
                 }
 
                 //Check for pagination. Exit loop if there is no NEXT button
                 HtmlNode navNode = htmlDoc.DocumentNode.SelectSingleNode("//ol[@class='pagination actions'][1]/li[@class='next'][1]/@class");
-                if(navNode != null)
+                if (navNode != null)
                 {
                     HtmlNode nextNode = navNode.SelectSingleNode("//li[@class='next'][1]/a[1]");
-                    if(nextNode == null) break;
+                    if (nextNode == null) break;
                 }
                 else
                 {
                     break;
                 }
-                
-                
-               //Delay to avoid getting rate limited
+
+
+                //Delay to avoid getting rate limited
                 await Task.Delay(500);
             }
             return userWorksList;
@@ -266,7 +268,7 @@ namespace AO3SchedulerWin
             try
             {
                 var author = new Author();
-                author.Id = Int32.Parse(userId.GetAttributeValue("value", null));
+                author.Id = int.Parse(userId.GetAttributeValue("value", null));
                 author.Name = _username;
                 author.Password = _password;
                 return author;
@@ -304,7 +306,7 @@ namespace AO3SchedulerWin
             };
 
 
-            
+
 
             bool useProxy = false;
             _cookieContainer = new CookieContainer();
@@ -333,7 +335,7 @@ namespace AO3SchedulerWin
             httpClientRedirect = new HttpClient(clientHandlerNoRedirect) { BaseAddress = uri };
             _logger.Info("Created new AO3 Session");
         }
-        
+
         public Ao3Session()
         {
 

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AO3SchedulerWin
+namespace AO3SchedulerWin.AO3
 {
     internal class Ao3NotFoundException : Ao3GenericException
     {

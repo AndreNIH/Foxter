@@ -13,6 +13,7 @@ using System.Windows.Forms;
 using AO3SchedulerWin.Models.StoryModels;
 using AO3SchedulerWin.Controllers.StoryControllers;
 using AO3SchedulerWin.Models.AuthorModels;
+using AO3SchedulerWin.AO3;
 
 namespace AO3SchedulerWin.Forms
 {
