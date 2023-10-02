@@ -20,6 +20,7 @@ namespace AO3SchedulerWin.Controllers.StoryControllers
         RichTextBox _chapterNotesTextbox;
         CheckBox _notesAtStartCheckbox;
         CheckBox _notesAtEndCheckbox;
+        TextBox _storyContents;
         int? _preloadId;
 
         public bool DeleteStory(int id)
@@ -57,6 +58,7 @@ namespace AO3SchedulerWin.Controllers.StoryControllers
                     _chapterNotesTextbox.Text = story.ChapterNotes;
                     _notesAtStartCheckbox.Checked = story.NotesAtStart;
                     _notesAtEndCheckbox.Checked = story.NotesAtEnd;
+                    _storyContents.Text = story.Contents;
                 }
                 else
                 {
@@ -74,6 +76,7 @@ namespace AO3SchedulerWin.Controllers.StoryControllers
             RichTextBox chapterNotes,
             CheckBox notesAtStart,
             CheckBox notesAtEnd,
+            TextBox storyContents,
             int? preloadId)
         {
             _model = model;
@@ -84,6 +87,7 @@ namespace AO3SchedulerWin.Controllers.StoryControllers
             _chapterNotesTextbox = chapterNotes;
             _notesAtStartCheckbox = notesAtStart;
             _notesAtEndCheckbox = notesAtEnd;
+            _storyContents = storyContents;
             _preloadId = preloadId;
         }
     }

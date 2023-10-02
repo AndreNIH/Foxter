@@ -31,7 +31,7 @@ namespace AO3SchedulerWin
 
             _authorModel = serviceFactory.CreateAuthorModel();
             _session = serviceFactory.GetSession();
-            
+
 
             SetMainContent(nextScreen);
         }
@@ -119,10 +119,10 @@ namespace AO3SchedulerWin
 
         private async void accountsButton_Click(object sender, EventArgs e)
         {
-            
+
             SetMainContent(new AuthorsScreen(ref _session));
-            
-            
+
+
         }
 
         private void settingsButton_Click(object sender, EventArgs e)
@@ -132,7 +132,7 @@ namespace AO3SchedulerWin
 
         private async void MainForm_Load(object sender, EventArgs e)
         {
-            
+
 
         }
     }

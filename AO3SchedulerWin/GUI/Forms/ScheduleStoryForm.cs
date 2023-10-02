@@ -13,6 +13,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using AO3SchedulerWin.AO3;
+using AO3SchedulerWin.BEmu;
+using System.IO;
 
 namespace AO3SchedulerWin.Forms
 {
@@ -40,6 +42,7 @@ namespace AO3SchedulerWin.Forms
                 chapterNotesTextbox,
                 notesAtStartCheckbox,
                 notesAtEndCheckbox,
+                storyHtmlTextbox,
                 preloadId);
             _preloadId = preloadId;
             _storyController.UpdateViews();
@@ -152,6 +155,8 @@ namespace AO3SchedulerWin.Forms
 
             Close();
         }
+        // File load
+
 
         //Form Events
         private void detailsNextButton_Click(object sender, EventArgs e)
@@ -161,9 +166,26 @@ namespace AO3SchedulerWin.Forms
 
         private async void convertFixNextButton_Click(object sender, EventArgs e)
         {
-            //MessageBox.Show("Pretend this actually works. *Handwavy magic*");
+            var filepath = filePathTextbox.Text;
+            if (File.Exists(filepath))
+            {
+                string? convertedPath = FicConverter.ConvertStory(filepath);
+                if (convertedPath == null)
+                {
+                    MessageBox.Show(
+                        $"Failed to convert '{filepath}'",
+                        "Convertion Error",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Warning);
+                    return;
+                }
+                storyHtmlTextbox.Text = await File.ReadAllTextAsync(convertedPath);
+            }
+            mainContainer.SelectedIndex += 1;
+        }
 
-
+        private void schedulePostButton_Click(object sender, EventArgs e)
+        {
             bool result = false;
             Story story = new Story();
             story.ChapterTitle = chapterTitleTextbox.Text;
@@ -173,6 +195,7 @@ namespace AO3SchedulerWin.Forms
             story.NotesAtStart = notesAtStartCheckbox.Checked;
             story.NotesAtEnd = notesAtEndCheckbox.Checked;
             story.Title = worksComboBox.Text;
+            story.Contents = storyHtmlTextbox.Text;
 
             if (_updatePost)
             {
@@ -225,6 +248,17 @@ namespace AO3SchedulerWin.Forms
 
 
             Close();
+        }
+
+        private void selectFileButton_Click(object sender, EventArgs e)
+        {
+            var res = openFileDialog.ShowDialog();
+            if (res == DialogResult.OK) filePathTextbox.Text = openFileDialog.FileName;
+        }
+
+        private void backFinalButton_Click(object sender, EventArgs e)
+        {
+            mainContainer.SelectedIndex--;
         }
     }
 }

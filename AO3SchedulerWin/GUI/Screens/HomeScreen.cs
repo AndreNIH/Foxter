@@ -26,7 +26,7 @@ namespace AO3SchedulerWin.Forms
             _queuedStoriesController = new StoryQueueController(new LocalStoryModel(), queueLabel);
 
         }
-        
+
         protected override void OnLoad(EventArgs e)
         {
             _authorController.UpdateViews();

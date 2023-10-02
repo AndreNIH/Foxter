@@ -48,8 +48,8 @@
             chapterTitleTextbox = new TextBox();
             label8 = new Label();
             detailsNextButton = new Button();
-            tabPage3 = new TabPage();
-            button3 = new Button();
+            convertionTab = new TabPage();
+            backConverterButton = new Button();
             convertFixNextButton = new Button();
             label6 = new Label();
             groupBox2 = new GroupBox();
@@ -63,16 +63,22 @@
             checkBox6 = new CheckBox();
             checkBox7 = new CheckBox();
             groupBox1 = new GroupBox();
-            button4 = new Button();
-            textBox1 = new TextBox();
+            selectFileButton = new Button();
+            filePathTextbox = new TextBox();
             label7 = new Label();
+            finalTab = new TabPage();
+            storyHtmlTextbox = new TextBox();
+            backFinalButton = new Button();
+            schedulePostButton = new Button();
+            openFileDialog = new OpenFileDialog();
             mainContainer.SuspendLayout();
             loadingTab.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
             chapterDetailsTab.SuspendLayout();
-            tabPage3.SuspendLayout();
+            convertionTab.SuspendLayout();
             groupBox2.SuspendLayout();
             groupBox1.SuspendLayout();
+            finalTab.SuspendLayout();
             SuspendLayout();
             // 
             // label1
@@ -173,7 +179,8 @@
             // 
             mainContainer.Controls.Add(loadingTab);
             mainContainer.Controls.Add(chapterDetailsTab);
-            mainContainer.Controls.Add(tabPage3);
+            mainContainer.Controls.Add(convertionTab);
+            mainContainer.Controls.Add(finalTab);
             mainContainer.Dock = DockStyle.Fill;
             mainContainer.Location = new Point(0, 0);
             mainContainer.Name = "mainContainer";
@@ -191,7 +198,7 @@
             loadingTab.Padding = new Padding(3);
             loadingTab.Size = new Size(431, 582);
             loadingTab.TabIndex = 1;
-            loadingTab.Text = "tabPage2";
+            loadingTab.Text = "tabPage1";
             // 
             // label5
             // 
@@ -208,9 +215,9 @@
             // 
             pictureBox1.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
             pictureBox1.Image = (Image)resources.GetObject("pictureBox1.Image");
-            pictureBox1.Location = new Point(117, 77);
+            pictureBox1.Location = new Point(122, 67);
             pictureBox1.Name = "pictureBox1";
-            pictureBox1.Size = new Size(205, 204);
+            pictureBox1.Size = new Size(194, 204);
             pictureBox1.SizeMode = PictureBoxSizeMode.Zoom;
             pictureBox1.TabIndex = 0;
             pictureBox1.TabStop = false;
@@ -236,7 +243,7 @@
             chapterDetailsTab.Padding = new Padding(3);
             chapterDetailsTab.Size = new Size(431, 582);
             chapterDetailsTab.TabIndex = 0;
-            chapterDetailsTab.Text = "tabPage1";
+            chapterDetailsTab.Text = "tabPage2";
             chapterDetailsTab.UseVisualStyleBackColor = true;
             // 
             // deleteButton
@@ -280,31 +287,31 @@
             detailsNextButton.UseVisualStyleBackColor = true;
             detailsNextButton.Click += detailsNextButton_Click;
             // 
-            // tabPage3
+            // convertionTab
             // 
-            tabPage3.Controls.Add(button3);
-            tabPage3.Controls.Add(convertFixNextButton);
-            tabPage3.Controls.Add(label6);
-            tabPage3.Controls.Add(groupBox2);
-            tabPage3.Controls.Add(groupBox1);
-            tabPage3.Location = new Point(4, 24);
-            tabPage3.Margin = new Padding(2);
-            tabPage3.Name = "tabPage3";
-            tabPage3.Padding = new Padding(2);
-            tabPage3.Size = new Size(431, 582);
-            tabPage3.TabIndex = 2;
-            tabPage3.Text = "tabPage3";
-            tabPage3.UseVisualStyleBackColor = true;
+            convertionTab.Controls.Add(backConverterButton);
+            convertionTab.Controls.Add(convertFixNextButton);
+            convertionTab.Controls.Add(label6);
+            convertionTab.Controls.Add(groupBox2);
+            convertionTab.Controls.Add(groupBox1);
+            convertionTab.Location = new Point(4, 24);
+            convertionTab.Margin = new Padding(2);
+            convertionTab.Name = "convertionTab";
+            convertionTab.Padding = new Padding(2);
+            convertionTab.Size = new Size(431, 582);
+            convertionTab.TabIndex = 2;
+            convertionTab.Text = "tabPage3";
+            convertionTab.UseVisualStyleBackColor = true;
             // 
-            // button3
+            // backConverterButton
             // 
-            button3.Anchor = AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
-            button3.Location = new Point(31, 478);
-            button3.Name = "button3";
-            button3.Size = new Size(377, 45);
-            button3.TabIndex = 13;
-            button3.Text = "Back";
-            button3.UseVisualStyleBackColor = true;
+            backConverterButton.Anchor = AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            backConverterButton.Location = new Point(31, 478);
+            backConverterButton.Name = "backConverterButton";
+            backConverterButton.Size = new Size(377, 45);
+            backConverterButton.TabIndex = 13;
+            backConverterButton.Text = "Back";
+            backConverterButton.UseVisualStyleBackColor = true;
             // 
             // convertFixNextButton
             // 
@@ -454,8 +461,8 @@
             // 
             // groupBox1
             // 
-            groupBox1.Controls.Add(button4);
-            groupBox1.Controls.Add(textBox1);
+            groupBox1.Controls.Add(selectFileButton);
+            groupBox1.Controls.Add(filePathTextbox);
             groupBox1.Controls.Add(label7);
             groupBox1.Location = new Point(13, 5);
             groupBox1.Name = "groupBox1";
@@ -464,22 +471,23 @@
             groupBox1.TabStop = false;
             groupBox1.Text = "File";
             // 
-            // button4
+            // selectFileButton
             // 
-            button4.Location = new Point(6, 51);
-            button4.Name = "button4";
-            button4.Size = new Size(398, 23);
-            button4.TabIndex = 2;
-            button4.Text = "Select File";
-            button4.UseVisualStyleBackColor = true;
+            selectFileButton.Location = new Point(6, 51);
+            selectFileButton.Name = "selectFileButton";
+            selectFileButton.Size = new Size(398, 23);
+            selectFileButton.TabIndex = 2;
+            selectFileButton.Text = "Select File";
+            selectFileButton.UseVisualStyleBackColor = true;
+            selectFileButton.Click += selectFileButton_Click;
             // 
-            // textBox1
+            // filePathTextbox
             // 
-            textBox1.Location = new Point(46, 22);
-            textBox1.Name = "textBox1";
-            textBox1.PlaceholderText = "C:/Users/Documents/Fanfic.html";
-            textBox1.Size = new Size(358, 23);
-            textBox1.TabIndex = 1;
+            filePathTextbox.Location = new Point(46, 22);
+            filePathTextbox.Name = "filePathTextbox";
+            filePathTextbox.PlaceholderText = "C:/Users/Documents/Fanfic.html";
+            filePathTextbox.Size = new Size(358, 23);
+            filePathTextbox.TabIndex = 1;
             // 
             // label7
             // 
@@ -490,12 +498,62 @@
             label7.TabIndex = 0;
             label7.Text = "Path:";
             // 
+            // finalTab
+            // 
+            finalTab.Controls.Add(storyHtmlTextbox);
+            finalTab.Controls.Add(backFinalButton);
+            finalTab.Controls.Add(schedulePostButton);
+            finalTab.Location = new Point(4, 24);
+            finalTab.Name = "finalTab";
+            finalTab.Padding = new Padding(3);
+            finalTab.Size = new Size(431, 582);
+            finalTab.TabIndex = 3;
+            finalTab.Text = "tabPage4";
+            finalTab.UseVisualStyleBackColor = true;
+            // 
+            // storyHtmlTextbox
+            // 
+            storyHtmlTextbox.Location = new Point(8, 6);
+            storyHtmlTextbox.Multiline = true;
+            storyHtmlTextbox.Name = "storyHtmlTextbox";
+            storyHtmlTextbox.ScrollBars = ScrollBars.Vertical;
+            storyHtmlTextbox.Size = new Size(415, 467);
+            storyHtmlTextbox.TabIndex = 16;
+            // 
+            // backFinalButton
+            // 
+            backFinalButton.Anchor = AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            backFinalButton.Location = new Point(29, 479);
+            backFinalButton.Name = "backFinalButton";
+            backFinalButton.Size = new Size(377, 45);
+            backFinalButton.TabIndex = 15;
+            backFinalButton.Text = "Back";
+            backFinalButton.UseVisualStyleBackColor = true;
+            backFinalButton.Click += backFinalButton_Click;
+            // 
+            // schedulePostButton
+            // 
+            schedulePostButton.Anchor = AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            schedulePostButton.Location = new Point(29, 530);
+            schedulePostButton.Name = "schedulePostButton";
+            schedulePostButton.Size = new Size(377, 45);
+            schedulePostButton.TabIndex = 14;
+            schedulePostButton.Text = "Schedule Post";
+            schedulePostButton.UseVisualStyleBackColor = true;
+            schedulePostButton.Click += schedulePostButton_Click;
+            // 
+            // openFileDialog
+            // 
+            openFileDialog.Filter = "ZIP Files|*.zip|HTML Files|*.htm;*.htm";
+            // 
             // ScheduleStoryForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(439, 610);
             Controls.Add(mainContainer);
+            FormBorderStyle = FormBorderStyle.FixedSingle;
+            MaximizeBox = false;
             Name = "ScheduleStoryForm";
             Text = "Upload New Chapter";
             mainContainer.ResumeLayout(false);
@@ -504,12 +562,14 @@
             ((System.ComponentModel.ISupportInitialize)pictureBox1).EndInit();
             chapterDetailsTab.ResumeLayout(false);
             chapterDetailsTab.PerformLayout();
-            tabPage3.ResumeLayout(false);
-            tabPage3.PerformLayout();
+            convertionTab.ResumeLayout(false);
+            convertionTab.PerformLayout();
             groupBox2.ResumeLayout(false);
             groupBox2.PerformLayout();
             groupBox1.ResumeLayout(false);
             groupBox1.PerformLayout();
+            finalTab.ResumeLayout(false);
+            finalTab.PerformLayout();
             ResumeLayout(false);
         }
 
@@ -531,8 +591,8 @@
         private Button detailsNextButton;
         private PictureBox pictureBox1;
         private Label label5;
-        private TabPage tabPage3;
-        private Button button3;
+        private TabPage convertionTab;
+        private Button backConverterButton;
         private Button convertFixNextButton;
         private Label label6;
         private GroupBox groupBox2;
@@ -546,11 +606,16 @@
         private CheckBox checkBox6;
         private CheckBox checkBox7;
         private GroupBox groupBox1;
-        private Button button4;
-        private TextBox textBox1;
+        private Button selectFileButton;
+        private TextBox filePathTextbox;
         private Label label7;
         private TextBox chapterTitleTextbox;
         private Label label8;
         private Button deleteButton;
+        private OpenFileDialog openFileDialog;
+        private TabPage finalTab;
+        private TextBox storyHtmlTextbox;
+        private Button schedulePostButton;
+        private Button backFinalButton;
     }
 }

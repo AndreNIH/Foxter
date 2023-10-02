@@ -244,7 +244,7 @@
             FormBorderStyle = FormBorderStyle.None;
             MinimumSize = new Size(1064, 590);
             Name = "MainForm";
-            Text = "Form1";
+            Text = "AO3 Scheduler";
             WindowState = FormWindowState.Maximized;
             Load += MainForm_Load;
             topBarPanel.ResumeLayout(false);

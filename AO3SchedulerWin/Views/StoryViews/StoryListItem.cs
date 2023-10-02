@@ -33,7 +33,18 @@ namespace AO3SchedulerWin.Forms
             var story = _model.GetStory(_storyPostId);
             storyTitleLabelRHS.Text = story.Title;
             chapterTitleLabelRHS.Text = story.ChapterTitle;
-            publishingDateLabelRHS.Text = story.PublishingDate.ToLongDateString();
+            
+
+            if(story.PublishingDate < DateTime.Now)
+            {
+                publishingDateLabelRHS.Text = $"Failed to upload on {story.PublishingDate.ToLongDateString()} ,{story.PublishingDate.ToLongTimeString()}";
+                publishingDateLabelRHS.ForeColor = Color.Red;
+            }
+            else
+            {
+                publishingDateLabelRHS.Text = $"{story.PublishingDate.ToLongDateString()} ,{story.PublishingDate.ToLongTimeString()}";
+            }
+
             _logger.Info($"Created StoryListItem for story '{story.StoryId}'. Internal Id: {id}");
         }
 

@@ -35,6 +35,7 @@
             // 
             // queueLabel
             // 
+            queueLabel.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             queueLabel.AutoSize = true;
             queueLabel.Font = new Font("Segoe UI", 20F, FontStyle.Regular, GraphicsUnit.Point);
             queueLabel.Location = new Point(12, 59);
