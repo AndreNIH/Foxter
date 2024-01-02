@@ -1,4 +1,4 @@
-﻿using AO3SchedulerWin.Models;
+﻿using AO3SchedulerWin.Models.Base;
 using System;
 using System.Collections.Generic;
 using System.Linq;

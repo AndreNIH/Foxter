@@ -1,6 +1,6 @@
 ﻿using AO3SchedulerWin.AO3;
-using AO3SchedulerWin.Models.AuthorModels;
-using AO3SchedulerWin.Models.StoryModels;
+using AO3SchedulerWin.Models;
+using AO3SchedulerWin.Models.Components;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -13,24 +13,26 @@ namespace AO3SchedulerWin.Factories
     internal class LocalAppServiceFactory : IAppServiceFactory
     {
         private static readonly log4net.ILog _logger = log4net.LogManager.GetLogger(typeof(LocalAppServiceFactory));
-        private static Ao3Session _session = new Ao3Session();
+        private static Ao3Client _session = new Ao3Client();
         private AppConfiguration _appConfiguration;
-        public IAuthorModel CreateAuthorModel()
+        
+        
+
+        public Ao3Client GetSession()
+        {
+            return _session;   
+        }
+
+        IAuthorModel IAppServiceFactory.CreateAuthorModel()
         {
             _logger.Info("Instanciating local Author model. ");
             return new AuthorLocalModel();
         }
 
-        public IStoryModel CreateStoryModel()
+        public IChapterModel CreateChapterModel()
         {
-
-            _logger.Info("Instanciating loca Story model. ");
-            return new LocalStoryModel();
-        }
-
-        public Ao3Session GetSession()
-        {
-            return _session;   
+            _logger.Info("Instanciating local Chapter model");
+            return new ChapterLocalModel();
         }
 
         //This constructor probably wont see much use

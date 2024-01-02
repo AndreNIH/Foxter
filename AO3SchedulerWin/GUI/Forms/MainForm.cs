@@ -2,7 +2,6 @@ using AO3SchedulerWin.AO3;
 using AO3SchedulerWin.Factories;
 using AO3SchedulerWin.Forms;
 using AO3SchedulerWin.GUI.Screens;
-using AO3SchedulerWin.Models.AuthorModels;
 using System.Runtime.InteropServices;
 
 namespace AO3SchedulerWin
@@ -18,21 +17,20 @@ namespace AO3SchedulerWin
         //End of external DLL imports
 
         private static readonly log4net.ILog logger = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
-        private IAuthorModel _authorModel = new AuthorLocalModel();
-        private Ao3Session _session;
+        private Ao3Client _session;
         public MainForm(IAppServiceFactory serviceFactory)
         {
             InitializeComponent();
             this.MaximizedBounds = Screen.FromHandle(this.Handle).WorkingArea;
-            var activeAuthor = _authorModel.GetActiveAuthor();
-            Form nextScreen = activeAuthor == null
+            //TODO: Reimplement this
+            /*Form nextScreen = activeAuthor == null
                 ? new NoActiveUserScreen()
                 : new HomeScreen();
 
-            _authorModel = serviceFactory.CreateAuthorModel();
-            _session = serviceFactory.GetSession();
+            //_authorModel = serviceFactory.CreateAuthorModel();
+            _session = serviceFactory.GetSession();*/
 
-
+            var nextScreen = new NoActiveUserScreen();
             SetMainContent(nextScreen);
         }
 
@@ -103,18 +101,20 @@ namespace AO3SchedulerWin
         private void homeButton_Click(object sender, EventArgs e)
         {
 
-            Form nextScreen = _authorModel.GetActiveAuthor() == null
+            /*Form nextScreen = _authorModel.GetActiveAuthor() == null
                 ? new NoActiveUserScreen()
-                : new HomeScreen();
-            SetMainContent(nextScreen);
+                : new HomeScreen();*/
+            //SetMainContent(nextScreen);
         }
 
         private void scheduleButton_Click(object sender, EventArgs e)
         {
+            /*
             Form nextScreen = _authorModel.GetActiveAuthor() == null
                 ? new NoActiveUserScreen()
-                : new SchedulerScreen(_session);
-            SetMainContent(nextScreen);
+                : new SchedulerScreen(_session);*/
+            //SetMainContent(nextScreen);
+            SetMainContent(new SchedulerScreen(null));
         }
 
         private async void accountsButton_Click(object sender, EventArgs e)

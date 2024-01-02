@@ -50,7 +50,7 @@ namespace AO3SchedulerWin.GUI.Forms
             }
             catch (FileNotFoundException)
             {
-                _logger.Info("No configuratio file was found. Falling back on default settings...");
+                _logger.Info("No configuration file was found. Falling back on default settings...");
                 return new LocalAppServiceFactory();
             }
             catch (IOException)
@@ -61,13 +61,14 @@ namespace AO3SchedulerWin.GUI.Forms
         }
 
 
-        protected async override void OnLoad(EventArgs e)
+        protected async override void OnShown(EventArgs e)
         {
+            base.OnShown(e);
             var factory = this.CreateAppServiceFactory();
             var authorModel = factory.CreateAuthorModel();
             try
             {
-                var session = factory.GetSession();
+/*                var session = factory.GetSession();
                 bool success = await session.RestoreCookiesFromDisk(authorModel);
 
                 //Cookies could not be loaded
@@ -82,7 +83,7 @@ namespace AO3SchedulerWin.GUI.Forms
 
                     }
 
-                }
+                }*/
             }
             catch(HttpRequestException ex)
             {
@@ -95,8 +96,8 @@ namespace AO3SchedulerWin.GUI.Forms
             }
 
             var form = new MainForm(factory);
-            Hide();
             form.Show();
+            this.Hide();
 
 
         }

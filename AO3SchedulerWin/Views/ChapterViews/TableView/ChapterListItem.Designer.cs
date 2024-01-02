@@ -1,6 +1,6 @@
 ﻿namespace AO3SchedulerWin.Forms
 {
-    partial class StoryListItem
+    partial class ChapterTableItem
     {
         /// <summary> 
         /// Required designer variable.
@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(StoryListItem));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ChapterTableItem));
             detailPanel = new Panel();
             pictureBox1 = new PictureBox();
             outerContainerLayout = new TableLayoutPanel();

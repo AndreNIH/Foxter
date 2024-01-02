@@ -10,36 +10,30 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using AO3SchedulerWin.Models.StoryModels;
 using AO3SchedulerWin.Controllers.StoryControllers;
-using AO3SchedulerWin.Models.AuthorModels;
 using AO3SchedulerWin.AO3;
+using AO3SchedulerWin.Views.ChapterViews.TableView;
+using AO3SchedulerWin.Models.Base;
 
 namespace AO3SchedulerWin.Forms
 {
-    public partial class SchedulerScreen : Form
+    
+    public partial class SchedulerScreen : Form, ITableUpdateListener
     {
-        public SchedulerScreen(Ao3Session session)
+        public SchedulerScreen(Ao3Client session)
         {
             InitializeComponent();
-            _model = new LocalStoryModel();
-            _authorModel = new AuthorLocalModel();
-            _session = session;
-            _tableView = new StoryListViewAdapter(storyListContainer, _session, _model);
-            _storyController = new StoryTableController(_tableView, _model);
-
-
+            _tableView = new ChapterTableView(storyListContainer, _model, this);
         }
 
         private void reloadScreen()
         {
             mainContainer.SelectedIndex = 1; //storyListContainer.Controls.Count > 0 ? 1 : 0;
-            _storyController.UpdateViews();
         }
 
         private void schedulePostButton_Click(object sender, EventArgs e)
         {
-            var form = new ScheduleStoryForm(_session, _model);
+            var form = new ScheduleStoryForm(_session);
             form.ShowDialog();
             reloadScreen();
         }
@@ -53,10 +47,45 @@ namespace AO3SchedulerWin.Forms
             reloadScreen();
         }
 
-        private IStoryController _storyController;
-        private IStoryModel _model;
+        public void NotifyUpdate()
+        {
+            _controller.UpdateViews();
+        }
+
+        private IChapterController _controller;
+        private IChapterModel _model;
         private IAuthorModel _authorModel;
-        private IStoryView _tableView;
-        private Ao3Session _session;
+        private IChapterView _tableView;
+        private Ao3Client _session;
     }
+
+    internal class DeletemeModel : IChapterModel
+    {
+        public Task Create(Chapter chapter)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task Delete(int chapterId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<List<Chapter>> GetAllChaptersFromAuthor(int authorId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<Chapter> GetChapterById(int id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task Update(int chapterId, Chapter newChapter)
+        {
+            throw new NotImplementedException();
+        }
+    }
+
+    
 }

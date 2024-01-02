@@ -1,6 +1,6 @@
 ﻿using AO3SchedulerWin.AO3;
-using AO3SchedulerWin.Models.AuthorModels;
-using AO3SchedulerWin.Models.StoryModels;
+using AO3SchedulerWin.Models;
+using AO3SchedulerWin.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,9 +12,9 @@ namespace AO3SchedulerWin.Factories
     public interface IAppServiceFactory
     {
         IAuthorModel CreateAuthorModel();
-        IStoryModel CreateStoryModel();
+        IChapterModel CreateChapterModel();
         
         //TODO: Make this an interface
-        Ao3Session GetSession();
+        Ao3Client GetSession();
     }
 }

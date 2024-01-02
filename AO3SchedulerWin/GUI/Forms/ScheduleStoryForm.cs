@@ -1,8 +1,5 @@
 ﻿using System.Linq;
 using AO3SchedulerWin.Controllers.StoryControllers;
-using AO3SchedulerWin.Models;
-using AO3SchedulerWin.Models.AuthorModels;
-using AO3SchedulerWin.Models.StoryModels;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -15,39 +12,23 @@ using System.Windows.Forms;
 using AO3SchedulerWin.AO3;
 using AO3SchedulerWin.BEmu;
 using System.IO;
+using AO3SchedulerWin.Models.Base;
 
 namespace AO3SchedulerWin.Forms
 {
     public partial class ScheduleStoryForm : Form
     {
         private static readonly log4net.ILog _logger = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
-        private IStoryModel _storyModel;
-        private IStoryController _storyController;
-        private Ao3Session _session;
+        private IChapterController _storyController;
+        private Ao3Client _session;
         private List<Ao3Work> _works = new List<Ao3Work>();
         private List<int> _workIndexToIdVec = new List<int>();
         private bool _updatePost = false;
         private int? _preloadId = null;
-        public ScheduleStoryForm(Ao3Session session, IStoryModel storyModel, int? preloadId = null)
+        public ScheduleStoryForm(Ao3Client session, int? preloadId = null)
         {
             InitializeComponent();
-
             _session = session;
-            _storyModel = storyModel;
-            _storyController = new StoryFormController(_storyModel,
-                worksComboBox,
-                chapterTitleTextbox,
-                publishingDatePicker,
-                chapterSummaryTextbox,
-                chapterNotesTextbox,
-                notesAtStartCheckbox,
-                notesAtEndCheckbox,
-                storyHtmlTextbox,
-                preloadId);
-            _preloadId = preloadId;
-            _storyController.UpdateViews();
-
-
             mainContainer.Appearance = TabAppearance.FlatButtons;
             mainContainer.ItemSize = new Size(0, 1);
             mainContainer.SizeMode = TabSizeMode.Fixed;
@@ -87,25 +68,6 @@ namespace AO3SchedulerWin.Forms
                 {
                     deleteButton.Visible = true;
                     _logger.Info($"Updating scheduled post(internal id={_preloadId}). Skipped AO3 Work fetch cycle. Retrieving single story");
-                    var story = _storyModel.GetStory(_preloadId.Value);
-                    if (story != null)
-                    {
-                        worksComboBox.SelectedItem = 0;
-                        mainContainer.SelectedIndex = 1;
-                        return;
-                        //We wont get stories from Ao3, we'll fetch it from the model
-                        //we'll just update the model at startup
-                        /*if(await LoadOneStory(story.Id))
-                        {
-                            worksComboBox.SelectedItem = 0;
-                            mainContainer.SelectedIndex = 1;
-                            return;
-                        }*/
-                    }
-                    else
-                    {
-                        _logger.Error($"The story with internal id {_preloadId.Value} is missing on the database");
-                    }
                 }
                 else
                 {
@@ -140,14 +102,7 @@ namespace AO3SchedulerWin.Forms
                        MessageBoxIcon.Warning);
                     if (res == DialogResult.Yes)
                     {
-                        if (_storyModel.DeleteStory(_preloadId.Value))
-                        {
-                            _logger.Info($"Scheduled story deleted, internal id {_preloadId.Value}");
-                        }
-                        else
-                        {
-                            _logger.Error($"Failed to delete scheduled story, internal id {_preloadId.Value}");
-                        }
+                        
                     }
                 }
 
@@ -187,26 +142,26 @@ namespace AO3SchedulerWin.Forms
         private void schedulePostButton_Click(object sender, EventArgs e)
         {
             bool result = false;
-            Story story = new Story();
+            Chapter story = new Chapter();
             story.ChapterTitle = chapterTitleTextbox.Text;
             story.PublishingDate = publishingDatePicker.Value;
             story.ChapterSummary = chapterSummaryTextbox.Text;
             story.ChapterNotes = chapterNotesTextbox.Text;
             story.NotesAtStart = notesAtStartCheckbox.Checked;
             story.NotesAtEnd = notesAtEndCheckbox.Checked;
-            story.Title = worksComboBox.Text;
+            story.ChapterTitle = worksComboBox.Text;
             story.Contents = storyHtmlTextbox.Text;
 
             if (_updatePost)
             {
-                story.Id = _preloadId.Value;
-                result = _storyController.UpdateStory(0, story);
+                //story.Id = _preloadId.Value;
+                //result = _storyController.UpdateStory(0, story);
             }
             else
             {
-                story.AuthorId = _session.GetAuthor().Id;
-                story.StoryId = _workIndexToIdVec[worksComboBox.SelectedIndex];
-                result = _storyController.InsertStory(story);
+                /*story.AuthorId = _session.GetAuthor().Id;
+                story.WebStoryId = _workIndexToIdVec[worksComboBox.SelectedIndex];
+                result = _storyController.InsertStory(story);*/
             }
 
             if (!result)
@@ -216,11 +171,11 @@ namespace AO3SchedulerWin.Forms
                     "Couldn't schedule post",
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
-                _logger.Error($"Failed to schedule story update, internal id={story.Id}, work id={story.StoryId}");
+                //_logger.Error($"Failed to schedule story update, internal id={story.Id}, work id={story.WebStoryId}");
             }
             else
             {
-                _logger.Info($"Scheduled story update, internal id={story.Id}, work id={story.StoryId}");
+                //_logger.Info($"Scheduled story update, internal id={story.Id}, work id={story.WebStoryId}");
             }
 
             Close();

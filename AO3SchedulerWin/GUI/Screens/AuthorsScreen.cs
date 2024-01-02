@@ -1,7 +1,6 @@
 ﻿using AO3SchedulerWin.AO3;
 using AO3SchedulerWin.Controllers.AuthorControllers;
 using AO3SchedulerWin.GUI.Forms;
-using AO3SchedulerWin.Models.AuthorModels;
 using AO3SchedulerWin.Views.AuthorViews;
 using System;
 using System.Collections.Generic;
@@ -19,42 +18,21 @@ namespace AO3SchedulerWin.GUI.Screens
     {
         private IAuthorController _tableController;
         private IAuthorController _loggedAuthorController;
-        private IAuthorModel _model = new AuthorLocalModel();
-        private Ao3Session _session;
+        private Ao3Client _session;
 
-        public AuthorsScreen(ref Ao3Session session)
+        public AuthorsScreen(ref Ao3Client session)
         {
-            InitializeComponent();
-            _tableController = AuthorCoordinator.Get.MakeCoorinatedObject(
-                new AuthorTableController(_model, new AuthorTableView(usersListView))
-            );
-
-
-            _loggedAuthorController = AuthorCoordinator.Get.MakeCoorinatedObject(
-                new LoggedAuthorController(_model, new AuthorNameView(userLabel))
-            );
-
-            AuthorCoordinator.Get.NotifyAll();
-            _session = session;
 
         }
 
         ~AuthorsScreen()
         {
-            AuthorCoordinator.Get.ReleaseCoordinatedObject(_loggedAuthorController);
-            AuthorCoordinator.Get.ReleaseCoordinatedObject(_tableController);
+
         }
-
-
-
-
 
         //Form Events
         private void AuthorsScreen_Load(object sender, EventArgs e)
         {
-
-            AuthorCoordinator.Get.NotifyAll();
-
 
         }
 
@@ -62,59 +40,22 @@ namespace AO3SchedulerWin.GUI.Screens
         //UI Elements
         private void setActiveButton_Click(object sender, EventArgs e)
         {
-            var selected = usersListView.SelectedItems;
-            if (selected.Count == 0) return;
-            foreach (var author in _model.GetAllAuthors())
-            {
-                if (author.Name == selected[0].Text)
-                {
-                    _loggedAuthorController.SetActiveAuthor(author.Id);
-                    _loggedAuthorController.UpdateViews();
-                }
-            }
-            //_tableController.SetActiveAuthor(0);
 
         }
 
         private void addAccountButton_Click(object sender, EventArgs e)
         {
-            var form = new Ao3LoginForm(_model, ref _session, null);
-            form.StartPosition = FormStartPosition.CenterScreen;
-            form.ShowDialog();
-            _tableController.UpdateViews();
-            _loggedAuthorController.UpdateViews();
 
         }
 
         private void removeAccountButton_Click(object sender, EventArgs e)
         {
 
-            var selected = usersListView.SelectedIndices;
-            var tableController = (AuthorTableController)_tableController;
-            if (selected.Count > 0)
-            {
-                int authorId = tableController.AuthorIdForTablePosition(selected[0]);
-                if (authorId > 0) tableController.UnregisterAuthor(authorId); //check is unecessary, but just to be safe
-            }
-            _tableController.UpdateViews();
-            _loggedAuthorController.UpdateViews();
-
-
         }
 
         private void updateAccountButton_Click(object sender, EventArgs e)
         {
-            var selected = usersListView.SelectedIndices;
-            var tableController = (AuthorTableController)_tableController;
-            if (selected.Count > 0)
-            {
-                int authorId = tableController.AuthorIdForTablePosition(selected[0]);
-                var form = new Ao3LoginForm(_model, ref _session, authorId);
-                form.ShowDialog();
-                _tableController.UpdateViews();
-                _loggedAuthorController.UpdateViews();
 
-            }
         }
     }
 }

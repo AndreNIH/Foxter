@@ -11,7 +11,7 @@ namespace AO3SchedulerWin.AO3
     {
         private static readonly ILog _logger = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
-        private Ao3Session _session;
+        private Ao3Client _session;
         private string _workName;
         private int _workId;
 
@@ -65,7 +65,7 @@ namespace AO3SchedulerWin.AO3
 
         }
 
-        public static async Task<Ao3Work> GetWorkFromId(Ao3Session session, int workId)
+        public static async Task<Ao3Work> GetWorkFromId(Ao3Client session, int workId)
         {
             Ao3Work work = new Ao3Work(session, workId);
             var res = await work.ParseWorkDetails();
@@ -85,7 +85,7 @@ namespace AO3SchedulerWin.AO3
             return work;
         }
 
-        public static Ao3Work CreateWork(Ao3Session session, int workId, string workName)
+        public static Ao3Work CreateWork(Ao3Client session, int workId, string workName)
         {
             var work = new Ao3Work(session, workId);
             work._workName = workName;
@@ -93,7 +93,7 @@ namespace AO3SchedulerWin.AO3
             return work;
         }
 
-        private Ao3Work(Ao3Session session, int workId)
+        private Ao3Work(Ao3Client session, int workId)
         {
             _session = session;
             _workId = workId;

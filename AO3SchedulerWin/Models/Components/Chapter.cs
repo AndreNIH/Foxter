@@ -4,14 +4,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AO3SchedulerWin.Models
+namespace AO3SchedulerWin.Models.Base
 {
-    public class Story
+    public class Chapter
     {
-        public int Id { get; set; }
-        public int AuthorId { get; set; }
+        public int ChapterId { get; set; }
         public int StoryId { get; set; }
-        public string Title { get; set; }
+        public string StoryTitle { get; set; }
         public string ChapterTitle { get; set; }
         public DateTime PublishingDate { get; set; }
         public string ChapterSummary { get; set; }
@@ -20,10 +19,11 @@ namespace AO3SchedulerWin.Models
         public bool NotesAtEnd { get; set; }
         public string Contents { get; set; }
 
-        public Story()
+        public Chapter()
         {
             //Initialize all member string values to empty strings
-            Title = string.Empty; ChapterTitle = string.Empty;
+            StoryTitle = string.Empty; 
+            ChapterTitle = string.Empty;
             ChapterSummary = string.Empty;
             ChapterNotes = string.Empty;
             Contents = string.Empty;

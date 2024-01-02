@@ -4,9 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AO3SchedulerWin.Models.StoryModels
+namespace AO3SchedulerWin.Views.ChapterViews.TableView
 {
-    internal class RemoteStoryModel
+    public interface ITableUpdateListener
     {
+        void NotifyUpdate();
     }
 }

@@ -7,17 +7,16 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Net.Http;
 using HtmlAgilityPack;
-using AO3SchedulerWin.Models;
 using System.Text.RegularExpressions;
 using System.Runtime.Serialization.Formatters.Binary;
 using Newtonsoft.Json;
-using AO3SchedulerWin.Models.AuthorModels;
 using System.Net.Sockets;
+using AO3SchedulerWin.Models.Base;
 
 namespace AO3SchedulerWin.AO3
 {
 
-    public class Ao3Session
+    public class Ao3Client
     {
         private static readonly log4net.ILog _logger = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
         private readonly string _appStorePath;
@@ -30,7 +29,7 @@ namespace AO3SchedulerWin.AO3
         private bool authenticated = false;
 
         //Cookies Read/Write methods
-        public async Task<bool> RestoreCookiesFromDisk(IAuthorModel authorModel)
+        public async Task<bool> RestoreCookiesFromDisk()
         {
             try
             {
@@ -53,20 +52,20 @@ namespace AO3SchedulerWin.AO3
                     if (username != null)
                     {
                         _logger.Info($"Session corresponds to user '{username}'");
-                        var restoredAuthor = authorModel.GetAllAuthors().Find(uname => uname.Name == username);
+                        return false;
+                        /*var restoredAuthor = authorModel.GetAllAuthors().Find(uname => uname.Name == username);
                         if (restoredAuthor != null)
                         {
                             _logger.Info("Session restored successfully");
                             _username = restoredAuthor.Name;
                             _password = restoredAuthor.Password;
-                            authorModel.SetActiveUser(restoredAuthor.Id);
                             return true;
                         }
                         else
                         {
                             _logger.Warn("Author isn't registed in the application database");
                         }
-                        return false;
+                        return false;*/
                     }
                     else
                     {
@@ -336,7 +335,7 @@ namespace AO3SchedulerWin.AO3
             _logger.Info("Created new AO3 Session");
         }
 
-        public Ao3Session()
+        public Ao3Client()
         {
 
             _appStorePath = Path.Combine(

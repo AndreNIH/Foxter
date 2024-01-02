@@ -8,30 +8,21 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using HtmlAgilityPack;
-using AO3SchedulerWin.Models.AuthorModels;
-using AO3SchedulerWin.Models;
 using AO3SchedulerWin.Controllers.AuthorControllers;
 using AO3SchedulerWin.AO3;
+using AO3SchedulerWin.Models.Base;
 
 namespace AO3SchedulerWin.GUI.Forms
 {
     public partial class Ao3LoginForm : Form
     {
         private static readonly log4net.ILog logger = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
-        private Ao3Session _session;
+        private Ao3Client _session;
         private IAuthorController _authorController;
         private int? _preloadId;
-        public Ao3LoginForm(IAuthorModel authorModel, ref Ao3Session session, int? preloadId)
+        public Ao3LoginForm(ref Ao3Client session, int? preloadId)
         {
             InitializeComponent();
-            _authorController = new AuthorFormController(
-                authorModel,
-                userTextBox,
-                passwordTextbox,
-                preloadId);
-            _session = session;
-            _preloadId = preloadId;
-            _authorController.UpdateViews();
         }
 
         private async void loginButton_Click(object sender, EventArgs e)
