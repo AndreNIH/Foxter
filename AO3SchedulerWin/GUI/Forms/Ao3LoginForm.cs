@@ -27,7 +27,7 @@ namespace AO3SchedulerWin.GUI.Forms
 
         private async void loginButton_Click(object sender, EventArgs e)
         {
-            try
+            /*try
             {
                 loginButton.Enabled = false;
                 bool loginSucccess = await _session.TryLogin(userTextBox.Text, passwordTextbox.Text);
@@ -63,7 +63,7 @@ namespace AO3SchedulerWin.GUI.Forms
                         "AO3 Error",
                         MessageBoxButtons.OK,
                         MessageBoxIcon.Error);
-            }
+            }*/
 
         }
 

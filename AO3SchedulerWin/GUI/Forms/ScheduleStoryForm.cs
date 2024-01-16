@@ -37,7 +37,7 @@ namespace AO3SchedulerWin.Forms
 
         private async Task<bool> LoadAllAuthorStories()
         {
-            var workEnumerable = await _session.GetAllAuthorWorks();
+            /*var workEnumerable = await _session.GetAllAuthorWorks();
             _works = workEnumerable.ToList();
             if (_works != null)
             {
@@ -46,16 +46,16 @@ namespace AO3SchedulerWin.Forms
                     worksComboBox.Items.Add(work.WorkTitle);
                     _workIndexToIdVec.Add(work.WorkId);
                 }
-            }
+            }*/
             return true;
 
         }
 
         private async Task<bool> LoadOneStory(int workId)
         {
-            var work = await Ao3Work.GetWorkFromId(_session, workId);
+            /*var work = await Ao3Work.GetWorkFromId(_session, workId);
             worksComboBox.Items.Add(work.WorkTitle);
-            _workIndexToIdVec.Add(work.WorkId);
+            _workIndexToIdVec.Add(work.WorkId);*/
             return true;
         }
 

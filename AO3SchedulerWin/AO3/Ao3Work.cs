@@ -9,9 +9,12 @@ namespace AO3SchedulerWin.AO3
 {
     public class Ao3Work
     {
-        private static readonly ILog _logger = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+        public int WorkId { get; set; }
+        public string WorkTitle { get; set; }
 
-        private Ao3Client _session;
+        /*private static readonly ILog _logger = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+        private Ao3Session _session;
+        //private HttpClient 
         private string _workName;
         private int _workId;
 
@@ -33,8 +36,8 @@ namespace AO3SchedulerWin.AO3
             Ok,
             StoryNotFound,
             StoryIsPrivate
-        }
-        private async Task<ParseError> ParseWorkDetails()
+        }*/
+        /*private async Task<ParseError> ParseWorkDetails()
         {
             _logger.Info($"Fetching work data for '{_workId}'");
 
@@ -93,11 +96,11 @@ namespace AO3SchedulerWin.AO3
             return work;
         }
 
-        private Ao3Work(Ao3Client session, int workId)
+        private Ao3Work(Ao3Session session, int workId)
         {
             _session = session;
             _workId = workId;
-        }
+        }*/
 
 
 

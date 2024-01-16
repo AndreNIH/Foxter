@@ -14,7 +14,5 @@ namespace AO3SchedulerWin.Factories
         IAuthorModel CreateAuthorModel();
         IChapterModel CreateChapterModel();
         
-        //TODO: Make this an interface
-        Ao3Client GetSession();
     }
 }

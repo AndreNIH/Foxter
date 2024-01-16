@@ -2,6 +2,7 @@ using AO3SchedulerWin.AO3;
 using AO3SchedulerWin.Factories;
 using AO3SchedulerWin.Forms;
 using AO3SchedulerWin.GUI.Screens;
+using AO3SchedulerWin.Models;
 using System.Runtime.InteropServices;
 
 namespace AO3SchedulerWin
@@ -17,23 +18,27 @@ namespace AO3SchedulerWin
         //End of external DLL imports
 
         private static readonly log4net.ILog logger = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
-        private Ao3Client _session;
-        public MainForm(IAppServiceFactory serviceFactory)
+        private IAuthorModel _authorModel;
+        private IChapterModel _chapterModel;
+        private Ao3Session _session;
+
+        public MainForm(IAppServiceFactory serviceFactory, Ao3Session session)
         {
             InitializeComponent();
+            _authorModel = serviceFactory.CreateAuthorModel();
+            _chapterModel = serviceFactory.CreateChapterModel();
+            _session = session;
             this.MaximizedBounds = Screen.FromHandle(this.Handle).WorkingArea;
-            //TODO: Reimplement this
-            /*Form nextScreen = activeAuthor == null
-                ? new NoActiveUserScreen()
-                : new HomeScreen();
-
-            //_authorModel = serviceFactory.CreateAuthorModel();
-            _session = serviceFactory.GetSession();*/
-
-            var nextScreen = new NoActiveUserScreen();
-            SetMainContent(nextScreen);
         }
 
+        protected override void OnLoad(EventArgs e)
+        {
+            base.OnLoad(e);
+            Form nextScene = _session.Autenticated
+                ? new LoggedUserScreen()
+                : new NoActiveUserScreen();
+
+        }
         //Child Form Loading
         private void SetMainContent(Form childForm)
         {
@@ -120,7 +125,8 @@ namespace AO3SchedulerWin
         private async void accountsButton_Click(object sender, EventArgs e)
         {
 
-            SetMainContent(new AuthorsScreen(ref _session));
+            //SetMainContent(new AuthorsScreen(ref _session));
+            SetMainContent(new LoginScreen());
 
 
         }

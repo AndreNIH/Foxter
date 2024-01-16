@@ -14,22 +14,12 @@ namespace AO3SchedulerWin.Models
             throw new NotImplementedException();
         }
 
-        public Task Delete(int authorId)
+        public Task Delete()
         {
             throw new NotImplementedException();
         }
 
-        public Task<Author?> GetActiveAuthor()
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<List<Author>> GetAllAuthors()
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task Update(int authorId, Author newAuthor)
+        public Task<Author?> Get()
         {
             throw new NotImplementedException();
         }

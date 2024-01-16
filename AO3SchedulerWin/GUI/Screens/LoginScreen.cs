@@ -14,18 +14,18 @@ using System.Windows.Forms;
 
 namespace AO3SchedulerWin.GUI.Screens
 {
-    public partial class AuthorsScreen : Form
+    public partial class LoginScreen : Form
     {
         private IAuthorController _tableController;
         private IAuthorController _loggedAuthorController;
         private Ao3Client _session;
 
-        public AuthorsScreen(ref Ao3Client session)
+        public LoginScreen(/*ref Ao3Client session*/)
         {
-
+            InitializeComponent();
         }
 
-        ~AuthorsScreen()
+        ~LoginScreen()
         {
 
         }
@@ -36,26 +36,12 @@ namespace AO3SchedulerWin.GUI.Screens
 
         }
 
+        private void loginButton_Click(object sender, EventArgs e)
+        {
+
+        }
+
 
         //UI Elements
-        private void setActiveButton_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void addAccountButton_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void removeAccountButton_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void updateAccountButton_Click(object sender, EventArgs e)
-        {
-
-        }
     }
 }

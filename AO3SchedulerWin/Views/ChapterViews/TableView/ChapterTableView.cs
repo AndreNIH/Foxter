@@ -26,7 +26,7 @@ namespace AO3SchedulerWin.Views.ChapterViews.TableView
         {
             _view = view;
             _model = model;
-            _ao3Client = new Ao3Client(); //TODO: Make this a dependency
+            _ao3Client = new Ao3Client(new Ao3Session()); //TODO: Make this a dependency
             _updateListener = updateListener;
         }
 

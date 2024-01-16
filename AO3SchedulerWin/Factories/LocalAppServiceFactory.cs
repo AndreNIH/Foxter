@@ -13,15 +13,9 @@ namespace AO3SchedulerWin.Factories
     internal class LocalAppServiceFactory : IAppServiceFactory
     {
         private static readonly log4net.ILog _logger = log4net.LogManager.GetLogger(typeof(LocalAppServiceFactory));
-        private static Ao3Client _session = new Ao3Client();
         private AppConfiguration _appConfiguration;
         
-        
-
-        public Ao3Client GetSession()
-        {
-            return _session;   
-        }
+      
 
         IAuthorModel IAppServiceFactory.CreateAuthorModel()
         {

@@ -1,4 +1,6 @@
-﻿using AO3SchedulerWin.Factories;
+﻿using AO3SchedulerWin.AO3;
+using AO3SchedulerWin.Factories;
+using AO3SchedulerWin.Models.Base;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -59,43 +61,37 @@ namespace AO3SchedulerWin.GUI.Forms
                 return new LocalAppServiceFactory();
             }
         }
-
+        
+        private async Task<Ao3Session> CreateSessionObject(Author? authorData)
+        {
+            var session = new Ao3Session();
+            try
+            {
+                if (authorData != null)
+                {
+                    bool loginSuccess = await session.Login(authorData.Name, authorData.Password);
+                    _logger.Info($"Login success: {loginSuccess}");
+                }
+                return session;
+            }catch(HttpRequestException ex)
+            {
+                return session;
+            }
+        }
 
         protected async override void OnShown(EventArgs e)
         {
             base.OnShown(e);
             var factory = this.CreateAppServiceFactory();
             var authorModel = factory.CreateAuthorModel();
-            try
+            var author = await authorModel.Get();
+            var session = await CreateSessionObject(author);
+            if (!session.Autenticated)
             {
-/*                var session = factory.GetSession();
-                bool success = await session.RestoreCookiesFromDisk(authorModel);
-
-                //Cookies could not be loaded
-                //Attempt to log in the user
-                if (!success)
-                {
-                    var author = authorModel.GetActiveAuthor();
-                    if (author != null)
-                    {
-                        success = await session.TryLogin(author.Name, author.Password);
-                        if (!success) authorModel.SetActiveUser(-1); ;
-
-                    }
-
-                }*/
-            }
-            catch(HttpRequestException ex)
-            {
-                MessageBox.Show(
-                            "Verify you are connected to the internet: " + ex.Message,
-                            "Network Error",
-                            MessageBoxButtons.OK,
-                            MessageBoxIcon.Warning
-                            );
+                await authorModel.Delete();
             }
 
-            var form = new MainForm(factory);
+            var form = new MainForm(factory, session);
             form.Show();
             this.Hide();
 
