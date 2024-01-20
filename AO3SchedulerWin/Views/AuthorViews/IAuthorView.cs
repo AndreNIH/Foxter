@@ -7,10 +7,9 @@ using System.Threading.Tasks;
 
 namespace AO3SchedulerWin.Views.AuthorViews
 {
-    internal interface IAuthorView
+    public interface IAuthorView
     {
-        public void QueueViewChange(Author author);
-        public void ApplyChanges();
+        public void Update(Author author);
 
     }
 }

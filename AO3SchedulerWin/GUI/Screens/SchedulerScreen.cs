@@ -20,10 +20,11 @@ namespace AO3SchedulerWin.Forms
     
     public partial class SchedulerScreen : Form, ITableUpdateListener
     {
-        public SchedulerScreen(Ao3Client session)
+        public SchedulerScreen(Ao3Client client)
         {
             InitializeComponent();
-            _tableView = new ChapterTableView(storyListContainer, _model, this);
+            _tableView = new ChapterTableView(storyListContainer, _model, this, client);
+            _client = client;
         }
 
         private void reloadScreen()
@@ -33,7 +34,7 @@ namespace AO3SchedulerWin.Forms
 
         private void schedulePostButton_Click(object sender, EventArgs e)
         {
-            var form = new ScheduleStoryForm(_session);
+            var form = new ScheduleStoryForm(_client);
             form.ShowDialog();
             reloadScreen();
         }
@@ -56,7 +57,7 @@ namespace AO3SchedulerWin.Forms
         private IChapterModel _model;
         private IAuthorModel _authorModel;
         private IChapterView _tableView;
-        private Ao3Client _session;
+        private Ao3Client _client;
     }
 
     internal class DeletemeModel : IChapterModel

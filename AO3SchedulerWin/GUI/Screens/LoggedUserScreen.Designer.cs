@@ -32,9 +32,9 @@
             tableLayoutPanel1 = new TableLayoutPanel();
             tableLayoutPanel2 = new TableLayoutPanel();
             pictureBox1 = new PictureBox();
-            label1 = new Label();
+            authorLabel = new Label();
             panel1 = new Panel();
-            button1 = new Button();
+            logoutButton = new Button();
             tableLayoutPanel1.SuspendLayout();
             tableLayoutPanel2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
@@ -62,7 +62,7 @@
             tableLayoutPanel2.ColumnCount = 1;
             tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
             tableLayoutPanel2.Controls.Add(pictureBox1, 0, 1);
-            tableLayoutPanel2.Controls.Add(label1, 0, 2);
+            tableLayoutPanel2.Controls.Add(authorLabel, 0, 2);
             tableLayoutPanel2.Dock = DockStyle.Fill;
             tableLayoutPanel2.Location = new Point(278, 3);
             tableLayoutPanel2.Name = "tableLayoutPanel2";
@@ -84,21 +84,21 @@
             pictureBox1.TabIndex = 0;
             pictureBox1.TabStop = false;
             // 
-            // label1
+            // authorLabel
             // 
-            label1.AutoSize = true;
-            label1.Dock = DockStyle.Top;
-            label1.Font = new Font("Segoe UI", 18F, FontStyle.Regular, GraphicsUnit.Point);
-            label1.Location = new Point(3, 321);
-            label1.Name = "label1";
-            label1.Size = new Size(238, 32);
-            label1.TabIndex = 1;
-            label1.Text = "User";
-            label1.TextAlign = ContentAlignment.MiddleCenter;
+            authorLabel.AutoSize = true;
+            authorLabel.Dock = DockStyle.Top;
+            authorLabel.Font = new Font("Segoe UI", 18F, FontStyle.Regular, GraphicsUnit.Point);
+            authorLabel.Location = new Point(3, 321);
+            authorLabel.Name = "authorLabel";
+            authorLabel.Size = new Size(238, 32);
+            authorLabel.TabIndex = 1;
+            authorLabel.Text = "User";
+            authorLabel.TextAlign = ContentAlignment.MiddleCenter;
             // 
             // panel1
             // 
-            panel1.Controls.Add(button1);
+            panel1.Controls.Add(logoutButton);
             panel1.Dock = DockStyle.Bottom;
             panel1.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
             panel1.Location = new Point(0, 398);
@@ -106,18 +106,19 @@
             panel1.Size = new Size(800, 52);
             panel1.TabIndex = 1;
             // 
-            // button1
+            // logoutButton
             // 
-            button1.BackColor = Color.Black;
-            button1.Dock = DockStyle.Fill;
-            button1.FlatStyle = FlatStyle.Flat;
-            button1.ForeColor = Color.White;
-            button1.Location = new Point(0, 0);
-            button1.Name = "button1";
-            button1.Size = new Size(800, 52);
-            button1.TabIndex = 0;
-            button1.Text = "Log Out";
-            button1.UseVisualStyleBackColor = false;
+            logoutButton.BackColor = Color.Black;
+            logoutButton.Dock = DockStyle.Fill;
+            logoutButton.FlatStyle = FlatStyle.Flat;
+            logoutButton.ForeColor = Color.White;
+            logoutButton.Location = new Point(0, 0);
+            logoutButton.Name = "logoutButton";
+            logoutButton.Size = new Size(800, 52);
+            logoutButton.TabIndex = 0;
+            logoutButton.Text = "Log Out";
+            logoutButton.UseVisualStyleBackColor = false;
+            logoutButton.Click += logoutButton_Click;
             // 
             // LoggedUserScreen
             // 
@@ -141,8 +142,8 @@
         private TableLayoutPanel tableLayoutPanel1;
         private TableLayoutPanel tableLayoutPanel2;
         private PictureBox pictureBox1;
-        private Label label1;
+        private Label authorLabel;
         private Panel panel1;
-        private Button button1;
+        private Button logoutButton;
     }
 }

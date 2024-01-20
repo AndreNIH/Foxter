@@ -22,11 +22,11 @@ namespace AO3SchedulerWin.Views.ChapterViews.TableView
         private TableLayoutPanel _view;
         private Ao3Client _ao3Client;
         
-        public ChapterTableView(TableLayoutPanel view, IChapterModel model, ITableUpdateListener updateListener)
+        public ChapterTableView(TableLayoutPanel view, IChapterModel model, ITableUpdateListener updateListener, Ao3Client client)
         {
             _view = view;
             _model = model;
-            _ao3Client = new Ao3Client(new Ao3Session()); //TODO: Make this a dependency
+            _ao3Client = client;
             _updateListener = updateListener;
         }
 

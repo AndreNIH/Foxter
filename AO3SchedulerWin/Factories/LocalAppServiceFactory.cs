@@ -4,6 +4,8 @@ using AO3SchedulerWin.Models.Components;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Data.Common;
+using System.Data.SQLite;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -13,14 +15,33 @@ namespace AO3SchedulerWin.Factories
     internal class LocalAppServiceFactory : IAppServiceFactory
     {
         private static readonly log4net.ILog _logger = log4net.LogManager.GetLogger(typeof(LocalAppServiceFactory));
-        private AppConfiguration _appConfiguration;
-        
-      
+        private DbProviderFactory _dbProvider;
+        private string _connectionStr;
+        private string _dbPath;
+
+        void EnsureDatabaseIsCreated()
+        {
+            string path = _dbPath;
+            if (File.Exists(path))
+            {
+                _logger.Info($"Database found in '${path}'. Skipping file creation");
+                return;
+            }
+            SQLiteConnection.CreateFile(path);
+            using (var conn = new SQLiteConnection($"Data Source={path};Version=3;"))
+            {
+                conn.Open();
+                var cmd = new SQLiteCommand(Resources.AppStrings.DbCreationScript, conn);
+                cmd.ExecuteNonQuery();
+            }
+
+            _logger.Info($"Created application database in {path}");
+        }
 
         IAuthorModel IAppServiceFactory.CreateAuthorModel()
         {
-            _logger.Info("Instanciating local Author model. ");
-            return new AuthorLocalModel();
+            _logger.Info("Created AuthorLocalModel instance");
+            return new AuthorLocalModel(_dbProvider, _connectionStr);
         }
 
         public IChapterModel CreateChapterModel()
@@ -29,25 +50,18 @@ namespace AO3SchedulerWin.Factories
             return new ChapterLocalModel();
         }
 
-        //This constructor probably wont see much use
-        //Local models don't require any configuration
-        public LocalAppServiceFactory(FileStream configFileStream)
-        {
-            _logger.Info("Configuring AppServiceFactory with file " + configFileStream.Name);
-            using (var sr = new StreamReader(configFileStream))
-            {
-                _appConfiguration = JsonConvert.DeserializeObject<AppConfiguration>(sr.ReadToEnd());
-            }
-        }
+        
 
         public LocalAppServiceFactory()
         {
-            _logger.Info("Configuring LocalAppServiceFactory with default settings");
-            _appConfiguration = new AppConfiguration();
-            _appConfiguration.ServiceType = ServiceType.kLocal;
-            _appConfiguration.RemoteServerAdress = "";
-            _appConfiguration.RemoteUsername = "";
-            _appConfiguration.RemoteServerAdress = "";
+            _dbProvider = new SQLiteFactory();
+            _dbPath = Path.Combine(Environment.GetFolderPath(
+                Environment.SpecialFolder.LocalApplicationData), 
+                "AO3S", 
+                "appstorage.sqlite"
+                );
+            _connectionStr = $"Data Source={_dbPath};Version=3;";
+            EnsureDatabaseIsCreated();
         }
     }
 }

@@ -9,9 +9,9 @@ namespace AO3SchedulerWin.Models
 {
     public interface IAuthorModel
     {
-        public Task Create(Author authord);
+        public Task<bool> Create(Author authord);
 
-        public Task Delete();
+        public Task<bool> Delete();
 
         public Task<Author?> Get();
 

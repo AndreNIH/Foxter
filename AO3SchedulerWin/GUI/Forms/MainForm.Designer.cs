@@ -246,7 +246,6 @@
             Name = "MainForm";
             Text = "AO3 Scheduler";
             WindowState = FormWindowState.Maximized;
-            Load += MainForm_Load;
             topBarPanel.ResumeLayout(false);
             topBarPanel.PerformLayout();
             panel2.ResumeLayout(false);

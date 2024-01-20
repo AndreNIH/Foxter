@@ -1,4 +1,9 @@
-﻿using System;
+﻿using AO3SchedulerWin.AO3;
+using AO3SchedulerWin.Controllers.AuthorControllers;
+using AO3SchedulerWin.GUI.Forms;
+using AO3SchedulerWin.Models;
+using AO3SchedulerWin.Views.AuthorViews;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -12,9 +17,30 @@ namespace AO3SchedulerWin.GUI.Screens
 {
     public partial class LoggedUserScreen : Form
     {
-        public LoggedUserScreen()
+        private IAuthorController _authorDisplayController;
+        private IAuthorController _authroController;
+        private Ao3Session _session;
+        private IScreenUpdater _updater;
+        public LoggedUserScreen(ref Ao3Session session, IAuthorModel authorModel, IScreenUpdater updater)
         {
             InitializeComponent();
+            _authorDisplayController = new DisplayAuthorController(authorModel, new AuthorLabelViewAdapter(authorLabel));
+            _authroController = new LoginAuthorController(authorModel);
+            _session = session;
+            _updater = updater;
+        }
+
+        protected async override void OnLoad(EventArgs e)
+        {
+            base.OnLoad(e);
+            await _authorDisplayController.UpdateViews();
+        }
+
+        private async void logoutButton_Click(object sender, EventArgs e)
+        {
+            await _authroController.UnregisterAuthor();
+            _session.Reset();
+            await _updater.ChangeScreen("SC_LOGIN");
         }
     }
 }

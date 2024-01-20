@@ -1,5 +1,6 @@
 ﻿using AO3SchedulerWin.Controllers.AuthorControllers;
 using AO3SchedulerWin.Controllers.StoryControllers;
+using AO3SchedulerWin.Models;
 using AO3SchedulerWin.Views.AuthorViews;
 using System;
 using System.Collections.Generic;
@@ -15,16 +16,16 @@ namespace AO3SchedulerWin.Forms
 {
     public partial class HomeScreen : Form
     {
-        public HomeScreen()
+        public HomeScreen(IAuthorModel model)
         {
             InitializeComponent();
-
+            _authorController = new DisplayAuthorController(model ,new AuthorLabelViewAdapter(authorLabel));
         }
 
         protected override void OnLoad(EventArgs e)
         {
-            
-
+            base.OnLoad(e);
+            _authorController.UpdateViews();
         }
 
         private IAuthorController _authorController;

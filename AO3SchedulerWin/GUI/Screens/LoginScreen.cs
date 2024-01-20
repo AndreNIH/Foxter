@@ -1,6 +1,7 @@
 ﻿using AO3SchedulerWin.AO3;
 using AO3SchedulerWin.Controllers.AuthorControllers;
 using AO3SchedulerWin.GUI.Forms;
+using AO3SchedulerWin.Models;
 using AO3SchedulerWin.Views.AuthorViews;
 using System;
 using System.Collections.Generic;
@@ -16,29 +17,67 @@ namespace AO3SchedulerWin.GUI.Screens
 {
     public partial class LoginScreen : Form
     {
-        private IAuthorController _tableController;
         private IAuthorController _loggedAuthorController;
-        private Ao3Client _session;
+        private Ao3Session _session;
+        private IScreenUpdater _updater;
 
-        public LoginScreen(/*ref Ao3Client session*/)
+        public LoginScreen(ref Ao3Session client, IAuthorModel authorModel, IScreenUpdater updater)
         {
+            _session = client;
+            _updater = updater;
+            _loggedAuthorController = new LoginAuthorController(authorModel);
             InitializeComponent();
         }
 
-        ~LoginScreen()
+        private async Task<bool> DoLogin()
         {
-
+            bool success = false;
+            try
+            {
+                success = await _session.Login(userTextBox.Text.ToString(), passwordTextBox.Text.ToString());
+            }
+            catch (HttpRequestException ex)
+            {
+                MessageBox.Show(
+                    ex.Message,
+                    "Request Failed",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning
+                    );
+            }
+            catch (Ao3GenericException ex)
+            {
+                MessageBox.Show(
+                    ex.Message,
+                    "Error",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error
+                    );
+            }
+            return success;
         }
 
-        //Form Events
-        private void AuthorsScreen_Load(object sender, EventArgs e)
+        private async void loginButton_Click_1(object sender, EventArgs e)
         {
 
-        }
+            await _loggedAuthorController.UnregisterAuthor();
+            loginButton.BackColor = Color.Gray;
+            loginButton.Enabled = false;
+            bool success = await DoLogin();
+            loginButton.Enabled = true;
+            loginButton.BackColor = Color.FromArgb(153, 0, 0);
 
-        private void loginButton_Click(object sender, EventArgs e)
-        {
 
+            if (success)
+            {
+                await _loggedAuthorController.RegisterAuthor(new Models.Base.Author
+                {
+                    Id = _session.Id,
+                    Name = _session.User,
+                    Password = passwordTextBox.Text.ToString()
+                });
+                await _updater.ChangeScreen("SC_MAIN");
+            }
         }
 
 

@@ -30,10 +30,10 @@
         {
             panel2 = new Panel();
             tableLayoutPanel2 = new TableLayoutPanel();
-            button1 = new Button();
+            loginButton = new Button();
             tableLayoutPanel1 = new TableLayoutPanel();
-            textBox1 = new TextBox();
-            textBox2 = new TextBox();
+            userTextBox = new TextBox();
+            passwordTextBox = new TextBox();
             label1 = new Label();
             panel2.SuspendLayout();
             tableLayoutPanel2.SuspendLayout();
@@ -54,7 +54,7 @@
             // 
             tableLayoutPanel2.ColumnCount = 1;
             tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
-            tableLayoutPanel2.Controls.Add(button1, 0, 2);
+            tableLayoutPanel2.Controls.Add(loginButton, 0, 2);
             tableLayoutPanel2.Controls.Add(tableLayoutPanel1, 0, 1);
             tableLayoutPanel2.Controls.Add(label1, 0, 0);
             tableLayoutPanel2.Dock = DockStyle.Fill;
@@ -68,27 +68,28 @@
             tableLayoutPanel2.Size = new Size(780, 430);
             tableLayoutPanel2.TabIndex = 4;
             // 
-            // button1
+            // loginButton
             // 
-            button1.BackColor = Color.FromArgb(153, 0, 0);
-            button1.Dock = DockStyle.Bottom;
-            button1.FlatStyle = FlatStyle.Flat;
-            button1.Font = new Font("Segoe UI", 14.25F, FontStyle.Regular, GraphicsUnit.Point);
-            button1.ForeColor = Color.White;
-            button1.Location = new Point(15, 370);
-            button1.Margin = new Padding(10, 3, 10, 3);
-            button1.Name = "button1";
-            button1.Size = new Size(750, 52);
-            button1.TabIndex = 0;
-            button1.Text = "Log In";
-            button1.UseVisualStyleBackColor = false;
+            loginButton.BackColor = Color.FromArgb(153, 0, 0);
+            loginButton.Dock = DockStyle.Bottom;
+            loginButton.FlatStyle = FlatStyle.Flat;
+            loginButton.Font = new Font("Segoe UI", 14.25F, FontStyle.Regular, GraphicsUnit.Point);
+            loginButton.ForeColor = Color.White;
+            loginButton.Location = new Point(15, 370);
+            loginButton.Margin = new Padding(10, 3, 10, 3);
+            loginButton.Name = "loginButton";
+            loginButton.Size = new Size(750, 52);
+            loginButton.TabIndex = 0;
+            loginButton.Text = "Log In";
+            loginButton.UseVisualStyleBackColor = false;
+            loginButton.Click += loginButton_Click_1;
             // 
             // tableLayoutPanel1
             // 
             tableLayoutPanel1.ColumnCount = 1;
             tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
-            tableLayoutPanel1.Controls.Add(textBox1, 0, 0);
-            tableLayoutPanel1.Controls.Add(textBox2, 0, 2);
+            tableLayoutPanel1.Controls.Add(userTextBox, 0, 0);
+            tableLayoutPanel1.Controls.Add(passwordTextBox, 0, 2);
             tableLayoutPanel1.Dock = DockStyle.Fill;
             tableLayoutPanel1.Location = new Point(8, 148);
             tableLayoutPanel1.Name = "tableLayoutPanel1";
@@ -99,26 +100,26 @@
             tableLayoutPanel1.Size = new Size(764, 133);
             tableLayoutPanel1.TabIndex = 1;
             // 
-            // textBox1
+            // userTextBox
             // 
-            textBox1.Dock = DockStyle.Fill;
-            textBox1.Font = new Font("Segoe UI", 20.25F, FontStyle.Regular, GraphicsUnit.Point);
-            textBox1.Location = new Point(3, 3);
-            textBox1.Name = "textBox1";
-            textBox1.PlaceholderText = "Username/Email";
-            textBox1.Size = new Size(758, 43);
-            textBox1.TabIndex = 0;
+            userTextBox.Dock = DockStyle.Fill;
+            userTextBox.Font = new Font("Segoe UI", 20.25F, FontStyle.Regular, GraphicsUnit.Point);
+            userTextBox.Location = new Point(3, 3);
+            userTextBox.Name = "userTextBox";
+            userTextBox.PlaceholderText = "Username/Email";
+            userTextBox.Size = new Size(758, 43);
+            userTextBox.TabIndex = 0;
             // 
-            // textBox2
+            // passwordTextBox
             // 
-            textBox2.Dock = DockStyle.Fill;
-            textBox2.Font = new Font("Segoe UI", 20.25F, FontStyle.Regular, GraphicsUnit.Point);
-            textBox2.Location = new Point(3, 84);
-            textBox2.Name = "textBox2";
-            textBox2.PasswordChar = '*';
-            textBox2.PlaceholderText = "Password";
-            textBox2.Size = new Size(758, 43);
-            textBox2.TabIndex = 1;
+            passwordTextBox.Dock = DockStyle.Fill;
+            passwordTextBox.Font = new Font("Segoe UI", 20.25F, FontStyle.Regular, GraphicsUnit.Point);
+            passwordTextBox.Location = new Point(3, 84);
+            passwordTextBox.Name = "passwordTextBox";
+            passwordTextBox.PasswordChar = '*';
+            passwordTextBox.PlaceholderText = "Password";
+            passwordTextBox.Size = new Size(758, 43);
+            passwordTextBox.TabIndex = 1;
             // 
             // label1
             // 
@@ -140,7 +141,6 @@
             Controls.Add(panel2);
             Name = "LoginScreen";
             Text = "AuthorsScreen";
-            Load += AuthorsScreen_Load;
             panel2.ResumeLayout(false);
             tableLayoutPanel2.ResumeLayout(false);
             tableLayoutPanel2.PerformLayout();
@@ -152,10 +152,10 @@
         #endregion
         private Panel panel2;
         private TableLayoutPanel tableLayoutPanel2;
-        private Button button1;
+        private Button loginButton;
         private TableLayoutPanel tableLayoutPanel1;
-        private TextBox textBox1;
-        private TextBox textBox2;
+        private TextBox userTextBox;
+        private TextBox passwordTextBox;
         private Label label1;
     }
 }

@@ -2,9 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using System.Net.Http;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.StartPanel;
 
 namespace AO3SchedulerWin.AO3
 {
@@ -13,11 +15,32 @@ namespace AO3SchedulerWin.AO3
         private static readonly log4net.ILog _logger = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
         private HttpClient _httpClient;
         public CookieContainer SessionCookies { get; private set; }
+        public int Id { get; private set; }
         public string User { get; private set; }
         public bool Autenticated { get; private set; }
 
-        private void Reset()
+        
+        private async Task<int> GetUserId()
         {
+            var rootDoc = new HtmlAgilityPack.HtmlDocument();
+            rootDoc.LoadHtml(await _httpClient.GetStringAsync($"users/{User}/profile"));
+            var userIdNode = rootDoc.DocumentNode.SelectSingleNode("//input[@id='subscription_subscribable_id'][1]/@value");
+            if(userIdNode != null)
+            {
+                string id = userIdNode.GetAttributeValue("value", null); 
+                if(id == null) throw new Ao3GenericException("Could not read user id from the page");
+                return int.Parse(id);
+            }
+            else
+            {
+                throw new Ao3GenericException("Could not read user id from the page");
+
+            }
+        }
+        
+        public void Reset()
+        {
+            SessionCookies = new CookieContainer();
             var handler = new HttpClientHandler()
             {
                 AllowAutoRedirect = false,
@@ -69,6 +92,7 @@ namespace AO3SchedulerWin.AO3
                 string userLinkMatchExpression = @"<a href=""https://archiveofourown\.org/users/(?<Username>[^""]+)""";
                 var userLinkMatch = Regex.Match(await loginRequest.Content.ReadAsStringAsync(), userLinkMatchExpression);
                 User = userLinkMatch.Groups["Username"].Value;
+                Id = await GetUserId();
                 return true;
             }
             else

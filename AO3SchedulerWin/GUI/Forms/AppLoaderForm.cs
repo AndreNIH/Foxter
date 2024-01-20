@@ -28,9 +28,6 @@ namespace AO3SchedulerWin.GUI.Forms
         private extern static void SendMessage(System.IntPtr hwndm, int msg, int wParam, int lParam);
         //End of external DLL imports
 
-
-
-
         private IAppServiceFactory CreateAppServiceFactory()
         {
             try
@@ -62,33 +59,40 @@ namespace AO3SchedulerWin.GUI.Forms
             }
         }
         
-        private async Task<Ao3Session> CreateSessionObject(Author? authorData)
-        {
-            var session = new Ao3Session();
-            try
-            {
-                if (authorData != null)
-                {
-                    bool loginSuccess = await session.Login(authorData.Name, authorData.Password);
-                    _logger.Info($"Login success: {loginSuccess}");
-                }
-                return session;
-            }catch(HttpRequestException ex)
-            {
-                return session;
-            }
-        }
-
+        
         protected async override void OnShown(EventArgs e)
         {
             base.OnShown(e);
             var factory = this.CreateAppServiceFactory();
             var authorModel = factory.CreateAuthorModel();
             var author = await authorModel.Get();
-            var session = await CreateSessionObject(author);
-            if (!session.Autenticated)
+            var session = new Ao3Session();
+            if( author != null)
             {
-                await authorModel.Delete();
+                try
+                {
+                    bool success = await session.Login(author.Name, author.Password);
+                    if (!success)
+                    {
+                        _logger.Info($"{author.Name} login failure. Removing author from database");
+                        await authorModel.Delete();
+                    }
+                }
+                catch (Ao3GenericException ex)
+                {
+                    _logger.Error(ex.Message);
+                    Close();
+                }
+                catch (HttpRequestException ex)
+                {
+                    _logger.Warn(ex.Message);
+                    MessageBox.Show(
+                            ex.Message,
+                            "Connection Error",
+                            MessageBoxButtons.OK,
+                            MessageBoxIcon.Warning
+                            );
+                }
             }
 
             var form = new MainForm(factory, session);

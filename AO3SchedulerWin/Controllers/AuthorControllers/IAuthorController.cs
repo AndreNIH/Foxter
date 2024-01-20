@@ -7,13 +7,11 @@ using System.Threading.Tasks;
 
 namespace AO3SchedulerWin.Controllers.AuthorControllers
 {
-    internal interface IAuthorController
+    public interface IAuthorController
     {
-        bool RegisterAuthor(Author author);
-        bool UpdateAuthor(int authorId, Author newAuthorData);
-        bool UnregisterAuthor(int authorId);
-        bool SetActiveAuthor(int authorId);
-        void UpdateViews();
+        Task<bool> RegisterAuthor(Author author);
+        Task<bool> UnregisterAuthor();
+        Task UpdateViews();
 
         
     }
