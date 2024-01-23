@@ -33,52 +33,20 @@
             worksComboBox = new ComboBox();
             publishingDatePicker = new DateTimePicker();
             label2 = new Label();
-            chapterSummaryTextbox = new RichTextBox();
-            label3 = new Label();
-            label4 = new Label();
-            chapterNotesTextbox = new RichTextBox();
-            notesAtStartCheckbox = new CheckBox();
-            notesAtEndCheckbox = new CheckBox();
             mainContainer = new TabControl();
             loadingTab = new TabPage();
             label5 = new Label();
             pictureBox1 = new PictureBox();
             chapterDetailsTab = new TabPage();
+            openInAo3Button = new Button();
+            chapterComboBox = new ComboBox();
             deleteButton = new Button();
-            chapterTitleTextbox = new TextBox();
             label8 = new Label();
-            detailsNextButton = new Button();
-            convertionTab = new TabPage();
-            backConverterButton = new Button();
-            convertFixNextButton = new Button();
-            label6 = new Label();
-            groupBox2 = new GroupBox();
-            checkBox8 = new CheckBox();
-            checkBox3 = new CheckBox();
-            checkBox11 = new CheckBox();
-            checkBox4 = new CheckBox();
-            checkBox10 = new CheckBox();
-            checkBox5 = new CheckBox();
-            checkBox9 = new CheckBox();
-            checkBox6 = new CheckBox();
-            checkBox7 = new CheckBox();
-            groupBox1 = new GroupBox();
-            selectFileButton = new Button();
-            filePathTextbox = new TextBox();
-            label7 = new Label();
-            finalTab = new TabPage();
-            storyHtmlTextbox = new TextBox();
-            backFinalButton = new Button();
-            schedulePostButton = new Button();
-            openFileDialog = new OpenFileDialog();
+            scheduleButton = new Button();
             mainContainer.SuspendLayout();
             loadingTab.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
             chapterDetailsTab.SuspendLayout();
-            convertionTab.SuspendLayout();
-            groupBox2.SuspendLayout();
-            groupBox1.SuspendLayout();
-            finalTab.SuspendLayout();
             SuspendLayout();
             // 
             // label1
@@ -119,73 +87,15 @@
             label2.TabIndex = 3;
             label2.Text = "Publishing Date:";
             // 
-            // chapterSummaryTextbox
-            // 
-            chapterSummaryTextbox.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
-            chapterSummaryTextbox.Location = new Point(8, 119);
-            chapterSummaryTextbox.Name = "chapterSummaryTextbox";
-            chapterSummaryTextbox.Size = new Size(415, 131);
-            chapterSummaryTextbox.TabIndex = 4;
-            chapterSummaryTextbox.Text = "";
-            // 
-            // label3
-            // 
-            label3.AutoSize = true;
-            label3.Location = new Point(8, 101);
-            label3.Name = "label3";
-            label3.Size = new Size(103, 15);
-            label3.TabIndex = 5;
-            label3.Text = "Chapter Summary";
-            // 
-            // label4
-            // 
-            label4.AutoSize = true;
-            label4.Location = new Point(8, 263);
-            label4.Name = "label4";
-            label4.Size = new Size(83, 15);
-            label4.TabIndex = 7;
-            label4.Text = "Chapter Notes";
-            // 
-            // chapterNotesTextbox
-            // 
-            chapterNotesTextbox.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
-            chapterNotesTextbox.Location = new Point(8, 281);
-            chapterNotesTextbox.Name = "chapterNotesTextbox";
-            chapterNotesTextbox.Size = new Size(415, 131);
-            chapterNotesTextbox.TabIndex = 6;
-            chapterNotesTextbox.Text = "";
-            // 
-            // notesAtStartCheckbox
-            // 
-            notesAtStartCheckbox.AutoSize = true;
-            notesAtStartCheckbox.Location = new Point(8, 419);
-            notesAtStartCheckbox.Name = "notesAtStartCheckbox";
-            notesAtStartCheckbox.Size = new Size(147, 19);
-            notesAtStartCheckbox.TabIndex = 8;
-            notesAtStartCheckbox.Text = "Notes at the beginning";
-            notesAtStartCheckbox.UseVisualStyleBackColor = true;
-            // 
-            // notesAtEndCheckbox
-            // 
-            notesAtEndCheckbox.AutoSize = true;
-            notesAtEndCheckbox.Location = new Point(8, 444);
-            notesAtEndCheckbox.Name = "notesAtEndCheckbox";
-            notesAtEndCheckbox.Size = new Size(113, 19);
-            notesAtEndCheckbox.TabIndex = 9;
-            notesAtEndCheckbox.Text = "Notes at the end";
-            notesAtEndCheckbox.UseVisualStyleBackColor = true;
-            // 
             // mainContainer
             // 
             mainContainer.Controls.Add(loadingTab);
             mainContainer.Controls.Add(chapterDetailsTab);
-            mainContainer.Controls.Add(convertionTab);
-            mainContainer.Controls.Add(finalTab);
             mainContainer.Dock = DockStyle.Fill;
             mainContainer.Location = new Point(0, 0);
             mainContainer.Name = "mainContainer";
             mainContainer.SelectedIndex = 0;
-            mainContainer.Size = new Size(439, 610);
+            mainContainer.Size = new Size(439, 493);
             mainContainer.TabIndex = 10;
             // 
             // loadingTab
@@ -196,7 +106,7 @@
             loadingTab.Location = new Point(4, 24);
             loadingTab.Name = "loadingTab";
             loadingTab.Padding = new Padding(3);
-            loadingTab.Size = new Size(431, 582);
+            loadingTab.Size = new Size(431, 465);
             loadingTab.TabIndex = 1;
             loadingTab.Text = "tabPage1";
             // 
@@ -224,34 +134,46 @@
             // 
             // chapterDetailsTab
             // 
+            chapterDetailsTab.Controls.Add(openInAo3Button);
+            chapterDetailsTab.Controls.Add(chapterComboBox);
             chapterDetailsTab.Controls.Add(deleteButton);
-            chapterDetailsTab.Controls.Add(chapterTitleTextbox);
             chapterDetailsTab.Controls.Add(label8);
-            chapterDetailsTab.Controls.Add(detailsNextButton);
-            chapterDetailsTab.Controls.Add(notesAtEndCheckbox);
+            chapterDetailsTab.Controls.Add(scheduleButton);
             chapterDetailsTab.Controls.Add(worksComboBox);
-            chapterDetailsTab.Controls.Add(notesAtStartCheckbox);
             chapterDetailsTab.Controls.Add(label1);
-            chapterDetailsTab.Controls.Add(label4);
             chapterDetailsTab.Controls.Add(publishingDatePicker);
-            chapterDetailsTab.Controls.Add(chapterNotesTextbox);
             chapterDetailsTab.Controls.Add(label2);
-            chapterDetailsTab.Controls.Add(label3);
-            chapterDetailsTab.Controls.Add(chapterSummaryTextbox);
             chapterDetailsTab.Location = new Point(4, 24);
             chapterDetailsTab.Name = "chapterDetailsTab";
             chapterDetailsTab.Padding = new Padding(3);
-            chapterDetailsTab.Size = new Size(431, 582);
+            chapterDetailsTab.Size = new Size(431, 465);
             chapterDetailsTab.TabIndex = 0;
             chapterDetailsTab.Text = "tabPage2";
             chapterDetailsTab.UseVisualStyleBackColor = true;
+            // 
+            // openInAo3Button
+            // 
+            openInAo3Button.Location = new Point(10, 111);
+            openInAo3Button.Name = "openInAo3Button";
+            openInAo3Button.Size = new Size(413, 46);
+            openInAo3Button.TabIndex = 11;
+            openInAo3Button.Text = "Open in Archive of Our Own";
+            openInAo3Button.UseVisualStyleBackColor = true;
+            // 
+            // chapterComboBox
+            // 
+            chapterComboBox.FormattingEnabled = true;
+            chapterComboBox.Location = new Point(107, 42);
+            chapterComboBox.Name = "chapterComboBox";
+            chapterComboBox.Size = new Size(316, 23);
+            chapterComboBox.TabIndex = 14;
             // 
             // deleteButton
             // 
             deleteButton.Anchor = AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             deleteButton.BackColor = Color.Brown;
             deleteButton.ForeColor = Color.White;
-            deleteButton.Location = new Point(31, 478);
+            deleteButton.Location = new Point(31, 361);
             deleteButton.Name = "deleteButton";
             deleteButton.Size = new Size(377, 45);
             deleteButton.TabIndex = 13;
@@ -260,316 +182,43 @@
             deleteButton.Visible = false;
             deleteButton.Click += deleteButton_Click;
             // 
-            // chapterTitleTextbox
-            // 
-            chapterTitleTextbox.Location = new Point(107, 42);
-            chapterTitleTextbox.Name = "chapterTitleTextbox";
-            chapterTitleTextbox.Size = new Size(316, 23);
-            chapterTitleTextbox.TabIndex = 12;
-            // 
             // label8
             // 
             label8.AutoSize = true;
             label8.Location = new Point(10, 46);
             label8.Name = "label8";
-            label8.Size = new Size(77, 15);
+            label8.Size = new Size(86, 15);
             label8.TabIndex = 11;
-            label8.Text = "Chapter Title:";
+            label8.Text = "Select Chapter:";
             // 
-            // detailsNextButton
+            // scheduleButton
             // 
-            detailsNextButton.Anchor = AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
-            detailsNextButton.Location = new Point(31, 529);
-            detailsNextButton.Name = "detailsNextButton";
-            detailsNextButton.Size = new Size(377, 45);
-            detailsNextButton.TabIndex = 10;
-            detailsNextButton.Text = "Next";
-            detailsNextButton.UseVisualStyleBackColor = true;
-            detailsNextButton.Click += detailsNextButton_Click;
-            // 
-            // convertionTab
-            // 
-            convertionTab.Controls.Add(backConverterButton);
-            convertionTab.Controls.Add(convertFixNextButton);
-            convertionTab.Controls.Add(label6);
-            convertionTab.Controls.Add(groupBox2);
-            convertionTab.Controls.Add(groupBox1);
-            convertionTab.Location = new Point(4, 24);
-            convertionTab.Margin = new Padding(2);
-            convertionTab.Name = "convertionTab";
-            convertionTab.Padding = new Padding(2);
-            convertionTab.Size = new Size(431, 582);
-            convertionTab.TabIndex = 2;
-            convertionTab.Text = "tabPage3";
-            convertionTab.UseVisualStyleBackColor = true;
-            // 
-            // backConverterButton
-            // 
-            backConverterButton.Anchor = AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
-            backConverterButton.Location = new Point(31, 478);
-            backConverterButton.Name = "backConverterButton";
-            backConverterButton.Size = new Size(377, 45);
-            backConverterButton.TabIndex = 13;
-            backConverterButton.Text = "Back";
-            backConverterButton.UseVisualStyleBackColor = true;
-            // 
-            // convertFixNextButton
-            // 
-            convertFixNextButton.Anchor = AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
-            convertFixNextButton.Location = new Point(31, 529);
-            convertFixNextButton.Name = "convertFixNextButton";
-            convertFixNextButton.Size = new Size(377, 45);
-            convertFixNextButton.TabIndex = 12;
-            convertFixNextButton.Text = "Next";
-            convertFixNextButton.UseVisualStyleBackColor = true;
-            convertFixNextButton.Click += convertFixNextButton_Click;
-            // 
-            // label6
-            // 
-            label6.AutoSize = true;
-            label6.Location = new Point(13, 275);
-            label6.Name = "label6";
-            label6.Size = new Size(350, 15);
-            label6.TabIndex = 11;
-            label6.Text = "* Document to HTML converter powered by AOYeet (@daemuth)";
-            // 
-            // groupBox2
-            // 
-            groupBox2.Controls.Add(checkBox8);
-            groupBox2.Controls.Add(checkBox3);
-            groupBox2.Controls.Add(checkBox11);
-            groupBox2.Controls.Add(checkBox4);
-            groupBox2.Controls.Add(checkBox10);
-            groupBox2.Controls.Add(checkBox5);
-            groupBox2.Controls.Add(checkBox9);
-            groupBox2.Controls.Add(checkBox6);
-            groupBox2.Controls.Add(checkBox7);
-            groupBox2.Location = new Point(13, 107);
-            groupBox2.Name = "groupBox2";
-            groupBox2.Size = new Size(410, 165);
-            groupBox2.TabIndex = 10;
-            groupBox2.TabStop = false;
-            groupBox2.Text = "Options";
-            // 
-            // checkBox8
-            // 
-            checkBox8.AutoSize = true;
-            checkBox8.Checked = true;
-            checkBox8.CheckState = CheckState.Checked;
-            checkBox8.Location = new Point(183, 22);
-            checkBox8.Name = "checkBox8";
-            checkBox8.Size = new Size(154, 19);
-            checkBox8.TabIndex = 5;
-            checkBox8.Text = "Set Heading Alignments";
-            checkBox8.UseVisualStyleBackColor = true;
-            // 
-            // checkBox3
-            // 
-            checkBox3.AutoSize = true;
-            checkBox3.Checked = true;
-            checkBox3.CheckState = CheckState.Checked;
-            checkBox3.Location = new Point(6, 22);
-            checkBox3.Name = "checkBox3";
-            checkBox3.Size = new Size(129, 19);
-            checkBox3.TabIndex = 0;
-            checkBox3.Text = "Remove comments";
-            checkBox3.UseVisualStyleBackColor = true;
-            // 
-            // checkBox11
-            // 
-            checkBox11.AutoSize = true;
-            checkBox11.Checked = true;
-            checkBox11.CheckState = CheckState.Checked;
-            checkBox11.Location = new Point(183, 97);
-            checkBox11.Name = "checkBox11";
-            checkBox11.Size = new Size(119, 19);
-            checkBox11.TabIndex = 8;
-            checkBox11.Text = "Keep Empty Lines";
-            checkBox11.UseVisualStyleBackColor = true;
-            // 
-            // checkBox4
-            // 
-            checkBox4.AutoSize = true;
-            checkBox4.Checked = true;
-            checkBox4.CheckState = CheckState.Checked;
-            checkBox4.Location = new Point(6, 47);
-            checkBox4.Name = "checkBox4";
-            checkBox4.Size = new Size(163, 19);
-            checkBox4.TabIndex = 1;
-            checkBox4.Text = "Set Paragraph Alignments";
-            checkBox4.UseVisualStyleBackColor = true;
-            // 
-            // checkBox10
-            // 
-            checkBox10.AutoSize = true;
-            checkBox10.Checked = true;
-            checkBox10.CheckState = CheckState.Checked;
-            checkBox10.Location = new Point(183, 72);
-            checkBox10.Name = "checkBox10";
-            checkBox10.Size = new Size(143, 19);
-            checkBox10.TabIndex = 7;
-            checkBox10.Text = "Convert Strikethrough";
-            checkBox10.UseVisualStyleBackColor = true;
-            // 
-            // checkBox5
-            // 
-            checkBox5.AutoSize = true;
-            checkBox5.Checked = true;
-            checkBox5.CheckState = CheckState.Checked;
-            checkBox5.Location = new Point(6, 72);
-            checkBox5.Name = "checkBox5";
-            checkBox5.Size = new Size(95, 19);
-            checkBox5.TabIndex = 2;
-            checkBox5.Text = "Convert Bold";
-            checkBox5.UseVisualStyleBackColor = true;
-            // 
-            // checkBox9
-            // 
-            checkBox9.AutoSize = true;
-            checkBox9.Checked = true;
-            checkBox9.CheckState = CheckState.Checked;
-            checkBox9.Location = new Point(183, 47);
-            checkBox9.Name = "checkBox9";
-            checkBox9.Size = new Size(96, 19);
-            checkBox9.TabIndex = 6;
-            checkBox9.Text = "Convert Italic";
-            checkBox9.UseVisualStyleBackColor = true;
-            // 
-            // checkBox6
-            // 
-            checkBox6.AutoSize = true;
-            checkBox6.Checked = true;
-            checkBox6.CheckState = CheckState.Checked;
-            checkBox6.Location = new Point(6, 97);
-            checkBox6.Name = "checkBox6";
-            checkBox6.Size = new Size(122, 19);
-            checkBox6.TabIndex = 3;
-            checkBox6.Text = "Convert Underline";
-            checkBox6.UseVisualStyleBackColor = true;
-            // 
-            // checkBox7
-            // 
-            checkBox7.AutoSize = true;
-            checkBox7.Checked = true;
-            checkBox7.CheckState = CheckState.Checked;
-            checkBox7.Location = new Point(6, 122);
-            checkBox7.Name = "checkBox7";
-            checkBox7.Size = new Size(164, 19);
-            checkBox7.TabIndex = 4;
-            checkBox7.Text = "Remove class declarations";
-            checkBox7.UseVisualStyleBackColor = true;
-            // 
-            // groupBox1
-            // 
-            groupBox1.Controls.Add(selectFileButton);
-            groupBox1.Controls.Add(filePathTextbox);
-            groupBox1.Controls.Add(label7);
-            groupBox1.Location = new Point(13, 5);
-            groupBox1.Name = "groupBox1";
-            groupBox1.Size = new Size(410, 96);
-            groupBox1.TabIndex = 9;
-            groupBox1.TabStop = false;
-            groupBox1.Text = "File";
-            // 
-            // selectFileButton
-            // 
-            selectFileButton.Location = new Point(6, 51);
-            selectFileButton.Name = "selectFileButton";
-            selectFileButton.Size = new Size(398, 23);
-            selectFileButton.TabIndex = 2;
-            selectFileButton.Text = "Select File";
-            selectFileButton.UseVisualStyleBackColor = true;
-            selectFileButton.Click += selectFileButton_Click;
-            // 
-            // filePathTextbox
-            // 
-            filePathTextbox.Location = new Point(46, 22);
-            filePathTextbox.Name = "filePathTextbox";
-            filePathTextbox.PlaceholderText = "C:/Users/Documents/Fanfic.html";
-            filePathTextbox.Size = new Size(358, 23);
-            filePathTextbox.TabIndex = 1;
-            // 
-            // label7
-            // 
-            label7.AutoSize = true;
-            label7.Location = new Point(6, 26);
-            label7.Name = "label7";
-            label7.Size = new Size(34, 15);
-            label7.TabIndex = 0;
-            label7.Text = "Path:";
-            // 
-            // finalTab
-            // 
-            finalTab.Controls.Add(storyHtmlTextbox);
-            finalTab.Controls.Add(backFinalButton);
-            finalTab.Controls.Add(schedulePostButton);
-            finalTab.Location = new Point(4, 24);
-            finalTab.Name = "finalTab";
-            finalTab.Padding = new Padding(3);
-            finalTab.Size = new Size(431, 582);
-            finalTab.TabIndex = 3;
-            finalTab.Text = "tabPage4";
-            finalTab.UseVisualStyleBackColor = true;
-            // 
-            // storyHtmlTextbox
-            // 
-            storyHtmlTextbox.Location = new Point(8, 6);
-            storyHtmlTextbox.Multiline = true;
-            storyHtmlTextbox.Name = "storyHtmlTextbox";
-            storyHtmlTextbox.ScrollBars = ScrollBars.Vertical;
-            storyHtmlTextbox.Size = new Size(415, 467);
-            storyHtmlTextbox.TabIndex = 16;
-            // 
-            // backFinalButton
-            // 
-            backFinalButton.Anchor = AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
-            backFinalButton.Location = new Point(29, 479);
-            backFinalButton.Name = "backFinalButton";
-            backFinalButton.Size = new Size(377, 45);
-            backFinalButton.TabIndex = 15;
-            backFinalButton.Text = "Back";
-            backFinalButton.UseVisualStyleBackColor = true;
-            backFinalButton.Click += backFinalButton_Click;
-            // 
-            // schedulePostButton
-            // 
-            schedulePostButton.Anchor = AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
-            schedulePostButton.Location = new Point(29, 530);
-            schedulePostButton.Name = "schedulePostButton";
-            schedulePostButton.Size = new Size(377, 45);
-            schedulePostButton.TabIndex = 14;
-            schedulePostButton.Text = "Schedule Post";
-            schedulePostButton.UseVisualStyleBackColor = true;
-            schedulePostButton.Click += schedulePostButton_Click;
-            // 
-            // openFileDialog
-            // 
-            openFileDialog.Filter = "ZIP Files|*.zip|HTML Files|*.htm;*.htm";
+            scheduleButton.Anchor = AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            scheduleButton.Location = new Point(31, 412);
+            scheduleButton.Name = "scheduleButton";
+            scheduleButton.Size = new Size(377, 45);
+            scheduleButton.TabIndex = 10;
+            scheduleButton.Text = "Next";
+            scheduleButton.UseVisualStyleBackColor = true;
+            scheduleButton.Click += scheduleButton_Click;
             // 
             // ScheduleStoryForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(439, 610);
+            ClientSize = new Size(439, 493);
             Controls.Add(mainContainer);
             FormBorderStyle = FormBorderStyle.FixedSingle;
             MaximizeBox = false;
             Name = "ScheduleStoryForm";
             Text = "Upload New Chapter";
+            Load += ScheduleStoryForm_Load;
             mainContainer.ResumeLayout(false);
             loadingTab.ResumeLayout(false);
             loadingTab.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).EndInit();
             chapterDetailsTab.ResumeLayout(false);
             chapterDetailsTab.PerformLayout();
-            convertionTab.ResumeLayout(false);
-            convertionTab.PerformLayout();
-            groupBox2.ResumeLayout(false);
-            groupBox2.PerformLayout();
-            groupBox1.ResumeLayout(false);
-            groupBox1.PerformLayout();
-            finalTab.ResumeLayout(false);
-            finalTab.PerformLayout();
             ResumeLayout(false);
         }
 
@@ -583,8 +232,6 @@
         private Label label3;
         private Label label4;
         private RichTextBox chapterNotesTextbox;
-        private CheckBox notesAtStartCheckbox;
-        private CheckBox notesAtEndCheckbox;
         private TabControl mainContainer;
         private TabPage loadingTab;
         private TabPage chapterDetailsTab;
@@ -609,7 +256,6 @@
         private Button selectFileButton;
         private TextBox filePathTextbox;
         private Label label7;
-        private TextBox chapterTitleTextbox;
         private Label label8;
         private Button deleteButton;
         private OpenFileDialog openFileDialog;
@@ -617,5 +263,8 @@
         private TextBox storyHtmlTextbox;
         private Button schedulePostButton;
         private Button backFinalButton;
+        private ComboBox chapterComboBox;
+        private Button scheduleButton;
+        private Button openInAo3Button;
     }
 }

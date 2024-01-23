@@ -36,7 +36,7 @@ namespace AO3SchedulerWin.AO3
                 AllowAutoRedirect = false,
                 CookieContainer = session.SessionCookies
             };
-            _httpClient = new HttpClient() { BaseAddress = uri };
+            _httpClient = new HttpClient(clientHandler) { BaseAddress = uri };
             _workFactory = new Ao3WorkFactory(_session); //No DI here
 
         }
@@ -72,10 +72,43 @@ namespace AO3SchedulerWin.AO3
                 }
 
                 //Delay to avoid getting rate limited
-                await Task.Delay(500);
+                await Task.Delay(250);
             }
             return worksList;
         }
 
+        public async Task<List<Ao3Chapter>> GetChaptersForWork(int workId)
+        {
+            var chaptersList = new List<Ao3Chapter>();
+            var docRoot = new HtmlAgilityPack.HtmlDocument();
+            docRoot.LoadHtml(await _httpClient.GetStringAsync($"works/{workId}/chapters/manage"));
+            var chaptersNode = docRoot.DocumentNode.SelectNodes("//li[@class=\"chapter-position-list\"]");
+            
+            if(chaptersNode == null)
+            {
+                _logger.Warn("chaptersNode was empty");
+                return chaptersList;
+            }
+            
+            foreach(var chapterNode in chaptersNode)
+            {
+
+                var titleGroup = chapterNode.SelectSingleNode(".//span/following-sibling::text()[1]")
+                    .InnerHtml.Split("\n", StringSplitOptions.RemoveEmptyEntries);
+                
+                var workHref = chapterNode.SelectSingleNode(".//li[1]/a[1]").GetAttributeValue("href", "");
+                var chapterId = Regex.Match(workHref, @"/works/\d+/chapters/(\d+)/edit").Groups[1];
+                chaptersList.Add(new Ao3Chapter
+                {
+                    Id = int.Parse(chapterId.Value),
+                    Title = titleGroup[1],
+                    Draft = titleGroup.Length == 3
+                });
+            }
+
+
+
+            return chaptersList;
+        }
     }
 }

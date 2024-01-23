@@ -9,10 +9,11 @@ namespace AO3SchedulerWin.Controllers.StoryControllers
 {
     public interface IChapterController
     {
-        public bool InsertStory(Chapter story);
-        public bool UpdateStory(int id, Chapter newStory);
-        public bool DeleteStory(int id);
-        public Chapter? GetStory(int id);
+        public Task<bool> Create(Chapter chapter);
+        public Task<bool> Update(int chapterId, Chapter newChapter);
+        public Task<bool> Delete(int chapterId);
+        public Task<Chapter?> GetChapterById(int id);
+        public Task<List<Chapter>> GetAllChaptersFromAuthor(int authorId);
 
         public void UpdateViews();
 

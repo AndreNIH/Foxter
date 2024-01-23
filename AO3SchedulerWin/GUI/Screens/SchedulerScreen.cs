@@ -20,9 +20,10 @@ namespace AO3SchedulerWin.Forms
     
     public partial class SchedulerScreen : Form, ITableUpdateListener
     {
-        public SchedulerScreen(Ao3Client client)
+        public SchedulerScreen(Ao3Client client, IChapterModel model)
         {
             InitializeComponent();
+            _model = model;
             _tableView = new ChapterTableView(storyListContainer, _model, this, client);
             _client = client;
         }
@@ -30,11 +31,13 @@ namespace AO3SchedulerWin.Forms
         private void reloadScreen()
         {
             mainContainer.SelectedIndex = 1; //storyListContainer.Controls.Count > 0 ? 1 : 0;
+            _controller.UpdateViews();
+
         }
 
         private void schedulePostButton_Click(object sender, EventArgs e)
         {
-            var form = new ScheduleStoryForm(_client);
+            var form = new ScheduleStoryForm(new ScheduleNewStoryBehavior(_client, _model));
             form.ShowDialog();
             reloadScreen();
         }
@@ -60,33 +63,7 @@ namespace AO3SchedulerWin.Forms
         private Ao3Client _client;
     }
 
-    internal class DeletemeModel : IChapterModel
-    {
-        public Task Create(Chapter chapter)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task Delete(int chapterId)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<List<Chapter>> GetAllChaptersFromAuthor(int authorId)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<Chapter> GetChapterById(int id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task Update(int chapterId, Chapter newChapter)
-        {
-            throw new NotImplementedException();
-        }
-    }
+    
 
     
 }

@@ -1,6 +1,6 @@
 ﻿using AO3SchedulerWin.AO3;
 using AO3SchedulerWin.Models;
-using AO3SchedulerWin.Models.Components;
+using AO3SchedulerWin.Models.Local;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -47,7 +47,7 @@ namespace AO3SchedulerWin.Factories
         public IChapterModel CreateChapterModel()
         {
             _logger.Info("Instanciating local Chapter model");
-            return new ChapterLocalModel();
+            return new ChapterLocalModel(_dbProvider, _connectionStr);
         }
 
         

@@ -118,33 +118,27 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="DbCreationScript" xml:space="preserve">
-    <value>BEGIN TRANSACTION;
-CREATE TABLE IF NOT EXISTS "STORY_UPDATES" (
-	"id"	INTEGER UNIQUE,
-	"authorId"	INTEGER,
-	"storyId"	INTEGER,
-	"title"	TEXT,
-	"chapterTitle"	TEXT,
-	"publishingDate"	TEXT,
-	"chapterSummary"	TEXT,
-	"chapterNotes"	TEXT,
-	"notesAtTheStart"	NUMERIC DEFAULT 0,
-	"notesAtTheEnd"	NUMERIC DEFAULT 0,
-	"storyContent"	TEXT,
-	PRIMARY KEY("id" AUTOINCREMENT),
-	FOREIGN KEY("authorId") REFERENCES "AUTHORS"("id") ON DELETE RESTRICT
+    <value>-- AUTHORS definition
+
+CREATE TABLE "AUTHORS" (
+	"AuthorId"	INTEGER NOT NULL,
+	"Username"	TEXT NOT NULL,
+	"Password"	TEXT NOT NULL,
+	PRIMARY KEY("AuthorId")
 );
-CREATE TABLE IF NOT EXISTS "LOCAL_SETTINGS" (
-	"loggedUserId"	INTEGER,
-	"storageMode"	INTEGER
-);
-CREATE TABLE IF NOT EXISTS "AUTHORS" (
-	"id"	INTEGER,
-	"username"	INTEGER,
-	"password"	INTEGER,
-	"active"	INTEGER DEFAULT 0,
-	PRIMARY KEY("id")
-);
-COMMIT;</value>
+
+
+-- CHAPTERS definition
+
+CREATE TABLE CHAPTERS (
+	ChapterId INTEGER NOT NULL,
+	StoryId INTEGER,
+	StoryTitle TEXT NOT NULL,
+	ChapterTitle TEXT NOT NULL,
+	PublishingDate TEXT NOT NULL,
+	WrittenBy INTEGER,
+	CONSTRAINT CHAPTERS_PK PRIMARY KEY (ChapterId),
+	CONSTRAINT CHAPTERS_AUTHORS_FK FOREIGN KEY (WrittenBy) REFERENCES AUTHORS(AuthorId) ON UPDATE CASCADE
+);</value>
   </data>
 </root>

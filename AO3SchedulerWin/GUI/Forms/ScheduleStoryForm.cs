@@ -13,207 +13,228 @@ using AO3SchedulerWin.AO3;
 using AO3SchedulerWin.BEmu;
 using System.IO;
 using AO3SchedulerWin.Models.Base;
+using log4net;
+using AO3SchedulerWin.Models;
+using AO3SchedulerWin.Controllers.ChapterControllers;
 
 namespace AO3SchedulerWin.Forms
 {
     public partial class ScheduleStoryForm : Form
     {
         private static readonly log4net.ILog _logger = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
-        private IChapterController _storyController;
         private Ao3Client _session;
-        private List<Ao3Work> _works = new List<Ao3Work>();
-        private List<int> _workIndexToIdVec = new List<int>();
-        private bool _updatePost = false;
-        private int? _preloadId = null;
-        public ScheduleStoryForm(Ao3Client session, int? preloadId = null)
+        private BaseSchedulerBehavior _uiController;
+        public ScheduleStoryForm(BaseSchedulerBehavior uiBehavior)
         {
             InitializeComponent();
-            _session = session;
             mainContainer.Appearance = TabAppearance.FlatButtons;
             mainContainer.ItemSize = new Size(0, 1);
             mainContainer.SizeMode = TabSizeMode.Fixed;
-            _updatePost = preloadId.HasValue;
+            _uiController = uiBehavior;
+            _uiController.targetForm = this;
+            _uiController.chapterBox = chapterComboBox;
+            _uiController.storyBox = worksComboBox;
+            _uiController.datePicker = publishingDatePicker;
+            _uiController.deleteButton = deleteButton;
+            _uiController.scheduleButton = scheduleButton;
         }
 
-        private async Task<bool> LoadAllAuthorStories()
-        {
-            /*var workEnumerable = await _session.GetAllAuthorWorks();
-            _works = workEnumerable.ToList();
-            if (_works != null)
-            {
-                foreach (Ao3Work work in _works)
-                {
-                    worksComboBox.Items.Add(work.WorkTitle);
-                    _workIndexToIdVec.Add(work.WorkId);
-                }
-            }*/
-            return true;
 
-        }
-
-        private async Task<bool> LoadOneStory(int workId)
-        {
-            /*var work = await Ao3Work.GetWorkFromId(_session, workId);
-            worksComboBox.Items.Add(work.WorkTitle);
-            _workIndexToIdVec.Add(work.WorkId);*/
-            return true;
-        }
-
-        //Form Load 
-        protected async override void OnLoad(EventArgs e)
-        {
-            try
-            {
-                if (_updatePost)
-                {
-                    deleteButton.Visible = true;
-                    _logger.Info($"Updating scheduled post(internal id={_preloadId}). Skipped AO3 Work fetch cycle. Retrieving single story");
-                }
-                else
-                {
-                    _logger.Info("Fetching Works from AO3");
-                    if (await LoadAllAuthorStories())
-                    {
-                        mainContainer.SelectedIndex = 1;
-                        return;
-                    }
-                }
-            }
-            catch (HttpRequestException ex)
-            {
-                _logger.Error(ex.Message);
-                MessageBox.Show(
-                     ex.Message,
-                    "HTTP Request Error",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Warning
-                    );
-            }
-            catch (Ao3NotFoundException ex)
-            {
-                _logger.Error(ex.Message);
-                if (_updatePost)
-                {
-                    var res = MessageBox.Show(
-                       "The story you want to update no longer exists in Archive Of Our Own.\n\r" +
-                       "Do you want to remove it from the application's update list? This action cannot be undone",
-                       "Delete missing story",
-                       MessageBoxButtons.YesNo,
-                       MessageBoxIcon.Warning);
-                    if (res == DialogResult.Yes)
-                    {
-                        
-                    }
-                }
-
-            }
-
-            Close();
-        }
-        // File load
-
-
-        //Form Events
-        private void detailsNextButton_Click(object sender, EventArgs e)
-        {
-            mainContainer.SelectedIndex += 1;
-        }
-
-        private async void convertFixNextButton_Click(object sender, EventArgs e)
-        {
-            var filepath = filePathTextbox.Text;
-            if (File.Exists(filepath))
-            {
-                string? convertedPath = FicConverter.ConvertStory(filepath);
-                if (convertedPath == null)
-                {
-                    MessageBox.Show(
-                        $"Failed to convert '{filepath}'",
-                        "Convertion Error",
-                        MessageBoxButtons.OK,
-                        MessageBoxIcon.Warning);
-                    return;
-                }
-                storyHtmlTextbox.Text = await File.ReadAllTextAsync(convertedPath);
-            }
-            mainContainer.SelectedIndex += 1;
-        }
-
-        private void schedulePostButton_Click(object sender, EventArgs e)
-        {
-            bool result = false;
-            Chapter story = new Chapter();
-            story.ChapterTitle = chapterTitleTextbox.Text;
-            story.PublishingDate = publishingDatePicker.Value;
-            story.ChapterSummary = chapterSummaryTextbox.Text;
-            story.ChapterNotes = chapterNotesTextbox.Text;
-            story.NotesAtStart = notesAtStartCheckbox.Checked;
-            story.NotesAtEnd = notesAtEndCheckbox.Checked;
-            story.ChapterTitle = worksComboBox.Text;
-            story.Contents = storyHtmlTextbox.Text;
-
-            if (_updatePost)
-            {
-                //story.Id = _preloadId.Value;
-                //result = _storyController.UpdateStory(0, story);
-            }
-            else
-            {
-                /*story.AuthorId = _session.GetAuthor().Id;
-                story.WebStoryId = _workIndexToIdVec[worksComboBox.SelectedIndex];
-                result = _storyController.InsertStory(story);*/
-            }
-
-            if (!result)
-            {
-                MessageBox.Show(
-                    "Failed to schedule story update. Check error log for more details.",
-                    "Couldn't schedule post",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Error);
-                //_logger.Error($"Failed to schedule story update, internal id={story.Id}, work id={story.WebStoryId}");
-            }
-            else
-            {
-                //_logger.Info($"Scheduled story update, internal id={story.Id}, work id={story.WebStoryId}");
-            }
-
-            Close();
-        }
 
         private void deleteButton_Click(object sender, EventArgs e)
         {
-            var res = MessageBox.Show(
-                       "Are you sure you want to delete this story update? This action cannot be undone",
-                       "Delete story",
-                       MessageBoxButtons.YesNo,
-                       MessageBoxIcon.Warning);
-            if (res == DialogResult.Yes)
+
+        }
+
+
+
+        private async void ScheduleStoryForm_Load(object sender, EventArgs e)
+        {
+            try
             {
-                if (_storyController.DeleteStory(_preloadId.Value))
-                {
-                    _logger.Info($"Scheduled story deleted, internal id {_preloadId.Value}");
-                }
-                else
-                {
-                    _logger.Error($"Failed to delete scheduled story, internal id {_preloadId.Value}");
-                }
+                await _uiController.PopulateViews();
+                mainContainer.SelectedIndex++;
+
             }
-
-
-
-            Close();
+            catch (HttpRequestException ex)
+            {
+                MessageBox.Show(
+                    ex.Message,
+                    "Request Error",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning
+                    );
+                Close();
+            }
         }
 
-        private void selectFileButton_Click(object sender, EventArgs e)
+        private void scheduleButton_Click(object sender, EventArgs e)
         {
-            var res = openFileDialog.ShowDialog();
-            if (res == DialogResult.OK) filePathTextbox.Text = openFileDialog.FileName;
-        }
 
-        private void backFinalButton_Click(object sender, EventArgs e)
-        {
-            mainContainer.SelectedIndex--;
         }
     }
+
+
+
+
+    public abstract class BaseSchedulerBehavior
+    {
+        public class Ao3WebResource
+        {
+            public string DisplayName { get; set; }
+            public int Id { get; set; }
+            public Ao3WebResource(string displayName, int id)
+            {
+                DisplayName = displayName;
+                Id = id;
+            }
+        }
+        //Data sources
+        private List<Ao3WebResource> _storyWebResourceList = new List<Ao3WebResource>();
+        private List<Ao3WebResource> _chapterWebResourceList = new List<Ao3WebResource>();
+        
+        //Attributes
+        public Form targetForm { protected get; set; }
+        public ComboBox storyBox { protected get; set; }
+        public ComboBox chapterBox { protected get; set; }
+        public Button scheduleButton { protected get; set; }
+        public Button deleteButton { protected get; set; }
+        public DateTimePicker datePicker { protected get; set; }
+
+        //Template methods
+        protected abstract Task<List<Ao3WebResource>> FetchStories();
+        protected abstract Task<List<Ao3WebResource>> FetchChapters();
+        protected abstract Task OnSchedulePost();
+        protected abstract Task OnDeletePost();
+        protected abstract void AfterPopulateViews();
+        public async Task PopulateViews()
+        {
+            //Data Binding
+            storyBox.ValueMember = "Id";
+            chapterBox.ValueMember = "Id";
+            storyBox.DisplayMember = "DisplayName";
+            chapterBox.DisplayMember = "DisplayName";
+            
+            //Events
+            storyBox.SelectedIndexChanged += StoryBox_SelectedIndexChanged;
+            scheduleButton.Click += ScheduleButton_Click;
+            deleteButton.Click += DeleteButton_Click;
+            //Populate views
+            _storyWebResourceList.Clear();
+            _chapterWebResourceList.Clear();
+            var stories = await FetchStories();
+            stories.ForEach(s => _storyWebResourceList.Add(s));
+            storyBox.DataSource = _storyWebResourceList;
+            chapterBox.DataSource = _chapterWebResourceList;
+
+        }
+
+        private async void DeleteButton_Click(object? sender, EventArgs e)
+        {
+            await OnDeletePost();
+        }
+
+        private async void ScheduleButton_Click(object? sender, EventArgs e)
+        {
+            await OnSchedulePost();
+        }
+
+        private async void StoryBox_SelectedIndexChanged(object? sender, EventArgs e)
+        {
+            _chapterWebResourceList.Clear();
+            var chapters = await FetchChapters();
+            chapters.ForEach(c => _chapterWebResourceList.Add(c));
+
+            //This is a stupid hack
+            chapterBox.DataSource = null;
+            chapterBox.ValueMember = "Id";
+            chapterBox.DisplayMember = "DisplayName";
+            chapterBox.DataSource = _chapterWebResourceList;
+
+            if (chapterBox.SelectedItem == null && chapters.Count > 0)
+            {
+                chapterBox.SelectedIndex = 0;
+            }
+        }
+    }
+
+
+    public class ScheduleNewStoryBehavior : BaseSchedulerBehavior
+    {
+        private Ao3Client _client;
+        private IChapterController _controller;
+        private static readonly log4net.ILog _logger = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+
+        protected override async Task<List<Ao3WebResource>> FetchStories()
+        {
+            var stories = await _client.GetAllWorks();
+            return stories.Select(story => new Ao3WebResource(story.WorkTitle, story.WorkId)).ToList();
+        }
+
+        protected override async Task<List<Ao3WebResource>> FetchChapters()
+        {
+            try
+            {
+                var chapters = await _client.GetChaptersForWork((int)storyBox.SelectedValue);
+                return chapters.Where(chapter => chapter.Draft).Select(chapter => new Ao3WebResource(chapter.Title, chapter.Id)).ToList();
+            }
+            catch (HttpRequestException ex)
+            {
+                _logger.Warn(ex.Message);
+                return new List<Ao3WebResource>();
+            }
+        }
+
+        protected override void AfterPopulateViews()
+        {
+            deleteButton.Visible = false;
+        }
+
+        //Event handlers
+        protected override async Task OnSchedulePost()
+        {
+            if(chapterBox.SelectedValue != null) {
+                var newChapter = new Chapter();
+                newChapter.StoryTitle = storyBox.Text;
+                newChapter.ChapterTitle = chapterBox.Text;
+                newChapter.StoryId   = (int)storyBox.SelectedValue;
+                newChapter.ChapterId = (int)chapterBox.SelectedValue;
+                newChapter.PublishingDate = datePicker.Value;
+                if (await _controller.Create(newChapter) == false)
+                {
+                    MessageBox.Show(
+                        $"Upload task for '{chapterBox.Text}' couldn't be created",
+                        "Scheduling failed.",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Warning
+                      );
+                }
+                targetForm.Close();
+            }
+            else
+            {
+                MessageBox.Show(
+                    "You must select a chapter to continue",
+                    "Action not allowed",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Information
+                  );
+            }
+        }
+
+        protected override async Task OnDeletePost()
+        {
+            
+        }
+
+        
+
+        public ScheduleNewStoryBehavior(Ao3Client client, IChapterModel model)
+        {
+            _client = client;
+            _controller = new ChapterController(model);
+        }
+    }
+
+
 }

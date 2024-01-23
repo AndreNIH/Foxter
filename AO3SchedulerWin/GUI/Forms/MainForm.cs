@@ -129,7 +129,7 @@ namespace AO3SchedulerWin
 
                 case "SC_SCHEDULE":
                     {
-                        var screen = new SchedulerScreen(null);
+                        var screen = new SchedulerScreen(new Ao3Client(_session), _chapterModel);
                         SetMainContent(screen);
                         break;
                     }
@@ -190,5 +190,10 @@ namespace AO3SchedulerWin
 
         }
 
+        private void testButton_Click(object sender, EventArgs e)
+        {
+            var form = new DevForm(new Ao3Client(_session));
+            form.Show();
+        }
     }
 }

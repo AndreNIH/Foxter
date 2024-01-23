@@ -61,24 +61,27 @@ namespace AO3SchedulerWin.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to BEGIN TRANSACTION;
-        ///CREATE TABLE IF NOT EXISTS &quot;STORY_UPDATES&quot; (
-        ///	&quot;id&quot;	INTEGER UNIQUE,
-        ///	&quot;authorId&quot;	INTEGER,
-        ///	&quot;storyId&quot;	INTEGER,
-        ///	&quot;title&quot;	TEXT,
-        ///	&quot;chapterTitle&quot;	TEXT,
-        ///	&quot;publishingDate&quot;	TEXT,
-        ///	&quot;chapterSummary&quot;	TEXT,
-        ///	&quot;chapterNotes&quot;	TEXT,
-        ///	&quot;notesAtTheStart&quot;	NUMERIC DEFAULT 0,
-        ///	&quot;notesAtTheEnd&quot;	NUMERIC DEFAULT 0,
-        ///	&quot;storyContent&quot;	TEXT,
-        ///	PRIMARY KEY(&quot;id&quot; AUTOINCREMENT),
-        ///	FOREIGN KEY(&quot;authorId&quot;) REFERENCES &quot;AUTHORS&quot;(&quot;id&quot;) ON DELETE RESTRICT
+        ///   Looks up a localized string similar to -- AUTHORS definition
+        ///
+        ///CREATE TABLE &quot;AUTHORS&quot; (
+        ///	&quot;AuthorId&quot;	INTEGER NOT NULL,
+        ///	&quot;Username&quot;	TEXT NOT NULL,
+        ///	&quot;Password&quot;	TEXT NOT NULL,
+        ///	PRIMARY KEY(&quot;AuthorId&quot;)
         ///);
-        ///CREATE TABLE IF NOT EXISTS &quot;LOCAL_SETTINGS&quot; (
-        ///	&quot;loggedUse [rest of string was truncated]&quot;;.
+        ///
+        ///
+        ///-- CHAPTERS definition
+        ///
+        ///CREATE TABLE CHAPTERS (
+        ///	ChapterId INTEGER NOT NULL,
+        ///	StoryId INTEGER,
+        ///	StoryTitle TEXT NOT NULL,
+        ///	ChapterTitle TEXT NOT NULL,
+        ///	PublishingDate TEXT NOT NULL,
+        ///	WrittenBy INTEGER,
+        ///	CONSTRAINT CHAPTERS_PK PRIMARY KEY (ChapterId),
+        ///	CONSTRAINT CHAPTERS_AUTHORS_FK FOREIGN KEY (WrittenBy) REFERENCES AUTHORS(Auth [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string DbCreationScript {
             get {

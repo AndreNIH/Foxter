@@ -10,27 +10,15 @@ namespace AO3SchedulerWin.Models.Base
     {
         public int ChapterId { get; set; }
         public int StoryId { get; set; }
-        public string StoryTitle { get; set; }
-        public string ChapterTitle { get; set; }
         public DateTime PublishingDate { get; set; }
-        public string ChapterSummary { get; set; }
-        public string ChapterNotes { get; set; }
-        public bool NotesAtStart { get; set; }
-        public bool NotesAtEnd { get; set; }
-        public string Contents { get; set; }
-
-        public Chapter()
-        {
-            //Initialize all member string values to empty strings
-            StoryTitle = string.Empty; 
-            ChapterTitle = string.Empty;
-            ChapterSummary = string.Empty;
-            ChapterNotes = string.Empty;
-            Contents = string.Empty;
-            NotesAtStart = false; NotesAtEnd = false;
-
-
-        }
+        public int AuthorId { get; set; } 
+        
+        //We keep these properties to avoid having to
+        //act as a cache, and avoid unecessary,
+        //time consuming requests to AO3
+        public string StoryTitle { get; set; } 
+        public string ChapterTitle { get; set; }
+        
 
     }
 }

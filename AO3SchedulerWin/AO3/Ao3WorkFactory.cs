@@ -12,7 +12,6 @@ namespace AO3SchedulerWin.AO3
         #pragma warning disable CS8602 // Dereference of a possibly null reference.
         private static readonly ILog _logger = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
         #pragma warning restore CS8602 // Dereference of a possibly null reference.
-        private Ao3Session _session;
         private HttpClient _httpClient;
 
         public async Task<Ao3Work> CreateWorkFromId(int id)
@@ -20,6 +19,7 @@ namespace AO3SchedulerWin.AO3
             var worksPage = await _httpClient.GetAsync($"/works/{id}");
             if (!worksPage.IsSuccessStatusCode)
             {
+                _logger.Warn("Work object creation failed. AO3 returned status code " + worksPage.StatusCode);
                 string exceptMsg = $"Couldnt't find work '{id}' in the archive";
                 throw new Ao3NotFoundException(exceptMsg);
             }
@@ -42,6 +42,7 @@ namespace AO3SchedulerWin.AO3
                 throw new Ao3GenericException(exceptMsg);
             }
 
+            _logger.Info($"Created Ao3Work object (id={id})");
             var work = new Ao3Work();
             work.WorkTitle = titleNode.InnerText;
             work.WorkId = id;
@@ -52,7 +53,7 @@ namespace AO3SchedulerWin.AO3
         {
             var handler = new HttpClientHandler()
             {
-                AllowAutoRedirect = false,
+                AllowAutoRedirect = true,
                 CookieContainer = session.SessionCookies,
             };
 
