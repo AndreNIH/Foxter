@@ -232,7 +232,7 @@ namespace AO3SchedulerWin.Forms
         public ScheduleNewStoryBehavior(Ao3Client client, IChapterModel model)
         {
             _client = client;
-            _controller = new ChapterController(model);
+            
         }
     }
 

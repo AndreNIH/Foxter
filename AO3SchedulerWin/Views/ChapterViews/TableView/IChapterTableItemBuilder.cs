@@ -18,9 +18,7 @@ namespace AO3SchedulerWin.Views.ChapterViews.TableView
         IChapterTableItemBuilder SetPublishingDate(DateTime publishingDate);
 
         //Internal Properties
-        IChapterTableItemBuilder SetTableListener(ITableUpdateListener listener);
-        IChapterTableItemBuilder SetChapterModel(IChapterModel chapterModel);
-        IChapterTableItemBuilder SetAo3Client(Ao3Client client);
+        IChapterTableItemBuilder SetTableEventListener(ITableEventListener listener);
 
         //Builder methods
         void Reset();

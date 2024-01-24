@@ -11,19 +11,15 @@ namespace AO3SchedulerWin.Views.ChapterViews.TableView
 {
     public class ChapterTableItemBuilder : IChapterTableItemBuilder
     {
-        private Ao3Client? _ao3Client;
-        private IChapterModel? _chapterModel;
         private string? _chapterTitle;
         private int? _databaseId;
         private DateTime? _publishingDate;
         private string? _storyTitle;
-        private ITableUpdateListener? _tableListener;
+        private ITableEventListener? _tableListener;
 
         public bool AllFieldsSet()
         {
-            return _ao3Client != null
-                && _chapterModel != null
-                && _chapterTitle != null
+            return _chapterTitle != null
                 && _databaseId.HasValue
                 && _publishingDate.HasValue
                 && _storyTitle != null
@@ -38,8 +34,6 @@ namespace AO3SchedulerWin.Views.ChapterViews.TableView
 
             var result =  new ChapterTableItem(
                 listener: _tableListener,
-                model: _chapterModel,
-                session: _ao3Client,
                 id: _databaseId.Value,
                 storyTitle: _storyTitle,
                 chapterTitle: _chapterTitle,
@@ -51,25 +45,12 @@ namespace AO3SchedulerWin.Views.ChapterViews.TableView
 
         public void Reset()
         {
-            _ao3Client = null;
-            _chapterModel = null;
             _chapterTitle = null;
             _databaseId = -1;
             _publishingDate = null;
         }
 
         //Setters
-        public IChapterTableItemBuilder SetAo3Client(Ao3Client client)
-        {
-            _ao3Client = client;
-            return this;
-        }
-
-        public IChapterTableItemBuilder SetChapterModel(IChapterModel chapterModel)
-        {
-            _chapterModel = chapterModel;
-            return this;
-        }
 
         public IChapterTableItemBuilder SetChapterTitle(string title)
         {
@@ -95,7 +76,7 @@ namespace AO3SchedulerWin.Views.ChapterViews.TableView
             return this;
         }
 
-        public IChapterTableItemBuilder SetTableListener(ITableUpdateListener listener)
+        public IChapterTableItemBuilder SetTableEventListener(ITableEventListener listener)
         {
             _tableListener = listener;
             return this;

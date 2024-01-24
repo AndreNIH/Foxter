@@ -129,7 +129,7 @@ namespace AO3SchedulerWin
 
                 case "SC_SCHEDULE":
                     {
-                        var screen = new SchedulerScreen(new Ao3Client(_session), _chapterModel);
+                        var screen = new SchedulerScreen(_session, _chapterModel);
                         SetMainContent(screen);
                         break;
                     }

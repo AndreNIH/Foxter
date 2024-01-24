@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace AO3SchedulerWin.Views.ChapterViews.TableView
 {
-    public interface ITableUpdateListener
+    public interface ITableEventListener
     {
-        void NotifyUpdate();
+        void OnEditChapter(object sender);
     }
 }

@@ -14,53 +14,42 @@ using AO3SchedulerWin.Controllers.StoryControllers;
 using AO3SchedulerWin.AO3;
 using AO3SchedulerWin.Views.ChapterViews.TableView;
 using AO3SchedulerWin.Models.Base;
+using AO3SchedulerWin.Controllers.ChapterControllers;
 
 namespace AO3SchedulerWin.Forms
 {
     
-    public partial class SchedulerScreen : Form, ITableUpdateListener
+    public partial class SchedulerScreen : Form
     {
-        public SchedulerScreen(Ao3Client client, IChapterModel model)
+        public SchedulerScreen(Ao3Session session, IChapterModel model)
         {
             InitializeComponent();
-            _model = model;
-            _tableView = new ChapterTableView(storyListContainer, _model, this, client);
-            _client = client;
+            _controller = new ChapterTableController(model, storyListContainer, mainContainer, session);
+            _session = session;
+            
         }
 
-        private void reloadScreen()
+
+
+        private async void schedulePostButton_Click(object sender, EventArgs e)
         {
-            mainContainer.SelectedIndex = 1; //storyListContainer.Controls.Count > 0 ? 1 : 0;
-            _controller.UpdateViews();
-
+            //var form = new ScheduleStoryForm(new ScheduleNewStoryBehavior(_session, _model));
+            //form.ShowDialog();
+            await _controller.RefreshUI();
         }
 
-        private void schedulePostButton_Click(object sender, EventArgs e)
-        {
-            var form = new ScheduleStoryForm(new ScheduleNewStoryBehavior(_client, _model));
-            form.ShowDialog();
-            reloadScreen();
-        }
-
-        protected override void OnLoad(EventArgs e)
+        protected override async void OnLoad(EventArgs e)
         {
             mainContainer.Appearance = TabAppearance.FlatButtons;
             mainContainer.ItemSize = new Size(0, 1);
             mainContainer.SizeMode = TabSizeMode.Fixed;
-
-            reloadScreen();
+            await _controller.RefreshUI();
         }
 
-        public void NotifyUpdate()
-        {
-            _controller.UpdateViews();
-        }
+        
 
-        private IChapterController _controller;
-        private IChapterModel _model;
-        private IAuthorModel _authorModel;
-        private IChapterView _tableView;
-        private Ao3Client _client;
+        private ChapterTableController _controller;
+        private Ao3Session _session;
     }
 
     

@@ -14,5 +14,14 @@ namespace AO3SchedulerWin.Models
         public Task<bool> Delete(int chapterId);
         public Task<Chapter?> GetChapterById(int id);
         public Task<List<Chapter>> GetAllChaptersFromAuthor(int authorId);
+        public Task<int?> GetChapterCountFromAuthor(int authorId);
+
+        public void RegisterObserver(IChapterModelUpdateListener observer);
+        public void UnregisterObserver(IChapterModelUpdateListener observer);
+    }
+
+    public interface IChapterModelUpdateListener
+    {
+        public Task OnChapterModelUpdated();
     }
 }

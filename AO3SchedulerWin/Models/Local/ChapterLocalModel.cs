@@ -15,7 +15,7 @@ namespace AO3SchedulerWin.Models.Local
         private DbProviderFactory _dbProvider;
         private string _connectionString;
         private static readonly log4net.ILog _logger = log4net.LogManager.GetLogger(typeof(ChapterLocalModel));
-
+        private List<IChapterModelUpdateListener> _updateListeners = new List<IChapterModelUpdateListener>();
         public async Task<bool> Create(Chapter chapter)
         {
             await using (var connection = _dbProvider.CreateConnection())
@@ -221,6 +221,47 @@ namespace AO3SchedulerWin.Models.Local
             }
                 return false;
         }
+
+        public async Task<int?> GetChapterCountFromAuthor(int authorId)
+        {
+            await using (var connection = _dbProvider.CreateConnection())
+            {
+                connection.ConnectionString = _connectionString;
+                await connection.OpenAsync();
+                var cmd = connection.CreateCommand();
+                cmd.CommandText = "select count(*) from CHAPTERS";
+                try
+                {
+                    await using (var reader = await cmd.ExecuteReaderAsync())
+                    {
+                        if (await reader.ReadAsync())
+                        {
+                            return reader.GetInt32(0);
+                        }
+                        return 0; //this line shouldn't execute, but just to be safe
+                    }
+                }
+                catch (SQLiteException ex)
+                {
+                    _logger.Warn(ex.Message);
+                    return null;
+                }
+            }
+        }
+
+        public void RegisterObserver(IChapterModelUpdateListener observer)
+        {
+            _logger.Info($"Registered ChapterLocalModel observer object {observer}");
+            _updateListeners.Add(observer);
+        }
+
+        public void UnregisterObserver(IChapterModelUpdateListener observer)
+        {
+            _logger.Info($"Unregistered ChapterLocalModel observer object {observer}");
+            _updateListeners.Remove(observer);
+        }
+
+      
 
         public ChapterLocalModel(DbProviderFactory dbProvider, string connectionString)
         {

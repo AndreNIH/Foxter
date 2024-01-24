@@ -12,10 +12,6 @@ namespace AO3SchedulerWin.Controllers.StoryControllers
         public Task<bool> Create(Chapter chapter);
         public Task<bool> Update(int chapterId, Chapter newChapter);
         public Task<bool> Delete(int chapterId);
-        public Task<Chapter?> GetChapterById(int id);
-        public Task<List<Chapter>> GetAllChaptersFromAuthor(int authorId);
-
-        public void UpdateViews();
-
+        public Task RefreshUI();
     }
 }

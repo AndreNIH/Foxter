@@ -122,7 +122,7 @@
             dateContainer.Controls.Add(publishingDateLabelLHS, 0, 0);
             dateContainer.Controls.Add(publishingDateLabelRHS, 1, 0);
             dateContainer.Dock = DockStyle.Fill;
-            dateContainer.Location = new Point(3, 80);
+            dateContainer.Location = new Point(3, 100);
             dateContainer.Name = "dateContainer";
             dateContainer.RowCount = 1;
             dateContainer.RowStyles.Add(new RowStyle());
@@ -165,7 +165,7 @@
             chapterContainer.Controls.Add(chapterTitleLabelLHS, 0, 0);
             chapterContainer.Controls.Add(chapterTitleLabelRHS, 1, 0);
             chapterContainer.Dock = DockStyle.Fill;
-            chapterContainer.Location = new Point(3, 49);
+            chapterContainer.Location = new Point(3, 69);
             chapterContainer.Name = "chapterContainer";
             chapterContainer.RowCount = 1;
             chapterContainer.RowStyles.Add(new RowStyle());
@@ -210,8 +210,8 @@
             titleContainer.Location = new Point(3, 3);
             titleContainer.Name = "titleContainer";
             titleContainer.RowCount = 1;
-            titleContainer.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-            titleContainer.Size = new Size(497, 40);
+            titleContainer.RowStyles.Add(new RowStyle());
+            titleContainer.Size = new Size(497, 60);
             titleContainer.TabIndex = 0;
             // 
             // storyTitleLabelLHS
@@ -222,19 +222,20 @@
             storyTitleLabelLHS.Location = new Point(0, 0);
             storyTitleLabelLHS.Margin = new Padding(0);
             storyTitleLabelLHS.Name = "storyTitleLabelLHS";
-            storyTitleLabelLHS.Size = new Size(98, 40);
+            storyTitleLabelLHS.Size = new Size(98, 60);
             storyTitleLabelLHS.TabIndex = 0;
             storyTitleLabelLHS.Text = "Story:";
             storyTitleLabelLHS.TextAlign = ContentAlignment.MiddleRight;
             // 
             // storyTitleLabelRHS
             // 
+            storyTitleLabelRHS.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left;
             storyTitleLabelRHS.AutoEllipsis = true;
-            storyTitleLabelRHS.Dock = DockStyle.Fill;
+            storyTitleLabelRHS.AutoSize = true;
             storyTitleLabelRHS.Font = new Font("Segoe UI", 15.75F, FontStyle.Regular, GraphicsUnit.Point);
             storyTitleLabelRHS.Location = new Point(101, 0);
             storyTitleLabelRHS.Name = "storyTitleLabelRHS";
-            storyTitleLabelRHS.Size = new Size(393, 40);
+            storyTitleLabelRHS.Size = new Size(376, 60);
             storyTitleLabelRHS.TabIndex = 1;
             storyTitleLabelRHS.Text = "This is a story with a really long title so long in fact it overflows";
             storyTitleLabelRHS.TextAlign = ContentAlignment.MiddleLeft;
@@ -290,14 +291,14 @@
             label6.TabIndex = 1;
             label6.Text = "Chapter 3";
             // 
-            // StoryListItem
+            // ChapterTableItem
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = SystemColors.ControlLightLight;
             Controls.Add(outerContainerLayout);
             Controls.Add(detailPanel);
-            Name = "StoryListItem";
+            Name = "ChapterTableItem";
             Size = new Size(809, 150);
             detailPanel.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)pictureBox1).EndInit();
