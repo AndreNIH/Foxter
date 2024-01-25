@@ -51,15 +51,13 @@ namespace AO3SchedulerWin.Views.ChapterViews
 
         private async void OkButton_Click(object? sender, EventArgs e)
         {
-            if (storyBoxWidget.SelectedItem == null) return;
-            if (chapterBoxWidget.SelectedItem == null) return;
+            if (storyBoxWidget.SelectedValue == null) return;
+            if (chapterBoxWidget.SelectedValue == null) return;
             var updatedChapter = new Chapter();
             updatedChapter.StoryTitle = storyBoxWidget.SelectedText;
             updatedChapter.ChapterTitle = chapterBoxWidget.SelectedText;
-#pragma warning disable CS8605 // Unboxing a possibly null value.
             updatedChapter.StoryId = (int)storyBoxWidget.SelectedValue;
             updatedChapter.ChapterId = (int)chapterBoxWidget.SelectedValue;
-#pragma warning restore CS8605 // Unboxing a possibly null value.
             updatedChapter.PublishingDate = _uploadPickerWidget.Value;
 
             if (await _controller.Update(_updateTarget, updatedChapter) == false)
