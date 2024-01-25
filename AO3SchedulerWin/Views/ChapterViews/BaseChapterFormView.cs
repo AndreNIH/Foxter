@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -58,7 +59,7 @@ namespace AO3SchedulerWin.Views.ChapterViews
 
 
 
-        public BaseChapterFormView(ComboBox storyBox, ComboBox chapterBox)
+        public BaseChapterFormView(ComboBox storyBox, ComboBox chapterBox, Button openInAo3Button)
         {
             storyBoxWidget = storyBox;
             chapterBoxWidget = chapterBox;
@@ -66,10 +67,21 @@ namespace AO3SchedulerWin.Views.ChapterViews
             chapterBoxWidget.ValueMember = "Id";
             storyBoxWidget.DisplayMember = "Display";
             chapterBoxWidget.DisplayMember = "Display";
+            openInAo3Button.Click += OpenInAo3Button_Click;
 
         }
 
+        private void OpenInAo3Button_Click(object? sender, EventArgs e)
+        {
+            var selectedWorkId = storyBoxWidget.SelectedValue;
+            var selectedChapterId = chapterBoxWidget.SelectedValue;
+            if (selectedWorkId != null && selectedChapterId != null)
+            {
+                var workId = (int)selectedWorkId;
+                var chapterId = (int)selectedChapterId;
+                Process.Start("explorer", $"https://archiveofourown.org/works/{workId}/chapters/{chapterId}/edit");
+            }
 
-
+        }
     }
 }

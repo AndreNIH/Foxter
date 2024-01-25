@@ -23,6 +23,7 @@ namespace AO3SchedulerWin.Controllers.ChapterControllers
 
         public async Task<bool> Create(Chapter chapter)
         {
+            chapter.AuthorId = _client.GetSession().Id;
             return await _model.Create(chapter);
         }
 
@@ -79,6 +80,7 @@ namespace AO3SchedulerWin.Controllers.ChapterControllers
             IChapterModel model,
             Ao3Client client,
             Form managedForm,
+            Button ao3Button,
             ComboBox storyBox,
             ComboBox chapterBox,
             DateTimePicker uploadPicker,
@@ -89,7 +91,8 @@ namespace AO3SchedulerWin.Controllers.ChapterControllers
             _model = model;
             _client = client;
             _view = new NewChapterFormView(this, 
-                managedForm, 
+                managedForm,
+                ao3Button,
                 storyBox, 
                 chapterBox, 
                 uploadPicker, 

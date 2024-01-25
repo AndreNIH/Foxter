@@ -16,6 +16,7 @@ using AO3SchedulerWin.Models.Base;
 using log4net;
 using AO3SchedulerWin.Models;
 using AO3SchedulerWin.Controllers.ChapterControllers;
+using System.Diagnostics;
 
 namespace AO3SchedulerWin.Forms
 {
@@ -35,20 +36,13 @@ namespace AO3SchedulerWin.Forms
                 model,
                 _client,
                 this,
+                openInAo3Button,
                 worksComboBox,
                 chapterComboBox,
                 publishingDatePicker,
                 scheduleButton,
                 deleteButton
              );
-
-            /*_uiController = uiBehavior;
-            _uiController.targetForm = this;
-            _uiController.chapterBox = chapterComboBox;
-            _uiController.storyBox = worksComboBox;
-            _uiController.datePicker = publishingDatePicker;
-            _uiController.deleteButton = deleteButton;
-            _uiController.scheduleButton = scheduleButton;*/
         }
 
 
@@ -83,6 +77,10 @@ namespace AO3SchedulerWin.Forms
         private void scheduleButton_Click(object sender, EventArgs e)
         {
 
+        }
+
+        private void openInAo3Button_Click(object sender, EventArgs e)
+        {
         }
     }
 

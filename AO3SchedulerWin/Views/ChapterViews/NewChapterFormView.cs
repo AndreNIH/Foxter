@@ -20,12 +20,13 @@ namespace AO3SchedulerWin.Views.ChapterViews
         public NewChapterFormView(
             IChapterController controller,
             Form managedForm,
+            Button ao3button,
             ComboBox storyBox, 
             ComboBox chapterBox, 
             DateTimePicker uploadPicker,
             Button okButton,
             Button deleteButton
-        ) : base(storyBox, chapterBox)
+        ) : base(storyBox, chapterBox, ao3button)
         {
             _controller = controller;
             _uploadPickerWidget = uploadPicker;
@@ -68,8 +69,8 @@ namespace AO3SchedulerWin.Views.ChapterViews
             if(storyBoxWidget.SelectedItem == null) return;
             if(chapterBoxWidget.SelectedItem == null) return;
             var newChapter = new Chapter();
-            newChapter.StoryTitle = storyBoxWidget.SelectedText;
-            newChapter.ChapterTitle = chapterBoxWidget.SelectedText;
+            newChapter.StoryTitle = storyBoxWidget.Text;
+            newChapter.ChapterTitle = chapterBoxWidget.Text;
             #pragma warning disable CS8605 // Unboxing a possibly null value.
             newChapter.StoryId = (int)storyBoxWidget.SelectedValue;
             newChapter.ChapterId = (int)chapterBoxWidget.SelectedValue;
@@ -79,7 +80,7 @@ namespace AO3SchedulerWin.Views.ChapterViews
             if (await _controller.Create(newChapter) == false)
             {
                 MessageBox.Show(
-                    $"Upload task for '{storyBoxWidget.SelectedText}' couldn't be created",
+                    $"Upload task for '{storyBoxWidget.Text}' couldn't be created",
                     "Scheduling failed.",
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Warning

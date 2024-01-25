@@ -110,5 +110,10 @@ namespace AO3SchedulerWin.AO3
 
             return chaptersList;
         }
+
+        public Ao3Session GetSession()
+        {
+            return _session;
+        }
     }
 }

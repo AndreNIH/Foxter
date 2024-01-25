@@ -19,12 +19,13 @@ namespace AO3SchedulerWin.Views.ChapterViews
             IChapterController controller,
             int updateTarget,
             Form managedForm,
+            Button ao3Button,
             ComboBox storyBox,
             ComboBox chapterBox,
             DateTimePicker uploadPicker,
             Button okButton,
             Button deleteButton
-        ) : base(storyBox, chapterBox)
+        ) : base(storyBox, chapterBox, ao3Button)
         {
             _controller = controller;
             _updateTarget = updateTarget;

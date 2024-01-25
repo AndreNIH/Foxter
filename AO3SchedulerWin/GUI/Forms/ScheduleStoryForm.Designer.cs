@@ -52,10 +52,9 @@
             // label1
             // 
             label1.AutoSize = true;
-            label1.Location = new Point(14, 32);
-            label1.Margin = new Padding(4, 0, 4, 0);
+            label1.Location = new Point(10, 19);
             label1.Name = "label1";
-            label1.Size = new Size(108, 25);
+            label1.Size = new Size(71, 15);
             label1.TabIndex = 0;
             label1.Text = "Select Story:";
             // 
@@ -64,10 +63,9 @@
             worksComboBox.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
             worksComboBox.AutoCompleteMode = AutoCompleteMode.Suggest;
             worksComboBox.FormattingEnabled = true;
-            worksComboBox.Location = new Point(153, 25);
-            worksComboBox.Margin = new Padding(4, 5, 4, 5);
+            worksComboBox.Location = new Point(107, 15);
             worksComboBox.Name = "worksComboBox";
-            worksComboBox.Size = new Size(450, 33);
+            worksComboBox.Size = new Size(316, 23);
             worksComboBox.TabIndex = 1;
             // 
             // publishingDatePicker
@@ -75,19 +73,17 @@
             publishingDatePicker.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
             publishingDatePicker.CustomFormat = "dd MMM yy hh:mm tt";
             publishingDatePicker.Format = DateTimePickerFormat.Custom;
-            publishingDatePicker.Location = new Point(153, 118);
-            publishingDatePicker.Margin = new Padding(4, 5, 4, 5);
+            publishingDatePicker.Location = new Point(107, 71);
             publishingDatePicker.Name = "publishingDatePicker";
-            publishingDatePicker.Size = new Size(450, 31);
+            publishingDatePicker.Size = new Size(316, 23);
             publishingDatePicker.TabIndex = 2;
             // 
             // label2
             // 
             label2.AutoSize = true;
-            label2.Location = new Point(14, 125);
-            label2.Margin = new Padding(4, 0, 4, 0);
+            label2.Location = new Point(10, 75);
             label2.Name = "label2";
-            label2.Size = new Size(140, 25);
+            label2.Size = new Size(93, 15);
             label2.TabIndex = 3;
             label2.Text = "Publishing Date:";
             // 
@@ -97,10 +93,9 @@
             mainContainer.Controls.Add(chapterDetailsTab);
             mainContainer.Dock = DockStyle.Fill;
             mainContainer.Location = new Point(0, 0);
-            mainContainer.Margin = new Padding(4, 5, 4, 5);
             mainContainer.Name = "mainContainer";
             mainContainer.SelectedIndex = 0;
-            mainContainer.Size = new Size(627, 640);
+            mainContainer.Size = new Size(439, 384);
             mainContainer.TabIndex = 10;
             // 
             // loadingTab
@@ -108,11 +103,10 @@
             loadingTab.BackColor = Color.White;
             loadingTab.Controls.Add(label5);
             loadingTab.Controls.Add(pictureBox1);
-            loadingTab.Location = new Point(4, 34);
-            loadingTab.Margin = new Padding(4, 5, 4, 5);
+            loadingTab.Location = new Point(4, 24);
             loadingTab.Name = "loadingTab";
-            loadingTab.Padding = new Padding(4, 5, 4, 5);
-            loadingTab.Size = new Size(619, 602);
+            loadingTab.Padding = new Padding(3);
+            loadingTab.Size = new Size(431, 356);
             loadingTab.TabIndex = 1;
             loadingTab.Text = "tabPage1";
             // 
@@ -121,10 +115,9 @@
             label5.AutoSize = true;
             label5.Font = new Font("Calibri", 18F, FontStyle.Regular, GraphicsUnit.Point);
             label5.ForeColor = SystemColors.ControlDarkDark;
-            label5.Location = new Point(174, 487);
-            label5.Margin = new Padding(4, 0, 4, 0);
+            label5.Location = new Point(122, 292);
             label5.Name = "label5";
-            label5.Size = new Size(290, 44);
+            label5.Size = new Size(194, 29);
             label5.TabIndex = 1;
             label5.Text = "Retrieving works...";
             // 
@@ -132,10 +125,9 @@
             // 
             pictureBox1.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
             pictureBox1.Image = (Image)resources.GetObject("pictureBox1.Image");
-            pictureBox1.Location = new Point(174, 112);
-            pictureBox1.Margin = new Padding(4, 5, 4, 5);
+            pictureBox1.Location = new Point(122, 67);
             pictureBox1.Name = "pictureBox1";
-            pictureBox1.Size = new Size(277, 340);
+            pictureBox1.Size = new Size(194, 204);
             pictureBox1.SizeMode = PictureBoxSizeMode.Zoom;
             pictureBox1.TabIndex = 0;
             pictureBox1.TabStop = false;
@@ -151,21 +143,19 @@
             chapterDetailsTab.Controls.Add(label1);
             chapterDetailsTab.Controls.Add(publishingDatePicker);
             chapterDetailsTab.Controls.Add(label2);
-            chapterDetailsTab.Location = new Point(4, 34);
-            chapterDetailsTab.Margin = new Padding(4, 5, 4, 5);
+            chapterDetailsTab.Location = new Point(4, 24);
             chapterDetailsTab.Name = "chapterDetailsTab";
-            chapterDetailsTab.Padding = new Padding(4, 5, 4, 5);
-            chapterDetailsTab.Size = new Size(619, 602);
+            chapterDetailsTab.Padding = new Padding(3);
+            chapterDetailsTab.Size = new Size(431, 356);
             chapterDetailsTab.TabIndex = 0;
             chapterDetailsTab.Text = "tabPage2";
             chapterDetailsTab.UseVisualStyleBackColor = true;
             // 
             // openInAo3Button
             // 
-            openInAo3Button.Location = new Point(14, 185);
-            openInAo3Button.Margin = new Padding(4, 5, 4, 5);
+            openInAo3Button.Location = new Point(10, 111);
             openInAo3Button.Name = "openInAo3Button";
-            openInAo3Button.Size = new Size(590, 77);
+            openInAo3Button.Size = new Size(413, 46);
             openInAo3Button.TabIndex = 11;
             openInAo3Button.Text = "Open in Archive of Our Own";
             openInAo3Button.UseVisualStyleBackColor = true;
@@ -173,19 +163,17 @@
             // chapterComboBox
             // 
             chapterComboBox.FormattingEnabled = true;
-            chapterComboBox.Location = new Point(153, 70);
-            chapterComboBox.Margin = new Padding(4, 5, 4, 5);
+            chapterComboBox.Location = new Point(107, 42);
             chapterComboBox.Name = "chapterComboBox";
-            chapterComboBox.Size = new Size(450, 33);
+            chapterComboBox.Size = new Size(316, 23);
             chapterComboBox.TabIndex = 14;
             // 
             // deleteButton
             // 
             deleteButton.Anchor = AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
-            deleteButton.Location = new Point(44, 420);
-            deleteButton.Margin = new Padding(4, 5, 4, 5);
+            deleteButton.Location = new Point(31, 252);
             deleteButton.Name = "deleteButton";
-            deleteButton.Size = new Size(539, 75);
+            deleteButton.Size = new Size(377, 45);
             deleteButton.TabIndex = 13;
             deleteButton.Text = "Delete";
             deleteButton.UseVisualStyleBackColor = false;
@@ -194,10 +182,9 @@
             // label8
             // 
             label8.AutoSize = true;
-            label8.Location = new Point(14, 77);
-            label8.Margin = new Padding(4, 0, 4, 0);
+            label8.Location = new Point(10, 46);
             label8.Name = "label8";
-            label8.Size = new Size(129, 25);
+            label8.Size = new Size(86, 15);
             label8.TabIndex = 11;
             label8.Text = "Select Chapter:";
             // 
@@ -206,10 +193,9 @@
             scheduleButton.Anchor = AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             scheduleButton.BackColor = Color.FromArgb(153, 0, 0);
             scheduleButton.ForeColor = Color.White;
-            scheduleButton.Location = new Point(44, 505);
-            scheduleButton.Margin = new Padding(4, 5, 4, 5);
+            scheduleButton.Location = new Point(31, 303);
             scheduleButton.Name = "scheduleButton";
-            scheduleButton.Size = new Size(539, 75);
+            scheduleButton.Size = new Size(377, 45);
             scheduleButton.TabIndex = 10;
             scheduleButton.Text = "Schedule Post";
             scheduleButton.UseVisualStyleBackColor = false;
@@ -217,12 +203,11 @@
             // 
             // ScheduleStoryForm
             // 
-            AutoScaleDimensions = new SizeF(10F, 25F);
+            AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(627, 640);
+            ClientSize = new Size(439, 384);
             Controls.Add(mainContainer);
             FormBorderStyle = FormBorderStyle.FixedSingle;
-            Margin = new Padding(4, 5, 4, 5);
             MaximizeBox = false;
             Name = "ScheduleStoryForm";
             Text = "Upload New Chapter";

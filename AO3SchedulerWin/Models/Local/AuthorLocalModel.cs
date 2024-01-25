@@ -8,7 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AO3SchedulerWin.Models
+namespace AO3SchedulerWin.Models.Local
 {
     public class AuthorLocalModel : IAuthorModel
     {
@@ -83,7 +83,7 @@ namespace AO3SchedulerWin.Models
             {
                 connection.ConnectionString = _connectionString;
                 await connection.OpenAsync();
-                
+
                 var cmd = connection.CreateCommand();
                 cmd.CommandText = $"select * from AUTHORS;";
                 try
@@ -100,15 +100,16 @@ namespace AO3SchedulerWin.Models
                             return author;
                         }
                     }
-                    
-                }catch(SQLiteException ex)
+
+                }
+                catch (SQLiteException ex)
                 {
                     _logger.Error(ex.Message);
                 }
                 return null;
             }
         }
-        
+
         public AuthorLocalModel(DbProviderFactory provider, string connectionString)
         {
             _dbProvider = provider;
@@ -116,5 +117,5 @@ namespace AO3SchedulerWin.Models
         }
     }
 
-    
+
 }
