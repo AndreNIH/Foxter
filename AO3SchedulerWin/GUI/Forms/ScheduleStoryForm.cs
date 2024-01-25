@@ -22,21 +22,33 @@ namespace AO3SchedulerWin.Forms
     public partial class ScheduleStoryForm : Form
     {
         private static readonly log4net.ILog _logger = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
-        private Ao3Client _session;
-        private BaseSchedulerBehavior _uiController;
-        public ScheduleStoryForm(BaseSchedulerBehavior uiBehavior)
+        private Ao3Client _client;
+        private IChapterController _controller;
+        public ScheduleStoryForm(IChapterModel model, Ao3Client client)
         {
             InitializeComponent();
             mainContainer.Appearance = TabAppearance.FlatButtons;
             mainContainer.ItemSize = new Size(0, 1);
             mainContainer.SizeMode = TabSizeMode.Fixed;
-            _uiController = uiBehavior;
+            _client = client;
+            _controller = new NewChapterController(
+                model,
+                _client,
+                this,
+                worksComboBox,
+                chapterComboBox,
+                publishingDatePicker,
+                scheduleButton,
+                deleteButton
+             );
+
+            /*_uiController = uiBehavior;
             _uiController.targetForm = this;
             _uiController.chapterBox = chapterComboBox;
             _uiController.storyBox = worksComboBox;
             _uiController.datePicker = publishingDatePicker;
             _uiController.deleteButton = deleteButton;
-            _uiController.scheduleButton = scheduleButton;
+            _uiController.scheduleButton = scheduleButton;*/
         }
 
 
@@ -52,7 +64,7 @@ namespace AO3SchedulerWin.Forms
         {
             try
             {
-                await _uiController.PopulateViews();
+                await _controller.InitUI();
                 mainContainer.SelectedIndex++;
 
             }
@@ -92,7 +104,7 @@ namespace AO3SchedulerWin.Forms
         //Data sources
         private List<Ao3WebResource> _storyWebResourceList = new List<Ao3WebResource>();
         private List<Ao3WebResource> _chapterWebResourceList = new List<Ao3WebResource>();
-        
+
         //Attributes
         public Form targetForm { protected get; set; }
         public ComboBox storyBox { protected get; set; }
@@ -114,7 +126,7 @@ namespace AO3SchedulerWin.Forms
             chapterBox.ValueMember = "Id";
             storyBox.DisplayMember = "DisplayName";
             chapterBox.DisplayMember = "DisplayName";
-            
+
             //Events
             storyBox.SelectedIndexChanged += StoryBox_SelectedIndexChanged;
             scheduleButton.Click += ScheduleButton_Click;
@@ -193,11 +205,12 @@ namespace AO3SchedulerWin.Forms
         //Event handlers
         protected override async Task OnSchedulePost()
         {
-            if(chapterBox.SelectedValue != null) {
+            if (chapterBox.SelectedValue != null)
+            {
                 var newChapter = new Chapter();
                 newChapter.StoryTitle = storyBox.Text;
                 newChapter.ChapterTitle = chapterBox.Text;
-                newChapter.StoryId   = (int)storyBox.SelectedValue;
+                newChapter.StoryId = (int)storyBox.SelectedValue;
                 newChapter.ChapterId = (int)chapterBox.SelectedValue;
                 newChapter.PublishingDate = datePicker.Value;
                 if (await _controller.Create(newChapter) == false)
@@ -224,15 +237,15 @@ namespace AO3SchedulerWin.Forms
 
         protected override async Task OnDeletePost()
         {
-            
+
         }
 
-        
+
 
         public ScheduleNewStoryBehavior(Ao3Client client, IChapterModel model)
         {
             _client = client;
-            
+
         }
     }
 

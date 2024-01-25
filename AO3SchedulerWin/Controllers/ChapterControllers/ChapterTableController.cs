@@ -13,39 +13,6 @@ namespace AO3SchedulerWin.Controllers.ChapterControllers
 {
     public class ChapterTableController : IChapterController
     {
-        /*private IChapterModel _model;
-        public async Task<bool> Create(Chapter chapter)
-        {
-            return await _model.Create(chapter);
-        }
-
-        public async Task<bool> Delete(int chapterId)
-        {
-            return await _model.Delete(chapterId);
-        }
-
-        public async Task<List<Chapter>> GetAllChaptersFromAuthor(int authorId)
-        {
-            return await _model.GetAllChaptersFromAuthor(authorId);
-        }
-
-        public async Task<Chapter?> GetChapterById(int id)
-        {
-            return await _model.GetChapterById(id);
-        }
-
-        public async Task<bool> Update(int chapterId, Chapter newChapter)
-        {
-            return await _model.Update(chapterId, newChapter);
-        }
-
-        public void UpdateViews(){}
-
-        public ChapterController(IChapterModel model)
-        {
-            _model = model;
-        }*/
-
         private Ao3Session _session;
         private ChapterTableView _view;
         private IChapterModel _model;
@@ -79,6 +46,11 @@ namespace AO3SchedulerWin.Controllers.ChapterControllers
             {
                 _view.DisplayActive(false);
             }
+        }
+
+        public Task InitUI()
+        {
+            throw new NotImplementedException();
         }
 
         public ChapterTableController(IChapterModel model, TableLayoutPanel tableView, TabControl tabView, Ao3Session session)

@@ -12,6 +12,9 @@ namespace AO3SchedulerWin.Controllers.StoryControllers
         public Task<bool> Create(Chapter chapter);
         public Task<bool> Update(int chapterId, Chapter newChapter);
         public Task<bool> Delete(int chapterId);
+        
+        //Are these two methods really needed???
         public Task RefreshUI();
+        public Task InitUI();
     }
 }

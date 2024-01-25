@@ -26,6 +26,7 @@ namespace AO3SchedulerWin.Forms
             InitializeComponent();
             _controller = new ChapterTableController(model, storyListContainer, mainContainer, session);
             _session = session;
+            _model = model;
             
         }
 
@@ -35,6 +36,8 @@ namespace AO3SchedulerWin.Forms
         {
             //var form = new ScheduleStoryForm(new ScheduleNewStoryBehavior(_session, _model));
             //form.ShowDialog();
+            var form = new ScheduleStoryForm(_model, new Ao3Client(_session));
+            form.ShowDialog();
             await _controller.RefreshUI();
         }
 
@@ -46,8 +49,8 @@ namespace AO3SchedulerWin.Forms
             await _controller.RefreshUI();
         }
 
-        
 
+        private IChapterModel _model;
         private ChapterTableController _controller;
         private Ao3Session _session;
     }
