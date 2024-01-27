@@ -53,6 +53,8 @@ namespace AO3SchedulerWin.Views.ChapterViews.TableView
             {
                 var chapterTableItem = (ChapterTableItem)item;
                 Debug.Assert(chapterTableItem != null);
+                
+                
                 Console.WriteLine(chapterTableItem.GetId());
             }
         }

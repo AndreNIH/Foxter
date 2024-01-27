@@ -46,15 +46,16 @@
             tableLayoutPanel1.BackColor = Color.White;
             tableLayoutPanel1.ColumnCount = 3;
             tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
-            tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 250F));
+            tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 357F));
             tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
             tableLayoutPanel1.Controls.Add(tableLayoutPanel2, 1, 0);
             tableLayoutPanel1.Dock = DockStyle.Fill;
             tableLayoutPanel1.Location = new Point(0, 0);
+            tableLayoutPanel1.Margin = new Padding(4, 5, 4, 5);
             tableLayoutPanel1.Name = "tableLayoutPanel1";
             tableLayoutPanel1.RowCount = 1;
             tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-            tableLayoutPanel1.Size = new Size(800, 398);
+            tableLayoutPanel1.Size = new Size(1143, 663);
             tableLayoutPanel1.TabIndex = 0;
             // 
             // tableLayoutPanel2
@@ -64,23 +65,25 @@
             tableLayoutPanel2.Controls.Add(pictureBox1, 0, 1);
             tableLayoutPanel2.Controls.Add(authorLabel, 0, 2);
             tableLayoutPanel2.Dock = DockStyle.Fill;
-            tableLayoutPanel2.Location = new Point(278, 3);
+            tableLayoutPanel2.Location = new Point(397, 5);
+            tableLayoutPanel2.Margin = new Padding(4, 5, 4, 5);
             tableLayoutPanel2.Name = "tableLayoutPanel2";
             tableLayoutPanel2.RowCount = 3;
             tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
-            tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Absolute, 250F));
+            tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Absolute, 417F));
             tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
-            tableLayoutPanel2.Size = new Size(244, 392);
+            tableLayoutPanel2.Size = new Size(349, 653);
             tableLayoutPanel2.TabIndex = 0;
             // 
             // pictureBox1
             // 
             pictureBox1.Dock = DockStyle.Fill;
             pictureBox1.Image = (Image)resources.GetObject("pictureBox1.Image");
-            pictureBox1.Location = new Point(3, 74);
+            pictureBox1.Location = new Point(4, 123);
+            pictureBox1.Margin = new Padding(4, 5, 4, 5);
             pictureBox1.Name = "pictureBox1";
-            pictureBox1.Size = new Size(238, 244);
-            pictureBox1.SizeMode = PictureBoxSizeMode.StretchImage;
+            pictureBox1.Size = new Size(341, 407);
+            pictureBox1.SizeMode = PictureBoxSizeMode.Zoom;
             pictureBox1.TabIndex = 0;
             pictureBox1.TabStop = false;
             // 
@@ -89,9 +92,10 @@
             authorLabel.AutoSize = true;
             authorLabel.Dock = DockStyle.Top;
             authorLabel.Font = new Font("Segoe UI", 18F, FontStyle.Regular, GraphicsUnit.Point);
-            authorLabel.Location = new Point(3, 321);
+            authorLabel.Location = new Point(4, 535);
+            authorLabel.Margin = new Padding(4, 0, 4, 0);
             authorLabel.Name = "authorLabel";
-            authorLabel.Size = new Size(238, 32);
+            authorLabel.Size = new Size(341, 48);
             authorLabel.TabIndex = 1;
             authorLabel.Text = "User";
             authorLabel.TextAlign = ContentAlignment.MiddleCenter;
@@ -101,9 +105,10 @@
             panel1.Controls.Add(logoutButton);
             panel1.Dock = DockStyle.Bottom;
             panel1.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
-            panel1.Location = new Point(0, 398);
+            panel1.Location = new Point(0, 663);
+            panel1.Margin = new Padding(4, 5, 4, 5);
             panel1.Name = "panel1";
-            panel1.Size = new Size(800, 52);
+            panel1.Size = new Size(1143, 87);
             panel1.TabIndex = 1;
             // 
             // logoutButton
@@ -113,8 +118,9 @@
             logoutButton.FlatStyle = FlatStyle.Flat;
             logoutButton.ForeColor = Color.White;
             logoutButton.Location = new Point(0, 0);
+            logoutButton.Margin = new Padding(4, 5, 4, 5);
             logoutButton.Name = "logoutButton";
-            logoutButton.Size = new Size(800, 52);
+            logoutButton.Size = new Size(1143, 87);
             logoutButton.TabIndex = 0;
             logoutButton.Text = "Log Out";
             logoutButton.UseVisualStyleBackColor = false;
@@ -122,11 +128,12 @@
             // 
             // LoggedUserScreen
             // 
-            AutoScaleDimensions = new SizeF(7F, 15F);
+            AutoScaleDimensions = new SizeF(10F, 25F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(800, 450);
+            ClientSize = new Size(1143, 750);
             Controls.Add(tableLayoutPanel1);
             Controls.Add(panel1);
+            Margin = new Padding(4, 5, 4, 5);
             Name = "LoggedUserScreen";
             Text = "LoggedUserScreen";
             tableLayoutPanel1.ResumeLayout(false);

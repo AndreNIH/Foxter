@@ -35,6 +35,7 @@ namespace AO3SchedulerWin.Views.ChapterViews
             okButton.Click += OkButton_Click;
         }
 
+        
         private async void DeleteButton_Click(object? sender, EventArgs e)
         {
             if(!await _controller.Delete(_updateTarget))
@@ -69,6 +70,11 @@ namespace AO3SchedulerWin.Views.ChapterViews
                     MessageBoxIcon.Warning
                   );
             }
+            _managedForm.Close();
+        }
+
+        public void Close()
+        {
             _managedForm.Close();
         }
     }

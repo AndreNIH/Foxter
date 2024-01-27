@@ -30,12 +30,6 @@ namespace AO3SchedulerWin.Views.ChapterViews
         public ComboBox storyBoxWidget { protected get; set; }
         public ComboBox chapterBoxWidget { protected get; set; }
 
-        
-        protected void RefreshDataSources()
-        {
-
-        }
-        
         public void PopulateStoriesBox(List<BoxItem> items)
         {
             _storyDS.Clear();
@@ -55,9 +49,6 @@ namespace AO3SchedulerWin.Views.ChapterViews
             chapterBoxWidget.DisplayMember = "DisplayField";
             chapterBoxWidget.ValueMember = "Id";
         }
-
-
-
 
         public BaseChapterFormView(ComboBox storyBox, ComboBox chapterBox, Button openInAo3Button)
         {

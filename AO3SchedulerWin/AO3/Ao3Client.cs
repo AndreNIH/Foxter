@@ -77,6 +77,11 @@ namespace AO3SchedulerWin.AO3
             return worksList;
         }
 
+        public async Task<Ao3Work> GetWork(int id)
+        {
+            return await _workFactory.CreateWorkFromId(id);
+        }
+
         public async Task<List<Ao3Chapter>> GetChaptersForWork(int workId)
         {
             var chaptersList = new List<Ao3Chapter>();

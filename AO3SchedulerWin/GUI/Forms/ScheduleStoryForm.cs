@@ -22,8 +22,12 @@ namespace AO3SchedulerWin.Forms
 {
     public partial class ScheduleStoryForm : Form
     {
+        //Data sources
+        private List<BoxItem> _worksDS;
+        private List<BoxItem> _chapterDS;
+        
         private static readonly log4net.ILog _logger = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
-        private Ao3Client _client;
+
         private IChapterController _controller;
         public ScheduleStoryForm(IChapterModel model, Ao3Client client)
         {
@@ -31,18 +35,8 @@ namespace AO3SchedulerWin.Forms
             mainContainer.Appearance = TabAppearance.FlatButtons;
             mainContainer.ItemSize = new Size(0, 1);
             mainContainer.SizeMode = TabSizeMode.Fixed;
-            _client = client;
-            _controller = new NewChapterController(
-                model,
-                _client,
-                this,
-                openInAo3Button,
-                worksComboBox,
-                chapterComboBox,
-                publishingDatePicker,
-                scheduleButton,
-                deleteButton
-             );
+            _worksDS = new List<BoxItem>();
+            _chapterDS = new List<BoxItem>();
         }
 
 
@@ -79,14 +73,68 @@ namespace AO3SchedulerWin.Forms
 
         }
 
-        private void openInAo3Button_Click(object sender, EventArgs e)
+        public void PopulateWorksBox(List<BoxItem> items)
         {
+            _worksDS.Clear();
+            _worksDS.AddRange(items);
+            worksComboBox.DataSource = null;
+            worksComboBox.DataSource = _worksDS;
+            worksComboBox.DisplayMember = "DisplayField";
+            worksComboBox.ValueMember = "Id";
+        }
+
+        public void PopulateChaptersBox(List<BoxItem> items)
+        {
+            _chapterDS.Clear();
+            _chapterDS.AddRange(items);
+            chapterComboBox.DataSource = null;
+            chapterComboBox.DataSource = _worksDS;
+            chapterComboBox.DisplayMember = "DisplayField";
+            chapterComboBox.ValueMember = "Id";
+        }
+
+        
+
+    }
+
+    public class BoxItem
+    {
+        public string DisplayField { get; set; }
+        public int Id { get; set; }
+        public BoxItem(string displayName, int id)
+        {
+            DisplayField = displayName;
+            Id = id;
         }
     }
 
+    public abstract class ChapterFormConfigurator
+    {
+        public abstract Task OnAccept();
+        public abstract Task OnDelete();
+        public void Bind(Button okButton, Button deleteButton)
+        {
+            okButton.Click += OkButton_Click;
+            deleteButton.Click += DeleteButton_Click;
+        }
+
+        private async void DeleteButton_Click(object? sender, EventArgs e)
+        {
+            await OnDelete();
+        }
+
+        private async void OkButton_Click(object? sender, EventArgs e)
+        {
+            await OnAccept();
+        }
+
+
+    }
+}
 
 
 
+    /*
     public abstract class BaseSchedulerBehavior
     {
         public class Ao3WebResource
@@ -248,4 +296,4 @@ namespace AO3SchedulerWin.Forms
     }
 
 
-}
+}*/

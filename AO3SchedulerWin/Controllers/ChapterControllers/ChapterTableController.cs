@@ -48,9 +48,8 @@ namespace AO3SchedulerWin.Controllers.ChapterControllers
             }
         }
 
-        public Task InitUI()
+        public async Task InitUI()
         {
-            throw new NotImplementedException();
         }
 
         public ChapterTableController(IChapterModel model, TableLayoutPanel tableView, TabControl tabView, Ao3Session session)
