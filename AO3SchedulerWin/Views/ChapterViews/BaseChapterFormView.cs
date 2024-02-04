@@ -4,11 +4,10 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using static AO3SchedulerWin.Forms.BaseSchedulerBehavior;
 
 namespace AO3SchedulerWin.Views.ChapterViews
 {
-    public abstract class BaseChapterFormView
+    /*public abstract class BaseChapterFormView
     {
 
         public class BoxItem
@@ -74,5 +73,5 @@ namespace AO3SchedulerWin.Views.ChapterViews
             }
 
         }
-    }
+    }*/
 }

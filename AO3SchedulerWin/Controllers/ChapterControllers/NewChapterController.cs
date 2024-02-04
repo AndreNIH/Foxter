@@ -18,8 +18,8 @@ namespace AO3SchedulerWin.Controllers.ChapterControllers
         private IChapterModel _model;
         private ScheduleStoryForm _view;
         private Ao3Client _client;
-        List<BaseChapterFormView.BoxItem> _workBuffer;
-        Dictionary<int, List<BaseChapterFormView.BoxItem>> _chapterBuffer;
+        List<BoxItem> _workBuffer;
+        Dictionary<int, List<BoxItem>> _chapterBuffer;
 
         public async Task<bool> Create(Chapter chapter)
         {
@@ -54,7 +54,7 @@ namespace AO3SchedulerWin.Controllers.ChapterControllers
             try
             {
                 _logger.Info("Refreshing user interface");
-                var selectedStory = _view.GetSelectedStoryId();
+                var selectedStory = _view.GetSelectedWorkId();
                 if (selectedStory == null) return;
                 List<BoxItem> displayItems;
                 if (_chapterBuffer.ContainsKey(selectedStory.Value) == false)
@@ -88,25 +88,19 @@ namespace AO3SchedulerWin.Controllers.ChapterControllers
             return false;
         }
 
+        public void ShowForm()
+        {
+            _view.ShowDialog();
+        }
         
 
-        public NewChapterController(
-            IChapterModel model,
-            Ao3Client client,
-            Form managedForm,
-            Button ao3Button,
-            ComboBox storyBox,
-            ComboBox chapterBox,
-            DateTimePicker uploadPicker,
-            Button okButton,
-            Button deleteButton
-            )
+        public NewChapterController(IChapterModel model,Ao3Session session)
         {
             _model = model;
-            _client = client;
-            _view = new ScheduleStoryForm();
-            _workBuffer = new List<BaseChapterFormView.BoxItem>();
-            _chapterBuffer = new Dictionary<int, List<BaseChapterFormView.BoxItem>>();
+            _client = new Ao3Client(session);
+            _view = new ScheduleStoryForm(this);
+            _workBuffer = new List<BoxItem>();
+            _chapterBuffer = new Dictionary<int, List<BoxItem>>();
         }
     }
 }

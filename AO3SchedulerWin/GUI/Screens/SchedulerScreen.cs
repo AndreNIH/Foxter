@@ -36,9 +36,8 @@ namespace AO3SchedulerWin.Forms
         {
             //var form = new ScheduleStoryForm(new ScheduleNewStoryBehavior(_session, _model));
             //form.ShowDialog();
-            var form = new ScheduleStoryForm(_model, new Ao3Client(_session));
-            form.ShowDialog();
-            await _controller.RefreshUI();
+            var formController = new NewChapterController(_model, _session);
+            formController.ShowForm();
         }
 
         protected override async void OnLoad(EventArgs e)

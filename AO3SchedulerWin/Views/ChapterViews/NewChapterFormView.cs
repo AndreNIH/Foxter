@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace AO3SchedulerWin.Views.ChapterViews
 {
-    public class NewChapterFormView : BaseChapterFormView
+    /*public class NewChapterFormView : BaseChapterFormView
     
     {
         IChapterController _controller;
@@ -89,5 +89,5 @@ namespace AO3SchedulerWin.Views.ChapterViews
             _managedForm.Close();
 
         }
-    }
+    }*/
 }

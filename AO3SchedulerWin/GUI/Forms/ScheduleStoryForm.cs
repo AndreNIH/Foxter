@@ -22,14 +22,22 @@ namespace AO3SchedulerWin.Forms
 {
     public partial class ScheduleStoryForm : Form
     {
+        enum UiBehavior
+        {
+            kUpdate,
+            kCreate
+        };
+        private static readonly log4net.ILog _logger = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
         //Data sources
         private List<BoxItem> _worksDS;
         private List<BoxItem> _chapterDS;
-        
-        private static readonly log4net.ILog _logger = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
-
+        private int _updateTarget;
         private IChapterController _controller;
-        public ScheduleStoryForm(IChapterModel model, Ao3Client client)
+        bool _skipUpdate = true;
+        UiBehavior _uiBehavior;
+
+        //Create ctor
+        public ScheduleStoryForm(IChapterController controller)
         {
             InitializeComponent();
             mainContainer.Appearance = TabAppearance.FlatButtons;
@@ -37,13 +45,72 @@ namespace AO3SchedulerWin.Forms
             mainContainer.SizeMode = TabSizeMode.Fixed;
             _worksDS = new List<BoxItem>();
             _chapterDS = new List<BoxItem>();
+            _uiBehavior = UiBehavior.kCreate;
+            deleteButton.Visible = false;
+            _controller = controller;
+        }
+
+        //Update ctor
+        public ScheduleStoryForm(IChapterController controller, int updateTarget)
+        {
+            InitializeComponent();
+            mainContainer.Appearance = TabAppearance.FlatButtons;
+            mainContainer.ItemSize = new Size(0, 1);
+            mainContainer.SizeMode = TabSizeMode.Fixed;
+            _worksDS = new List<BoxItem>();
+            _chapterDS = new List<BoxItem>();
+            _uiBehavior = UiBehavior.kUpdate;
+            _controller = controller;
+            _updateTarget = updateTarget;
+            deleteButton.Visible = true;
         }
 
 
-
-        private void deleteButton_Click(object sender, EventArgs e)
+        //Methods
+        public int? GetSelectedWorkId()
         {
+            var selected = worksComboBox.SelectedValue;
+            if (selected == null) return null;
+            return (int)selected;
+        }
 
+        public void PopulateWorksBox(List<BoxItem> items)
+        {
+            var source = new AutoCompleteStringCollection();
+            _logger.Info("Populating works box");
+            _worksDS.Clear();
+            _worksDS.AddRange(items);
+            worksComboBox.DataSource = null;
+            worksComboBox.DataSource = _worksDS;
+            worksComboBox.DisplayMember = "DisplayField";
+            worksComboBox.ValueMember = "Id";
+        }
+
+        public void PopulateChaptersBox(List<BoxItem> items)
+        {
+            _logger.Info("Populated chapters box");
+            _chapterDS.Clear();
+            _chapterDS.AddRange(items);
+            chapterComboBox.DataSource = null;
+            chapterComboBox.DataSource = _chapterDS;
+            chapterComboBox.DisplayMember = "DisplayField";
+            chapterComboBox.ValueMember = "Id";
+        }
+
+
+        //Event handlers
+        private async void deleteButton_Click(object sender, EventArgs e)
+        {
+            if (await _controller.Delete(_updateTarget) == false)
+            {
+                MessageBox.Show(
+                        $"Failed to cancel the upload task for '{chapterComboBox.Text}'",
+                        "Scheduling failed.",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Warning
+                      );
+            }
+            Close();
         }
 
 
@@ -54,6 +121,7 @@ namespace AO3SchedulerWin.Forms
             {
                 await _controller.InitUI();
                 mainContainer.SelectedIndex++;
+                _skipUpdate = false;
 
             }
             catch (HttpRequestException ex)
@@ -68,33 +136,103 @@ namespace AO3SchedulerWin.Forms
             }
         }
 
-        private void scheduleButton_Click(object sender, EventArgs e)
+        private async void scheduleButton_Click(object sender, EventArgs e)
         {
-
+            if (chapterComboBox.SelectedIndex == -1)
+            {
+                _logger.Warn("cannot schedule story because no chapter was selected");
+                return;
+            }
+            if (_uiBehavior == UiBehavior.kCreate)
+            {
+                var chapter = new Chapter();
+                chapter.StoryTitle = worksComboBox.Text;
+                chapter.ChapterTitle = chapterComboBox.Text;
+                chapter.ChapterId = (int)chapterComboBox.SelectedValue;
+                chapter.StoryId = (int)worksComboBox.SelectedValue;
+                chapter.PublishingDate = publishingDatePicker.Value;
+                //authorid is set by the controller
+                if (await _controller.Create(chapter) == false)
+                {
+                    MessageBox.Show(
+                        $"Upload task for '{chapterComboBox.Text}' couldn't be created",
+                        "Scheduling failed.",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Warning
+                      );
+                }
+                this.Close();
+            }
+            else if (_uiBehavior == UiBehavior.kUpdate)
+            {
+                var chapter = new Chapter();
+                chapter.StoryTitle = worksComboBox.Text;
+                chapter.ChapterTitle = chapterComboBox.Text;
+                chapter.ChapterId = (int)chapterComboBox.SelectedValue;
+                chapter.StoryId = (int)worksComboBox.SelectedValue;
+                chapter.PublishingDate = publishingDatePicker.Value;
+                //authorid is set by the controller
+                if (await _controller.Update(_updateTarget, chapter) == false)
+                {
+                    MessageBox.Show(
+                        $"Upload task for '{chapterComboBox.Text}' couldn't be updated",
+                        "Scheduling failed.",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Warning
+                      );
+                }
+                this.Close();
+            }
         }
 
-        public void PopulateWorksBox(List<BoxItem> items)
+
+        private async void worksComboBox_SelectedIndexChanged(object sender, EventArgs e)
         {
-            _worksDS.Clear();
-            _worksDS.AddRange(items);
-            worksComboBox.DataSource = null;
-            worksComboBox.DataSource = _worksDS;
-            worksComboBox.DisplayMember = "DisplayField";
-            worksComboBox.ValueMember = "Id";
+            //This prevents the event fired whe first registering data bindings
+            //from trying to refresh the view BEFORE it is fully initialized
+            if (_skipUpdate) return;
+            _logger.Info("works index changed, refreshing ui");
+            await _controller.RefreshUI();
         }
 
-        public void PopulateChaptersBox(List<BoxItem> items)
+        private void worksComboBox_KeyPress(object sender, KeyPressEventArgs e)
         {
-            _chapterDS.Clear();
-            _chapterDS.AddRange(items);
-            chapterComboBox.DataSource = null;
-            chapterComboBox.DataSource = _worksDS;
-            chapterComboBox.DisplayMember = "DisplayField";
-            chapterComboBox.ValueMember = "Id";
+            worksComboBox.DroppedDown = true;
+            if (char.IsControl(e.KeyChar)) return;
+            string str = worksComboBox.Text.Substring(0, worksComboBox.SelectionStart) + e.KeyChar;
+            int index = worksComboBox.FindStringExact(str);
+            if (index == -1) index = worksComboBox.FindString(str);
+            worksComboBox.SelectedIndex = index;
+            worksComboBox.SelectionStart = str.Length;
+            worksComboBox.SelectionLength = worksComboBox.Text.Length - worksComboBox.SelectionStart;
+            e.Handled = true;
         }
 
-        
+        private void chapterComboBox_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            chapterComboBox.DroppedDown = true;
+            if (char.IsControl(e.KeyChar)) return;
+            string str = chapterComboBox.Text.Substring(0, chapterComboBox.SelectionStart) + e.KeyChar;
+            int index = chapterComboBox.FindStringExact(str);
+            if (index == -1) index = chapterComboBox.FindString(str);
+            chapterComboBox.SelectedIndex = index;
+            chapterComboBox.SelectionStart = str.Length;
+            chapterComboBox.SelectionLength = chapterComboBox.Text.Length - chapterComboBox.SelectionStart;
+            e.Handled = true;
+        }
 
+        private void openInAo3Button_Click(object sender, EventArgs e)
+        {
+            var selectedWorkId = worksComboBox.SelectedValue;
+            var selectedChapterId = chapterComboBox.SelectedValue;
+            if (selectedWorkId != null && selectedChapterId != null)
+            {
+                var workId = (int)selectedWorkId;
+                var chapterId = (int)selectedChapterId;
+                Process.Start("explorer", $"https://archiveofourown.org/works/{workId}/chapters/{chapterId}/edit");
+            }
+
+        }
     }
 
     public class BoxItem
@@ -107,193 +245,4 @@ namespace AO3SchedulerWin.Forms
             Id = id;
         }
     }
-
-    public abstract class ChapterFormConfigurator
-    {
-        public abstract Task OnAccept();
-        public abstract Task OnDelete();
-        public void Bind(Button okButton, Button deleteButton)
-        {
-            okButton.Click += OkButton_Click;
-            deleteButton.Click += DeleteButton_Click;
-        }
-
-        private async void DeleteButton_Click(object? sender, EventArgs e)
-        {
-            await OnDelete();
-        }
-
-        private async void OkButton_Click(object? sender, EventArgs e)
-        {
-            await OnAccept();
-        }
-
-
-    }
 }
-
-
-
-    /*
-    public abstract class BaseSchedulerBehavior
-    {
-        public class Ao3WebResource
-        {
-            public string DisplayName { get; set; }
-            public int Id { get; set; }
-            public Ao3WebResource(string displayName, int id)
-            {
-                DisplayName = displayName;
-                Id = id;
-            }
-        }
-        //Data sources
-        private List<Ao3WebResource> _storyWebResourceList = new List<Ao3WebResource>();
-        private List<Ao3WebResource> _chapterWebResourceList = new List<Ao3WebResource>();
-
-        //Attributes
-        public Form targetForm { protected get; set; }
-        public ComboBox storyBox { protected get; set; }
-        public ComboBox chapterBox { protected get; set; }
-        public Button scheduleButton { protected get; set; }
-        public Button deleteButton { protected get; set; }
-        public DateTimePicker datePicker { protected get; set; }
-
-        //Template methods
-        protected abstract Task<List<Ao3WebResource>> FetchStories();
-        protected abstract Task<List<Ao3WebResource>> FetchChapters();
-        protected abstract Task OnSchedulePost();
-        protected abstract Task OnDeletePost();
-        protected abstract void AfterPopulateViews();
-        public async Task PopulateViews()
-        {
-            //Data Binding
-            storyBox.ValueMember = "Id";
-            chapterBox.ValueMember = "Id";
-            storyBox.DisplayMember = "DisplayName";
-            chapterBox.DisplayMember = "DisplayName";
-
-            //Events
-            storyBox.SelectedIndexChanged += StoryBox_SelectedIndexChanged;
-            scheduleButton.Click += ScheduleButton_Click;
-            deleteButton.Click += DeleteButton_Click;
-            //Populate views
-            _storyWebResourceList.Clear();
-            _chapterWebResourceList.Clear();
-            var stories = await FetchStories();
-            stories.ForEach(s => _storyWebResourceList.Add(s));
-            storyBox.DataSource = _storyWebResourceList;
-            chapterBox.DataSource = _chapterWebResourceList;
-
-        }
-
-        private async void DeleteButton_Click(object? sender, EventArgs e)
-        {
-            await OnDeletePost();
-        }
-
-        private async void ScheduleButton_Click(object? sender, EventArgs e)
-        {
-            await OnSchedulePost();
-        }
-
-        private async void StoryBox_SelectedIndexChanged(object? sender, EventArgs e)
-        {
-            _chapterWebResourceList.Clear();
-            var chapters = await FetchChapters();
-            chapters.ForEach(c => _chapterWebResourceList.Add(c));
-
-            //This is a stupid hack
-            chapterBox.DataSource = null;
-            chapterBox.ValueMember = "Id";
-            chapterBox.DisplayMember = "DisplayName";
-            chapterBox.DataSource = _chapterWebResourceList;
-
-            if (chapterBox.SelectedItem == null && chapters.Count > 0)
-            {
-                chapterBox.SelectedIndex = 0;
-            }
-        }
-    }
-
-
-    public class ScheduleNewStoryBehavior : BaseSchedulerBehavior
-    {
-        private Ao3Client _client;
-        private IChapterController _controller;
-        private static readonly log4net.ILog _logger = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
-
-        protected override async Task<List<Ao3WebResource>> FetchStories()
-        {
-            var stories = await _client.GetAllWorks();
-            return stories.Select(story => new Ao3WebResource(story.WorkTitle, story.WorkId)).ToList();
-        }
-
-        protected override async Task<List<Ao3WebResource>> FetchChapters()
-        {
-            try
-            {
-                var chapters = await _client.GetChaptersForWork((int)storyBox.SelectedValue);
-                return chapters.Where(chapter => chapter.Draft).Select(chapter => new Ao3WebResource(chapter.Title, chapter.Id)).ToList();
-            }
-            catch (HttpRequestException ex)
-            {
-                _logger.Warn(ex.Message);
-                return new List<Ao3WebResource>();
-            }
-        }
-
-        protected override void AfterPopulateViews()
-        {
-            deleteButton.Visible = false;
-        }
-
-        //Event handlers
-        protected override async Task OnSchedulePost()
-        {
-            if (chapterBox.SelectedValue != null)
-            {
-                var newChapter = new Chapter();
-                newChapter.StoryTitle = storyBox.Text;
-                newChapter.ChapterTitle = chapterBox.Text;
-                newChapter.StoryId = (int)storyBox.SelectedValue;
-                newChapter.ChapterId = (int)chapterBox.SelectedValue;
-                newChapter.PublishingDate = datePicker.Value;
-                if (await _controller.Create(newChapter) == false)
-                {
-                    MessageBox.Show(
-                        $"Upload task for '{chapterBox.Text}' couldn't be created",
-                        "Scheduling failed.",
-                        MessageBoxButtons.OK,
-                        MessageBoxIcon.Warning
-                      );
-                }
-                targetForm.Close();
-            }
-            else
-            {
-                MessageBox.Show(
-                    "You must select a chapter to continue",
-                    "Action not allowed",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Information
-                  );
-            }
-        }
-
-        protected override async Task OnDeletePost()
-        {
-
-        }
-
-
-
-        public ScheduleNewStoryBehavior(Ao3Client client, IChapterModel model)
-        {
-            _client = client;
-
-        }
-    }
-
-
-}*/

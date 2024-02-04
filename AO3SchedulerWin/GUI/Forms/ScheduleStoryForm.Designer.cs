@@ -67,6 +67,8 @@
             worksComboBox.Name = "worksComboBox";
             worksComboBox.Size = new Size(316, 23);
             worksComboBox.TabIndex = 1;
+            worksComboBox.SelectedIndexChanged += worksComboBox_SelectedIndexChanged;
+            worksComboBox.KeyPress += worksComboBox_KeyPress;
             // 
             // publishingDatePicker
             // 
@@ -76,7 +78,7 @@
             publishingDatePicker.Location = new Point(107, 71);
             publishingDatePicker.Name = "publishingDatePicker";
             publishingDatePicker.Size = new Size(316, 23);
-            publishingDatePicker.TabIndex = 2;
+            publishingDatePicker.TabIndex = 3;
             // 
             // label2
             // 
@@ -156,9 +158,10 @@
             openInAo3Button.Location = new Point(10, 111);
             openInAo3Button.Name = "openInAo3Button";
             openInAo3Button.Size = new Size(413, 46);
-            openInAo3Button.TabIndex = 11;
+            openInAo3Button.TabIndex = 4;
             openInAo3Button.Text = "Open in Archive of Our Own";
             openInAo3Button.UseVisualStyleBackColor = true;
+            openInAo3Button.Click += openInAo3Button_Click;
             // 
             // chapterComboBox
             // 
@@ -166,7 +169,8 @@
             chapterComboBox.Location = new Point(107, 42);
             chapterComboBox.Name = "chapterComboBox";
             chapterComboBox.Size = new Size(316, 23);
-            chapterComboBox.TabIndex = 14;
+            chapterComboBox.TabIndex = 2;
+            chapterComboBox.KeyPress += chapterComboBox_KeyPress;
             // 
             // deleteButton
             // 
@@ -174,7 +178,7 @@
             deleteButton.Location = new Point(31, 252);
             deleteButton.Name = "deleteButton";
             deleteButton.Size = new Size(377, 45);
-            deleteButton.TabIndex = 13;
+            deleteButton.TabIndex = 6;
             deleteButton.Text = "Delete";
             deleteButton.UseVisualStyleBackColor = false;
             deleteButton.Click += deleteButton_Click;
@@ -196,7 +200,7 @@
             scheduleButton.Location = new Point(31, 303);
             scheduleButton.Name = "scheduleButton";
             scheduleButton.Size = new Size(377, 45);
-            scheduleButton.TabIndex = 10;
+            scheduleButton.TabIndex = 5;
             scheduleButton.Text = "Schedule Post";
             scheduleButton.UseVisualStyleBackColor = false;
             scheduleButton.Click += scheduleButton_Click;

@@ -8,6 +8,6 @@ namespace AO3SchedulerWin.Views.ChapterViews.TableView
 {
     public interface ITableEventListener
     {
-        void OnEditChapter(object sender);
+        Task OnEditChapter(object sender);
     }
 }

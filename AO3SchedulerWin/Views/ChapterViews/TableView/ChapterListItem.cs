@@ -61,9 +61,9 @@ namespace AO3SchedulerWin.Forms
             return _postId;
         }
 
-        private void editButton_Click(object sender, EventArgs e)
+        private async void editButton_Click(object sender, EventArgs e)
         {
-            _updateListener.OnEditChapter(this);
+            await _updateListener.OnEditChapter(this);
         }
 
 

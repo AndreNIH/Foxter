@@ -60,6 +60,7 @@ namespace AO3SchedulerWin.Models.Local
                 {
                     await cmd.PrepareAsync();
                     await cmd.ExecuteNonQueryAsync();
+                    _updateListeners.ForEach(listener => listener.OnChapterModelUpdated());
                     return true;
                 }
                 catch (SQLiteException ex)
@@ -82,6 +83,7 @@ namespace AO3SchedulerWin.Models.Local
                 try
                 {
                     await cmd.ExecuteNonQueryAsync();
+                    _updateListeners.ForEach(listener => listener.OnChapterModelUpdated());
                     return true;
                 }
                 catch (SQLiteException ex)
@@ -133,6 +135,7 @@ namespace AO3SchedulerWin.Models.Local
                 connection.ConnectionString = _connectionString;
                 await connection.OpenAsync();
                 var cmd = connection.CreateCommand();
+                cmd.CommandText = $"select * from CHAPTERS where ChapterId={id}";
                 try
                 {
                     await using (var reader = await cmd.ExecuteReaderAsync())
@@ -162,13 +165,12 @@ namespace AO3SchedulerWin.Models.Local
 
         public async Task<bool> Update(int chapterId, Chapter newChapter)
         {
-            var chapter = new Chapter();
             await using (var connection = _dbProvider.CreateConnection())
             {
                 connection.ConnectionString = _connectionString;
                 await connection.OpenAsync();
                 var cmd = connection.CreateCommand();
-                cmd.CommandText = @"update CHAPTERS set values 
+                cmd.CommandText = @"update CHAPTERS set  
                                     ChapterId=@id, 
                                     StoryId=@storyId,
                                     StoryTitle=@storyTitle, 
@@ -179,32 +181,32 @@ namespace AO3SchedulerWin.Models.Local
 
                 var idParam = cmd.CreateParameter();
                 idParam.ParameterName = "id";
-                idParam.Value = chapter.ChapterId;
+                idParam.Value = chapterId;
                 cmd.Parameters.Add(idParam);
 
                 var storyId = cmd.CreateParameter();
                 storyId.ParameterName = "storyId";
-                storyId.Value = chapter.StoryId;
+                storyId.Value = newChapter.StoryId;
                 cmd.Parameters.Add(storyId);
 
                 var storyTitleParam = cmd.CreateParameter();
                 storyTitleParam.ParameterName = "storyTitle";
-                storyTitleParam.Value = chapter.StoryTitle;
+                storyTitleParam.Value = newChapter.StoryTitle;
                 cmd.Parameters.Add(storyTitleParam);
 
                 var chapterTitleParam = cmd.CreateParameter();
                 chapterTitleParam.ParameterName = "chapterTitle";
-                chapterTitleParam.Value = chapter.ChapterTitle;
+                chapterTitleParam.Value = newChapter.ChapterTitle;
                 cmd.Parameters.Add(chapterTitleParam);
 
                 var publishingDateParam = cmd.CreateParameter();
                 publishingDateParam.ParameterName = "publishingDate";
-                publishingDateParam.Value = chapter.PublishingDate.ToString("yyyy-MM-dd HH:mm:ss");
+                publishingDateParam.Value = newChapter.PublishingDate.ToString("yyyy-MM-dd HH:mm:ss");
                 cmd.Parameters.Add(publishingDateParam);
 
                 var authorParam = cmd.CreateParameter();
                 authorParam.ParameterName = "author";
-                authorParam.Value = chapter.AuthorId;
+                authorParam.Value = newChapter.AuthorId;
                 cmd.Parameters.Add(authorParam);
 
                 //Execute statement
@@ -212,6 +214,8 @@ namespace AO3SchedulerWin.Models.Local
                 {
                     await cmd.PrepareAsync();
                     await cmd.ExecuteNonQueryAsync();
+                    _logger.Info("updated auhthor model");
+                    _updateListeners.ForEach(listener => listener.OnChapterModelUpdated());
                     return true;
                 }
                 catch (SQLiteException ex)

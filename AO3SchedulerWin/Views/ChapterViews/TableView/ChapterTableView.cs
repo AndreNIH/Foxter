@@ -47,16 +47,19 @@ namespace AO3SchedulerWin.Views.ChapterViews.TableView
             _tableView.ResumeLayout();
         }
 
-        public void OnEditChapter(object sender)
+        public async Task OnEditChapter(object sender)
         {
-            foreach(var item in _tableView.Controls)
+            var chapterTableItem = (ChapterTableItem)sender;
+            var chapter = await _model.GetChapterById(chapterTableItem.GetId());
+            if(chapter == null)
             {
-                var chapterTableItem = (ChapterTableItem)item;
-                Debug.Assert(chapterTableItem != null);
-                
-                
-                Console.WriteLine(chapterTableItem.GetId());
+                return;
             }
+            
+            int workid = chapter.StoryId;
+            int chapterid = chapter.ChapterId;
+            var formController = new UpdateChapterController(_model, _session, workid, chapterid);
+            formController.ShowForm();
         }
 
         public ChapterTableView(ChapterTableController controller, IChapterModel model, TableLayoutPanel tableView, TabControl tabView, Ao3Session session)

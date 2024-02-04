@@ -1,5 +1,6 @@
 ﻿using AO3SchedulerWin.AO3;
 using AO3SchedulerWin.Controllers.StoryControllers;
+using AO3SchedulerWin.Forms;
 using AO3SchedulerWin.Models;
 using AO3SchedulerWin.Models.Base;
 using AO3SchedulerWin.Views.ChapterViews;
@@ -15,18 +16,24 @@ namespace AO3SchedulerWin.Controllers.ChapterControllers
     {
         private static readonly log4net.ILog _logger = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
         IChapterModel _model;
-        UpdateChapterFormView _view;
         Ao3Client _client;
         int _workId;
         int _chapterId;
-        public Task<bool> Create(Chapter chapter)
+        ScheduleStoryForm _view;
+        public async Task<bool> Create(Chapter chapter)
         {
-            throw new NotImplementedException();
+            return false;
         }
 
-        public Task<bool> Delete(int chapterId)
+        public async Task<bool> Delete(int chapterId)
         {
-            throw new NotImplementedException();
+            return await _model.Delete(chapterId);
+        }
+
+        public async Task<bool> Update(int chapterId, Chapter newChapter)
+        {
+            newChapter.AuthorId = _client.GetSession().Id;
+            return await  _model.Update(chapterId, newChapter);
         }
 
         public async Task InitUI()
@@ -34,12 +41,16 @@ namespace AO3SchedulerWin.Controllers.ChapterControllers
 
             try
             {
+                _logger.Info("initializing ui");
                 var work = await _client.GetWork(_workId);
-                var workDisplay = new List<BaseChapterFormView.BoxItem>(){ new(work.WorkTitle, work.WorkId)};
-
+                var workDisplay = new List<BoxItem>(){ new(work.WorkTitle, work.WorkId)};
                 var chapters = await _client.GetChaptersForWork(_workId);
-                var target = chapters.Select(c => c.Id == _chapterId).ToList();
-            }catch(HttpRequestException ex)
+                var chapter = chapters.First(c => c.Id == _chapterId);
+                _view.PopulateWorksBox(new List<BoxItem>() { new(work.WorkTitle, work.WorkId) });
+                _view.PopulateChaptersBox(new List<BoxItem>() { new(chapter.Title, chapter.Id) });
+
+            }
+            catch(HttpRequestException ex)
             {
                 _logger.Warn("InitUI http exception: " + ex.Message);
                 if(ex.StatusCode == System.Net.HttpStatusCode.NotFound)
@@ -66,53 +77,34 @@ namespace AO3SchedulerWin.Controllers.ChapterControllers
                 }
 
                 _logger.Info("Falling back on local model data to populate views");
-                var chapter = await _model.GetChapterById(_chapterId); //This shouldn't throw
-                _view.PopulateStoriesBox(new List<BaseChapterFormView.BoxItem>() { 
-                    new(chapter.StoryTitle, chapter.StoryId) 
-                });
-                _view.PopulateChaptersBox(new List<BaseChapterFormView.BoxItem>() { 
-                    new(chapter.ChapterTitle, chapter.ChapterId) 
-                });
+                var bufferedChapter = await _model.GetChapterById(_chapterId); //This shouldn't throw
+                _view.PopulateWorksBox(new List<BoxItem>() { new(bufferedChapter.StoryTitle, bufferedChapter.StoryId) });
+                _view.PopulateChaptersBox(new List<BoxItem>() { new(bufferedChapter.ChapterTitle, bufferedChapter.ChapterId) });
             }
-            
-            //_view.PopulateStoriesBox();
-            //_view.PopulateChaptersBox();
+      
         }
 
         public async Task RefreshUI()
         {
         }
 
-        public Task<bool> Update(int chapterId, Chapter newChapter)
+        public void ShowForm()
         {
-            throw new NotImplementedException();
+            _view.ShowDialog();
         }
+      
 
         public UpdateChapterController(
             IChapterModel model,
-            Ao3Client client,
-            Form managedForm,
-            Button ao3Button,
-            ComboBox storyBox,
-            ComboBox chapterBox,
-            DateTimePicker uploadPicker,
-            Button okButton,
-            Button deleteButton
-            )
+            Ao3Session session,
+            int workId,
+            int chapterId)
         {
             _model = model;
-            _client = client;
-            _view = new UpdateChapterFormView(this, 
-                0,
-                managedForm,
-                ao3Button,
-                storyBox,
-                chapterBox,
-                uploadPicker,
-                okButton,
-                deleteButton);
-
-
+            _client = new Ao3Client(session);
+            _workId = workId;
+            _chapterId = chapterId;
+            _view = new ScheduleStoryForm(this, chapterId);
         }
     }
 }
