@@ -20,6 +20,8 @@ namespace AO3SchedulerWin.Controllers.ChapterControllers
         int _workId;
         int _chapterId;
         ScheduleStoryForm _view;
+        bool _initializedUi = false;
+
         public async Task<bool> Create(Chapter chapter)
         {
             return false;
@@ -40,13 +42,19 @@ namespace AO3SchedulerWin.Controllers.ChapterControllers
         {
             try
             {
-                _logger.Info("initializing ui");
+                if (_initializedUi)
+                {
+                    _logger.Info("supress ui update flag is set. exiting refresh function");
+                    return;
+                }
+                _logger.Info("refresh ui");
                 var work = await _client.GetWork(_workId);
                 var workDisplay = new List<BoxItem>() { new(work.WorkTitle, work.WorkId) };
                 var chapters = await _client.GetChaptersForWork(_workId);
                 var chapter = chapters.First(c => c.Id == _chapterId);
                 _view.PopulateWorksBox(new List<BoxItem>() { new(work.WorkTitle, work.WorkId) });
                 _view.PopulateChaptersBox(new List<BoxItem>() { new(chapter.Title, chapter.Id) });
+                _initializedUi = true;
 
             }
             catch (HttpRequestException ex)
@@ -68,7 +76,7 @@ namespace AO3SchedulerWin.Controllers.ChapterControllers
                 else
                 {
                     MessageBox.Show(
-                       "A network rror occured: " + ex.Message,
+                       "A network error occured: " + ex.Message,
                        "Network error",
                        MessageBoxButtons.OK,
                        MessageBoxIcon.Error
