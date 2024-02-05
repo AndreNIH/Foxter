@@ -105,7 +105,7 @@ namespace AO3SchedulerWin.Forms
             {
                 MessageBox.Show(
                         $"Failed to cancel the upload task for '{chapterComboBox.Text}'",
-                        "Scheduling failed.",
+                        "Delete task failed",
                         MessageBoxButtons.OK,
                         MessageBoxIcon.Warning
                       );
@@ -113,6 +113,30 @@ namespace AO3SchedulerWin.Forms
             Close();
         }
 
+
+        private async Task HandleStoryNotFound() {
+            DialogResult choice = MessageBox.Show(
+                "This draft no longer exists in Archive of Our Own. Do you wish to remove it from the upload scheduler",
+                "Draft not found",
+                MessageBoxButtons.YesNo, 
+                MessageBoxIcon.Question
+                );
+
+            if(choice == DialogResult.Yes )
+            {
+                bool success = await _controller.Delete(_updateTarget);
+                if(!success) {
+                    //DRY!!!
+                    MessageBox.Show(
+                        $"Failed to cancel the upload task for '{chapterComboBox.Text}'",
+                        "Delete task failed",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Warning
+                      );
+                }
+
+            }
+        }
 
 
         private async void ScheduleStoryForm_Load(object sender, EventArgs e)
@@ -126,13 +150,21 @@ namespace AO3SchedulerWin.Forms
             }
             catch (HttpRequestException ex)
             {
-                MessageBox.Show(
+                if(ex.StatusCode == System.Net.HttpStatusCode.NotFound)
+                {
+                    await HandleStoryNotFound();
+                }
+                else
+                {
+                    MessageBox.Show(
                     ex.Message,
                     "Request Error",
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Warning
                     );
+                }
                 Close();
+                
             }
         }
 
