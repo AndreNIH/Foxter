@@ -20,6 +20,7 @@ namespace AO3SchedulerWin.Controllers.ChapterControllers
         private Ao3Client _client;
         List<BoxItem> _workBuffer;
         Dictionary<int, List<BoxItem>> _chapterBuffer;
+        bool _initializedUi;
 
         public async Task<bool> Create(Chapter chapter)
         {
@@ -32,53 +33,49 @@ namespace AO3SchedulerWin.Controllers.ChapterControllers
             return false;
         }
 
-        public async Task InitUI()
-        {
-            try
-            {
-                _logger.Info("Retrieving user works from the server");
-                var works = await _client.GetAllWorks();
-                var displayItems = works.Select(story => new BoxItem(story.WorkTitle, story.WorkId)).ToList();
-                _view.PopulateWorksBox(displayItems);
-            }catch(HttpRequestException ex)
-            {
-                _logger.Error(ex.Message);
-                throw ex;
-            }
-            
-        }
-
         public async Task RefreshUI()
         {
-
             try
             {
-                _logger.Info("Refreshing user interface");
-                var selectedStory = _view.GetSelectedWorkId();
-                if (selectedStory == null) return;
-                List<BoxItem> displayItems;
-                if (_chapterBuffer.ContainsKey(selectedStory.Value) == false)
+                _logger.Info("refreshing user interface");
+                if(!_initializedUi)
                 {
-                    _logger.Info($"Retrieving chapter data for {selectedStory.Value} from the server");
-                    var chapters = await _client.GetChaptersForWork(selectedStory.Value);
-                    displayItems = chapters
-                        .Where(c => c.Draft)
-                        .Select(chapter => new BoxItem(chapter.Title, chapter.Id))
-                        .ToList();
-                    _logger.Info($"Buffered {displayItems.Count} chapters for work {selectedStory.Value}");
-                    _chapterBuffer.Add(selectedStory.Value, displayItems);
+                    //Assume work box isn't populated
+                    var works = await _client.GetAllWorks();
+                    var displayItems = works.Select(story => new BoxItem(story.WorkTitle, story.WorkId)).ToList();
+                    _view.PopulateWorksBox(displayItems);
+                    _initializedUi = true;
                 }
-                else
+                var selectedWork = _view.GetSelectedWorkId();
+                if(selectedWork != null)
                 {
-                    _logger.Info($"Retrieving chapter data for {selectedStory.Value} from the local buffer");
-                    displayItems = _chapterBuffer[selectedStory.Value];
+                    List<BoxItem> displayItems;
+                    if (_chapterBuffer.ContainsKey(selectedWork.Value) == false)
+                    {
+                        _logger.Info($"Retrieving chapter data for {selectedWork.Value} from the server");
+                        var chapters = await _client.GetChaptersForWork(selectedWork.Value);
+                        displayItems = chapters
+                            .Where(c => c.Draft)
+                            .Select(chapter => new BoxItem(chapter.Title, chapter.Id))
+                            .ToList();
+                        _logger.Info($"Buffered {displayItems.Count} chapters for work {selectedWork.Value}");
+                        _chapterBuffer.Add(selectedWork.Value, displayItems);
+                    }
+                    else
+                    {
+                        _logger.Info($"Retrieving chapter data for {selectedWork.Value} from the local buffer");
+                        displayItems = _chapterBuffer[selectedWork.Value];
+                    }
+                    _view.PopulateChaptersBox(displayItems);
                 }
-                _view.PopulateChaptersBox(displayItems);
+
+
             }catch(HttpRequestException ex)
             {
                 _logger.Error(ex.Message);
                 throw ex;
             }
+
             
 
         }
@@ -101,6 +98,7 @@ namespace AO3SchedulerWin.Controllers.ChapterControllers
             _view = new ScheduleStoryForm(this);
             _workBuffer = new List<BoxItem>();
             _chapterBuffer = new Dictionary<int, List<BoxItem>>();
+            _initializedUi = false;
         }
     }
 }

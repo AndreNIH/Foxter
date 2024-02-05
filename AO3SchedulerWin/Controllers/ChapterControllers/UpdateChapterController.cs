@@ -36,24 +36,23 @@ namespace AO3SchedulerWin.Controllers.ChapterControllers
             return await  _model.Update(chapterId, newChapter);
         }
 
-        public async Task InitUI()
+        public async Task RefreshUI()
         {
-
             try
             {
                 _logger.Info("initializing ui");
                 var work = await _client.GetWork(_workId);
-                var workDisplay = new List<BoxItem>(){ new(work.WorkTitle, work.WorkId)};
+                var workDisplay = new List<BoxItem>() { new(work.WorkTitle, work.WorkId) };
                 var chapters = await _client.GetChaptersForWork(_workId);
                 var chapter = chapters.First(c => c.Id == _chapterId);
                 _view.PopulateWorksBox(new List<BoxItem>() { new(work.WorkTitle, work.WorkId) });
                 _view.PopulateChaptersBox(new List<BoxItem>() { new(chapter.Title, chapter.Id) });
 
             }
-            catch(HttpRequestException ex)
+            catch (HttpRequestException ex)
             {
-                _logger.Warn("InitUI http exception: " + ex.Message);
-                if(ex.StatusCode == System.Net.HttpStatusCode.NotFound)
+                _logger.Warn("RefreshUI http exception: " + ex.Message);
+                if (ex.StatusCode == System.Net.HttpStatusCode.NotFound)
                 {
                     MessageBox.Show(
                         "The selected chapter not found in Archive of Our Own. It may have been deleted.\n" +
@@ -81,11 +80,6 @@ namespace AO3SchedulerWin.Controllers.ChapterControllers
                 _view.PopulateWorksBox(new List<BoxItem>() { new(bufferedChapter.StoryTitle, bufferedChapter.StoryId) });
                 _view.PopulateChaptersBox(new List<BoxItem>() { new(bufferedChapter.ChapterTitle, bufferedChapter.ChapterId) });
             }
-      
-        }
-
-        public async Task RefreshUI()
-        {
         }
 
         public void ShowForm()

@@ -14,6 +14,5 @@ namespace AO3SchedulerWin.Controllers.StoryControllers
         public Task<bool> Delete(int chapterId);
         
         public Task RefreshUI();
-        public Task InitUI();
     }
 }

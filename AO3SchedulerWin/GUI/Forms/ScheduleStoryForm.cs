@@ -119,7 +119,7 @@ namespace AO3SchedulerWin.Forms
         {
             try
             {
-                await _controller.InitUI();
+                await _controller.RefreshUI();
                 mainContainer.SelectedIndex++;
                 _skipUpdate = false;
 

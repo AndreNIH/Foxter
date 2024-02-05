@@ -48,10 +48,6 @@ namespace AO3SchedulerWin.Controllers.ChapterControllers
             }
         }
 
-        public async Task InitUI()
-        {
-        }
-
         public ChapterTableController(IChapterModel model, TableLayoutPanel tableView, TabControl tabView, Ao3Session session)
         {
             _model = model;
