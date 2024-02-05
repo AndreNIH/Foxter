@@ -44,7 +44,9 @@ namespace AO3SchedulerWin.Views.ChapterViews.TableView
                 item.Anchor = AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Top;
                 _tableView.Controls.Add(item);
             }
+            DisplayActive(_tableView.Controls.Count > 0);
             _tableView.ResumeLayout();
+            
         }
 
         public async Task OnEditChapter(object sender)
@@ -73,7 +75,10 @@ namespace AO3SchedulerWin.Views.ChapterViews.TableView
         }
 
 
-
+        ~ChapterTableView()
+        {
+            _model.UnregisterObserver(this);
+        }
 
 
 

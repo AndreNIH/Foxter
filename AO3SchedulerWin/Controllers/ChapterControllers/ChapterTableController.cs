@@ -55,10 +55,6 @@ namespace AO3SchedulerWin.Controllers.ChapterControllers
             _session = session;
         }
 
-        ~ChapterTableController()
-        {
-            _model.UnregisterObserver(_view);
-        }
 
     }
 }
