@@ -122,7 +122,7 @@ namespace AO3SchedulerWin
             {
                 case "SC_MAIN":
                     {
-                        var screen = new HomeScreen(_authorModel);
+                        var screen = new HomeScreen(_authorModel, _chapterModel, _session);
                         SetMainContent(screen);
                         break;
                     }

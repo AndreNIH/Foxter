@@ -1,4 +1,6 @@
-﻿using AO3SchedulerWin.Controllers.AuthorControllers;
+﻿using AO3SchedulerWin.AO3;
+using AO3SchedulerWin.Controllers.AuthorControllers;
+using AO3SchedulerWin.Controllers.ChapterControllers;
 using AO3SchedulerWin.Controllers.StoryControllers;
 using AO3SchedulerWin.Models;
 using AO3SchedulerWin.Views.AuthorViews;
@@ -16,19 +18,21 @@ namespace AO3SchedulerWin.Forms
 {
     public partial class HomeScreen : Form
     {
-        public HomeScreen(IAuthorModel model)
+        public HomeScreen(IAuthorModel authorModel, IChapterModel chapterModel, Ao3Session session)
         {
             InitializeComponent();
-            _authorController = new DisplayAuthorController(model ,new AuthorLabelViewAdapter(authorLabel));
+            _authorController = new DisplayAuthorController(authorModel, new AuthorLabelViewAdapter(authorLabel));
+            _chapterDisplayController = new ChapterStatusController(chapterModel, pendingUploadLabel, failedUploadLabel, session.Id);
         }
 
         protected override void OnLoad(EventArgs e)
         {
             base.OnLoad(e);
             _authorController.UpdateViews();
+            _chapterDisplayController.RefreshUI();
         }
 
         private IAuthorController _authorController;
-        private IChapterController _queuedStoriesController;
+        private IChapterController _chapterDisplayController;
     }
 }
