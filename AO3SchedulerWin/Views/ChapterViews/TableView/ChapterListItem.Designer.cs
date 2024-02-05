@@ -229,13 +229,12 @@
             // 
             // storyTitleLabelRHS
             // 
-            storyTitleLabelRHS.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left;
             storyTitleLabelRHS.AutoEllipsis = true;
-            storyTitleLabelRHS.AutoSize = true;
+            storyTitleLabelRHS.Dock = DockStyle.Fill;
             storyTitleLabelRHS.Font = new Font("Segoe UI", 15.75F, FontStyle.Regular, GraphicsUnit.Point);
             storyTitleLabelRHS.Location = new Point(101, 0);
             storyTitleLabelRHS.Name = "storyTitleLabelRHS";
-            storyTitleLabelRHS.Size = new Size(376, 60);
+            storyTitleLabelRHS.Size = new Size(393, 60);
             storyTitleLabelRHS.TabIndex = 1;
             storyTitleLabelRHS.Text = "This is a story with a really long title so long in fact it overflows";
             storyTitleLabelRHS.TextAlign = ContentAlignment.MiddleLeft;
