@@ -143,6 +143,18 @@ namespace AO3SchedulerWin.Forms
                 _logger.Warn("cannot schedule story because no chapter was selected");
                 return;
             }
+
+            //Ensure you cant set past dates
+            if(publishingDatePicker.Value < DateTime.Now) {
+                MessageBox.Show(
+                    "A publishing date for a chapter cannot be set in the past",
+                    "Invalid publishing date",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Information);
+                return;
+            }
+
+
             if (_uiBehavior == UiBehavior.kCreate)
             {
                 var chapter = new Chapter();

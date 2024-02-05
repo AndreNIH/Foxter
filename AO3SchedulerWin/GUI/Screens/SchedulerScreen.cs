@@ -18,7 +18,7 @@ using AO3SchedulerWin.Controllers.ChapterControllers;
 
 namespace AO3SchedulerWin.Forms
 {
-    
+
     public partial class SchedulerScreen : Form
     {
         public SchedulerScreen(Ao3Session session, IChapterModel model)
@@ -27,7 +27,7 @@ namespace AO3SchedulerWin.Forms
             _controller = new ChapterTableController(model, storyListContainer, mainContainer, session);
             _session = session;
             _model = model;
-            
+
         }
 
 
@@ -54,7 +54,7 @@ namespace AO3SchedulerWin.Forms
         private Ao3Session _session;
     }
 
-    
 
-    
+
+
 }

@@ -175,6 +175,7 @@
             // deleteButton
             // 
             deleteButton.Anchor = AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            deleteButton.BackColor = Color.White;
             deleteButton.Location = new Point(31, 252);
             deleteButton.Name = "deleteButton";
             deleteButton.Size = new Size(377, 45);
