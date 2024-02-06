@@ -40,7 +40,7 @@ namespace AO3SchedulerWin
             base.OnLoad(e);
             bool logged = (await _authorModel.Get()) != null;
             if (logged) await ChangeScreen("SC_MAIN");
-            else await ChangeScreen("SC_LOGREQUIRED");
+            else await ChangeScreen("SC_LOGIN");
 
         }
         //Child Form Loading
