@@ -78,6 +78,10 @@ namespace AO3SchedulerWin.GUI.Screens
                 });
                 await _updater.ChangeScreen("SC_MAIN");
             }
+            else
+            {
+                MessageBox.Show("Incorrect password", "Login Failed", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
         }
 
 
