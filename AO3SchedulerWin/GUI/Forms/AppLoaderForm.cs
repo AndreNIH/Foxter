@@ -6,6 +6,8 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Data.SqlClient;
+using System.Data.SQLite;
 using System.Drawing;
 using System.Linq;
 using System.Runtime.InteropServices;
@@ -30,7 +32,7 @@ namespace AO3SchedulerWin.GUI.Forms
 
         private IAppServiceFactory CreateAppServiceFactory()
         {
-            try
+            /*try
             {
                 var configFileStream = File.OpenRead("file.txt");
                 using (var sr = new StreamReader(configFileStream))
@@ -56,7 +58,23 @@ namespace AO3SchedulerWin.GUI.Forms
             {
                 _logger.Info("I/O error when attempting to read configuration file. Falling back on default settings...");
                 return new LocalAppServiceFactory();
+            }*/
+
+            try
+            {
+                var path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),"AO3S");
+                var serviceFactory = new LocalAppServiceFactory(path);
+                return serviceFactory;
+
+
+            }catch(SqlException ex)
+            {
+                _logger.Error(ex);
+                MessageBox.Show("An error occured while accessing the database");
+                Close();
             }
+            return null;
+
         }
         
         

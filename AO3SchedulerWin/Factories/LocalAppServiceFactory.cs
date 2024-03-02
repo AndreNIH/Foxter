@@ -17,26 +17,48 @@ namespace AO3SchedulerWin.Factories
         private static readonly log4net.ILog _logger = log4net.LogManager.GetLogger(typeof(LocalAppServiceFactory));
         private DbProviderFactory _dbProvider;
         private string _connectionStr;
-        private string _dbPath;
+        private string _dbDirectory;
+        private string _dbFile;
 
         void EnsureDatabaseIsCreated()
         {
-            string path = _dbPath;
+            if (!Directory.Exists(_dbDirectory))
+            {
+                _logger.Info($"The specified route doesnt exist. Creating subdirectories: {_dbDirectory}");
+                Directory.CreateDirectory(_dbDirectory);
+                _logger.Info("Subdirectories created");
+            }
+
+            _logger.Info("Creating database file");
+            SQLiteConnection.CreateFile(Path.Combine(_dbDirectory, _dbFile));
+            using (var conn = new SQLiteConnection($"Data Source={_dbFile};Version=3;"))
+            {
+                conn.Open();
+                using (var cmd = new SQLiteCommand(Resources.AppStrings.DbCreationScript, conn))
+                {
+                    cmd.ExecuteNonQuery();
+                }
+            }
+
+            _logger.Info($"Created application database in {_dbFile}");
+        }
+
+        private bool IsDatabaseCreated()
+        {
+            string path = _dbFile;
             if (File.Exists(path))
             {
                 _logger.Info($"Database found in '${path}'. Skipping file creation");
-                return;
+                return true;
             }
-            SQLiteConnection.CreateFile(path);
-            using (var conn = new SQLiteConnection($"Data Source={path};Version=3;"))
+            else
             {
-                conn.Open();
-                var cmd = new SQLiteCommand(Resources.AppStrings.DbCreationScript, conn);
-                cmd.ExecuteNonQuery();
+                _logger.Info($"Database was not found in '${path}'. Attempting to create file");
+                return false;
             }
-
-            _logger.Info($"Created application database in {path}");
         }
+
+
 
         IAuthorModel IAppServiceFactory.CreateAuthorModel()
         {
@@ -52,16 +74,15 @@ namespace AO3SchedulerWin.Factories
 
         
 
-        public LocalAppServiceFactory()
+        public LocalAppServiceFactory(string dbPath)
         {
+            //It's pointless to use dependency injection here
+            //just instantiate the db factory in the constructor
             _dbProvider = new SQLiteFactory();
-            _dbPath = Path.Combine(Environment.GetFolderPath(
-                Environment.SpecialFolder.LocalApplicationData), 
-                "AO3S", 
-                "appstorage.sqlite"
-                );
-            _connectionStr = $"Data Source={_dbPath};Version=3;";
-            EnsureDatabaseIsCreated();
+            _dbDirectory = dbPath;
+            _dbFile = Path.Combine(dbPath, "las.sqlite"); //Local Application Storage
+            _connectionStr = $"Data Source={_dbFile};Version=3;";
+            if(!IsDatabaseCreated()) EnsureDatabaseIsCreated();
         }
     }
 }
