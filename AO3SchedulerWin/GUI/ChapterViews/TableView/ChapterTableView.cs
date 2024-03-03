@@ -11,7 +11,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AO3SchedulerWin.Views.ChapterViews.TableView
+namespace AO3SchedulerWin.GUI.ChapterViews.TableView
 {
     public class ChapterTableView : IChapterModelUpdateListener, ITableEventListener
     {
@@ -31,7 +31,7 @@ namespace AO3SchedulerWin.Views.ChapterViews.TableView
             var allChapters = await _model.GetAllChaptersFromAuthor(_session.Id);
             _tableView.SuspendLayout();
             _tableView.Controls.Clear();
-            foreach(var c in allChapters)
+            foreach (var c in allChapters)
             {
                 IChapterTableItemBuilder builder = new ChapterTableItemBuilder();
                 //TODO: Add a mediator reference to the builder class
@@ -46,18 +46,18 @@ namespace AO3SchedulerWin.Views.ChapterViews.TableView
             }
             DisplayActive(_tableView.Controls.Count > 0);
             _tableView.ResumeLayout();
-            
+
         }
 
         public async Task OnEditChapter(object sender)
         {
             var chapterTableItem = (ChapterTableItem)sender;
             var chapter = await _model.GetChapterById(chapterTableItem.GetId());
-            if(chapter == null)
+            if (chapter == null)
             {
                 return;
             }
-            
+
             int workid = chapter.StoryId;
             int chapterid = chapter.ChapterId;
             var formController = new UpdateChapterController(_model, _session, workid, chapterid);

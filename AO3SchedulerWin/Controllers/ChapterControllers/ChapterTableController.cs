@@ -1,8 +1,8 @@
 ﻿using AO3SchedulerWin.AO3;
 using AO3SchedulerWin.Controllers.StoryControllers;
+using AO3SchedulerWin.GUI.ChapterViews.TableView;
 using AO3SchedulerWin.Models;
 using AO3SchedulerWin.Models.Base;
-using AO3SchedulerWin.Views.ChapterViews.TableView;
 using System;
 using System.Collections.Generic;
 using System.Linq;

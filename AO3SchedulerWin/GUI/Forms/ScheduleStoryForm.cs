@@ -10,7 +10,6 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using AO3SchedulerWin.AO3;
-using AO3SchedulerWin.BEmu;
 using System.IO;
 using AO3SchedulerWin.Models.Base;
 using log4net;

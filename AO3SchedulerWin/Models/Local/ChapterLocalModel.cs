@@ -1,5 +1,4 @@
-﻿using AO3SchedulerWin.Database;
-using AO3SchedulerWin.Models.Base;
+﻿using AO3SchedulerWin.Models.Base;
 using System;
 using System.Collections.Generic;
 using System.Data.Common;

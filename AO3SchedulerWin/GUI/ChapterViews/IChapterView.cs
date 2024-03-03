@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using AO3SchedulerWin.Models.Base;
 
-namespace AO3SchedulerWin.Views
+namespace AO3SchedulerWin.GUI.ChapterViews
 {
     internal interface IChapterView
     {

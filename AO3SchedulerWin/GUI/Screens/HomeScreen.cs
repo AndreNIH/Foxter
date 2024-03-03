@@ -3,7 +3,6 @@ using AO3SchedulerWin.Controllers.AuthorControllers;
 using AO3SchedulerWin.Controllers.ChapterControllers;
 using AO3SchedulerWin.Controllers.StoryControllers;
 using AO3SchedulerWin.Models;
-using AO3SchedulerWin.Views.AuthorViews;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -21,7 +20,7 @@ namespace AO3SchedulerWin.Forms
         public HomeScreen(IAuthorModel authorModel, IChapterModel chapterModel, Ao3Session session)
         {
             InitializeComponent();
-            _authorController = new DisplayAuthorController(authorModel, new AuthorLabelViewAdapter(authorLabel));
+            _authorController = new DisplayAuthorController(authorModel, authorLabel);
             _chapterDisplayController = new ChapterStatusController(chapterModel, pendingUploadLabel, failedUploadLabel, session.Id);
         }
 

@@ -2,7 +2,6 @@
 using AO3SchedulerWin.Controllers.AuthorControllers;
 using AO3SchedulerWin.GUI.Forms;
 using AO3SchedulerWin.Models;
-using AO3SchedulerWin.Views.AuthorViews;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;

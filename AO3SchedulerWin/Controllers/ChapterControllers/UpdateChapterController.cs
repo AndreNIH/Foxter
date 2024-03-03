@@ -3,7 +3,7 @@ using AO3SchedulerWin.Controllers.StoryControllers;
 using AO3SchedulerWin.Forms;
 using AO3SchedulerWin.Models;
 using AO3SchedulerWin.Models.Base;
-using AO3SchedulerWin.Views.ChapterViews;
+using AO3SchedulerWin.GUI.ChapterViews;
 using System;
 using System.Collections.Generic;
 using System.Linq;

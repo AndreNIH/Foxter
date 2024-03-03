@@ -10,11 +10,8 @@
 
   <ItemGroup>
     <Compile Remove="Utils\**" />
-    <Compile Remove="Views\Story\**" />
     <EmbeddedResource Remove="Utils\**" />
-    <EmbeddedResource Remove="Views\Story\**" />
     <None Remove="Utils\**" />
-    <None Remove="Views\Story\**" />
   </ItemGroup>
 
   <ItemGroup>

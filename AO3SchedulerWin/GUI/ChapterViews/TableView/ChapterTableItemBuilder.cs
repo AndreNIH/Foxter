@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AO3SchedulerWin.Views.ChapterViews.TableView
+namespace AO3SchedulerWin.GUI.ChapterViews.TableView
 {
     public class ChapterTableItemBuilder : IChapterTableItemBuilder
     {
@@ -28,18 +28,19 @@ namespace AO3SchedulerWin.Views.ChapterViews.TableView
 
         public ChapterTableItem Build()
         {
-            if (!AllFieldsSet()) {
+            if (!AllFieldsSet())
+            {
                 throw new Exception("not all fields are set");
             }
 
-            var result =  new ChapterTableItem(
+            var result = new ChapterTableItem(
                 listener: _tableListener,
                 id: _databaseId.Value,
                 storyTitle: _storyTitle,
                 chapterTitle: _chapterTitle,
                 publishingDate: _publishingDate.Value
             );
-            this.Reset();
+            Reset();
             return result;
         }
 

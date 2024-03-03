@@ -2,7 +2,6 @@
 using AO3SchedulerWin.Controllers.AuthorControllers;
 using AO3SchedulerWin.GUI.Forms;
 using AO3SchedulerWin.Models;
-using AO3SchedulerWin.Views.AuthorViews;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -24,7 +23,7 @@ namespace AO3SchedulerWin.GUI.Screens
         public LoggedUserScreen(ref Ao3Session session, IAuthorModel authorModel, IScreenUpdater updater)
         {
             InitializeComponent();
-            _authorDisplayController = new DisplayAuthorController(authorModel, new AuthorLabelViewAdapter(authorLabel));
+            _authorDisplayController = new DisplayAuthorController(authorModel, authorLabel);
             _authroController = new LoginAuthorController(authorModel);
             _session = session;
             _updater = updater;

@@ -1,6 +1,6 @@
 ﻿using AO3SchedulerWin.Controllers;
 using AO3SchedulerWin.Models;
-using AO3SchedulerWin.Views;
+using AO3SchedulerWin.GUI;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using AO3SchedulerWin.Controllers.StoryControllers;
 using AO3SchedulerWin.AO3;
-using AO3SchedulerWin.Views.ChapterViews.TableView;
+using AO3SchedulerWin.GUI.ChapterViews.TableView;
 using AO3SchedulerWin.Models.Base;
 using AO3SchedulerWin.Controllers.ChapterControllers;
 

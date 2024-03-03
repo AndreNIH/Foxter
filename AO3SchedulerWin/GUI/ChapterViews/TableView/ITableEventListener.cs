@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AO3SchedulerWin.Views.ChapterViews.TableView
+namespace AO3SchedulerWin.GUI.ChapterViews.TableView
 {
     public interface ITableEventListener
     {

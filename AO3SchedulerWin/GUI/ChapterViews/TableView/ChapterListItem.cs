@@ -1,9 +1,9 @@
 ﻿using AO3SchedulerWin.AO3;
 using AO3SchedulerWin.Controllers.StoryControllers;
+using AO3SchedulerWin.GUI.ChapterViews.TableView;
 using AO3SchedulerWin.Models;
-using AO3SchedulerWin.Views;
-using AO3SchedulerWin.Views.ChapterViews;
-using AO3SchedulerWin.Views.ChapterViews.TableView;
+using AO3SchedulerWin.GUI;
+using AO3SchedulerWin.GUI.ChapterViews;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
