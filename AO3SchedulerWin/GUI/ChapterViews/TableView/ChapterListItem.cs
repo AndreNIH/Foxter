@@ -41,7 +41,7 @@ namespace AO3SchedulerWin.Forms
             storyTitleLabelRHS.Text = storyTitle;
             chapterTitleLabelRHS.Text = chapterTitle;
             var longDate = publishingDate.ToLongDateString();
-            var shortDate = publishingDate.ToShortDateString();
+            var shortDate = publishingDate.ToShortTimeString();
             if (publishingDate < DateTime.Now)
             {
                 publishingDateLabelRHS.Text = $"Failed to upload on {longDate}, {shortDate}";
