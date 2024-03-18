@@ -148,6 +148,12 @@ namespace AO3SchedulerWin
                         SetMainContent(screen);
                         break;
                     }
+                case "SC_SETTINGS":
+                    {
+                        var screen = new SettingsScreen();
+                        SetMainContent(screen);
+                        break;
+                    }
                 default:
                     {
                         _logger.Warn($"screen-id {screenId} doesn't exist");
@@ -182,9 +188,9 @@ namespace AO3SchedulerWin
 
         }
 
-        private void settingsButton_Click(object sender, EventArgs e)
+        private async void settingsButton_Click(object sender, EventArgs e)
         {
-
+            await ChangeScreen("SC_SETTINGS");
         }
 
         private void testButton_Click(object sender, EventArgs e)
