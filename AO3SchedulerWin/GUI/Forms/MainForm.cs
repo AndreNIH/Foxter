@@ -106,14 +106,6 @@ namespace AO3SchedulerWin
 
 
 
-        private async Task<Form> RedirectIfNotLoggedIn(Form expectedScreen)
-        {
-            bool logged = (await _authorModel.Get()) != null;
-            return _session.Autenticated
-                ? expectedScreen
-                : new NoActiveUserScreen();
-        }
-
         //Screen-id to scene mapping
         public async Task ChangeScreen(string screenId)
         {
@@ -129,6 +121,9 @@ namespace AO3SchedulerWin
 
                 case "SC_SCHEDULE":
                     {
+                        //Edge case: prevents re-binding attempt to the
+                        //same IPC port
+                        if (_activeForm != null) _activeForm.Close(); 
                         var screen = new SchedulerScreen(_session, _chapterModel);
                         SetMainContent(screen);
                         break;

@@ -155,6 +155,7 @@
             settingsButton.TabIndex = 2;
             settingsButton.Text = "Settings";
             settingsButton.UseVisualStyleBackColor = false;
+            settingsButton.Visible = false;
             settingsButton.Click += settingsButton_Click;
             // 
             // accountsButton
