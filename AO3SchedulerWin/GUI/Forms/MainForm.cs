@@ -109,6 +109,10 @@ namespace AO3SchedulerWin
         //Screen-id to scene mapping
         public async Task ChangeScreen(string screenId)
         {
+            //Edge case: prevents re-binding attempt to the
+            //same IPC port
+            if (_activeForm != null) _activeForm.Close();
+
             _logger.Info($"Transitioning to screen with id {screenId}");
             switch (screenId)
             {
@@ -121,9 +125,7 @@ namespace AO3SchedulerWin
 
                 case "SC_SCHEDULE":
                     {
-                        //Edge case: prevents re-binding attempt to the
-                        //same IPC port
-                        if (_activeForm != null) _activeForm.Close(); 
+                        
                         var screen = new SchedulerScreen(_session, _chapterModel);
                         SetMainContent(screen);
                         break;

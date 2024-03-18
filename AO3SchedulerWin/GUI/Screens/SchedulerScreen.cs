@@ -31,6 +31,11 @@ namespace AO3SchedulerWin.Forms
             _model = model;
             _ipcServerStarted = false;
             _ipcServer = new IpcServer();
+            SetupIPC();
+        }
+
+        private void SetupIPC()
+        {
             try
             {
                 int port = 55551;

@@ -40,12 +40,8 @@ namespace AO3SchedulerWin.Controllers.ChapterControllers
             int pendingUploads = chapters.Count();
             int failedUploads = chapters.Count(chapter => chapter.PublishingDate < DateTime.Now);
 
-            if (pendingUploads > 0)
-            {
-                if (pendingUploads == 1) _pendingLabel.Text = "You have 1 pending chapter upload";
-                else _pendingLabel.Text = $"You have {pendingUploads} pending chapter uploads";
-
-            }
+            if (pendingUploads == 1) _pendingLabel.Text = "You have 1 pending chapter upload";
+            else _pendingLabel.Text = $"You have {pendingUploads} pending chapter uploads";
 
             if (failedUploads > 0)
             {
