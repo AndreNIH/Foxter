@@ -32,47 +32,24 @@ namespace AO3SchedulerWin.GUI.Forms
 
         private IAppServiceFactory CreateAppServiceFactory()
         {
-            /*try
-            {
-                var configFileStream = File.OpenRead("file.txt");
-                using (var sr = new StreamReader(configFileStream))
-                {
-                    var appConfiguration = JsonConvert.DeserializeObject<AppConfiguration>(sr.ReadToEnd());
-                    if (appConfiguration.ServiceType == ServiceType.kLocal)
-                    {
-                        return new LocalAppServiceFactory();
-                    }
-                    else if (appConfiguration.ServiceType == ServiceType.kRemote)
-                    {
-
-                    }
-                    return null;
-                }
-            }
-            catch (FileNotFoundException)
-            {
-                _logger.Info("No configuration file was found. Falling back on default settings...");
-                return new LocalAppServiceFactory();
-            }
-            catch (IOException)
-            {
-                _logger.Info("I/O error when attempting to read configuration file. Falling back on default settings...");
-                return new LocalAppServiceFactory();
-            }*/
-
             try
             {
-                var path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),"AO3S");
+                var path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData),"AO3S");
                 var serviceFactory = new LocalAppServiceFactory(path);
                 return serviceFactory;
 
 
             }catch(SqlException ex)
             {
-                _logger.Error(ex);
+                _logger.Error(ex.Message);
                 MessageBox.Show("An error occured while accessing the database");
-                Close();
+                
+            }catch(UnauthorizedAccessException ex)
+            {
+                _logger.Error(ex.Message);
+                MessageBox.Show(ex.Message);
             }
+            
             return null;
 
         }
@@ -82,6 +59,12 @@ namespace AO3SchedulerWin.GUI.Forms
         {
             base.OnShown(e);
             var factory = this.CreateAppServiceFactory();
+            if(factory == null)
+            {
+                Close();
+                return;
+            }
+
             var authorModel = factory.CreateAuthorModel();
             var author = await authorModel.Get();
             var session = new Ao3Session();
