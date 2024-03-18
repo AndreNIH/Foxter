@@ -24,11 +24,11 @@ namespace AO3SchedulerWin.Forms
             _chapterDisplayController = new ChapterStatusController(chapterModel, pendingUploadLabel, failedUploadLabel, session.Id);
         }
 
-        protected override void OnLoad(EventArgs e)
+        protected override async void OnLoad(EventArgs e)
         {
             base.OnLoad(e);
-            _authorController.UpdateViews();
-            _chapterDisplayController.RefreshUI();
+            await _authorController.UpdateViews();
+            await _chapterDisplayController.RefreshUI();
         }
 
         private IAuthorController _authorController;
