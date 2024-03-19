@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace AO3SchedulerWin.Publisher
 {
-    internal interface IPublisherStrategy
+    public interface IPublisherStrategy
     {
         Task<PublishResult> Publish();
     }

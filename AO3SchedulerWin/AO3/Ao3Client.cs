@@ -39,6 +39,7 @@ namespace AO3SchedulerWin.AO3
             };
             _httpClient = new HttpClient(clientHandler) { BaseAddress = uri };
             _workFactory = new Ao3WorkFactory(_session); //No DI here
+            _draftUploader = new Uploader(_session);
 
         }
 

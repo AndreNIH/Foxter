@@ -41,6 +41,7 @@ namespace AO3SchedulerWin.Publisher
                     {
                         result.success++;
                         _logger.Info($"published \"{c.ChapterTitle}\" (id:{c.ChapterId})");
+                        await _chapterModel.Delete(c.ChapterId);
                     }
                     else
                     {

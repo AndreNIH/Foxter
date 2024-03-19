@@ -8,28 +8,32 @@ namespace AO3SchedulerWin.Publisher.Notifier
 {
     public class PublishNotifier
     {
+        private static readonly log4net.ILog _logger = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
         private HashSet<IPublishEventListener> _publishListener;
 
-        PublishNotifier()
+        public PublishNotifier()
         {
             _publishListener = new();
         }
 
         public void Subscribe(IPublishEventListener listener)
         {
+            _logger.Info($"registered IPublishEventListener {listener}");
             _publishListener.Add(listener);
         }
 
         public void Unsubscribe(IPublishEventListener listener)
         {
+            _logger.Info($"unregistered IPublishEventListener {listener}");
             _publishListener.Remove(listener);
         }
 
         public async Task NotifyPublish()
         {
-            foreach(var listener in _publishListener)
+            foreach (var listener in _publishListener)
             {
-                await listener.OnPublish();
+                _logger.Debug("firing up publish notification for " + listener);
+                listener.OnPublish();
             }
         }
     }

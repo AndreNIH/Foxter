@@ -4,13 +4,14 @@ using AO3SchedulerWin.Forms;
 using AO3SchedulerWin.GUI.Forms;
 using AO3SchedulerWin.GUI.Screens;
 using AO3SchedulerWin.Models;
+using AO3SchedulerWin.Publisher;
+using AO3SchedulerWin.Publisher.Notifier;
 using System.Runtime.InteropServices;
 
 namespace AO3SchedulerWin
 {
     public partial class MainForm : Form, IScreenUpdater
     {
-        private static readonly log4net.ILog _logger = log4net.LogManager.GetLogger(typeof(MainForm));
 
         //WinAPI DLL Imports
         [DllImport("user32.dll", EntryPoint = "ReleaseCapture")]
@@ -20,11 +21,14 @@ namespace AO3SchedulerWin
         private extern static void SendMessage(System.IntPtr hwndm, int msg, int wParam, int lParam);
         //End of external DLL imports
 
-        private static readonly log4net.ILog logger = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+        private static readonly log4net.ILog _logger = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
         private IAuthorModel _authorModel;
         private IChapterModel _chapterModel;
         private Ao3Session _session;
         private Form _activeForm;
+        private PublisherClient _publisher;
+        private PublishNotifier _publishNotifier;
+        private System.Timers.Timer _publishTimer;
 
         public MainForm(IAppServiceFactory serviceFactory, Ao3Session session)
         {
@@ -32,7 +36,29 @@ namespace AO3SchedulerWin
             _authorModel = serviceFactory.CreateAuthorModel();
             _chapterModel = serviceFactory.CreateChapterModel();
             _session = session;
-            this.MaximizedBounds = Screen.FromHandle(this.Handle).WorkingArea;
+            //Publishing
+            var publishingStrategy = new LocalPublishingStrategy(_authorModel, _chapterModel, session);
+            _publishNotifier = new PublishNotifier();
+            _publisher = new PublisherClient(publishingStrategy, _publishNotifier);
+            _publishTimer = new(3000);
+            _publishTimer.Elapsed += publishTimer_Elapsed;
+            _publishTimer.AutoReset = false;
+            _publishTimer.Start();
+            
+            //Resizing
+            MaximizedBounds = Screen.FromHandle(this.Handle).WorkingArea;
+
+            
+            
+        }
+
+        private async void publishTimer_Elapsed(object? sender, System.Timers.ElapsedEventArgs e)
+        {
+            Invoke((MethodInvoker)async delegate
+            {
+                await _publisher.PublishChapters();
+                _publishTimer.Start(); //keep the clock running
+            });
         }
 
         protected async override void OnLoad(EventArgs e)
@@ -109,24 +135,25 @@ namespace AO3SchedulerWin
         //Screen-id to scene mapping
         public async Task ChangeScreen(string screenId)
         {
-            //Edge case: prevents re-binding attempt to the
-            //same IPC port
-            if (_activeForm != null) _activeForm.Close();
-
             _logger.Info($"Transitioning to screen with id {screenId}");
+            if(_activeForm != null)
+            {
+                _activeForm.Close();
+            }
+
             switch (screenId)
             {
                 case "SC_MAIN":
                     {
-                        var screen = new HomeScreen(_authorModel, _chapterModel, _session);
+                        var screen = new HomeScreen(_authorModel, _chapterModel, _session, _publishNotifier);
                         SetMainContent(screen);
                         break;
                     }
 
                 case "SC_SCHEDULE":
                     {
-                        
-                        var screen = new SchedulerScreen(_session, _chapterModel);
+
+                        var screen = new SchedulerScreen(_session, _chapterModel, _publishNotifier);
                         SetMainContent(screen);
                         break;
                     }
@@ -198,5 +225,6 @@ namespace AO3SchedulerWin
             var form = new DevForm(new Ao3Client(_session));
             form.Show();
         }
+
     }
 }

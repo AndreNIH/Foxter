@@ -11,9 +11,9 @@ using System.Threading.Tasks;
 
 namespace AO3SchedulerWin.Publisher
 {
-    internal class Publisher
+    public class PublisherClient
     {
-        private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+        private static readonly log4net.ILog _logger = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
         private IPublisherStrategy _publishStrategy;
         private PublishNotifier _publishNotifier;
         private bool _supressError;
@@ -34,6 +34,7 @@ namespace AO3SchedulerWin.Publisher
                 new ToastContentBuilder()
                 .AddText($"Chapters published")
                 .AddText($"Published {result.success} chapter(s). Errors: {result.failed}")
+                .AddAppLogoOverride(new Uri(Path.GetFullPath(@"Images\info.png")))
                 .Show();
                 _supressError = false;
             }
@@ -50,7 +51,7 @@ namespace AO3SchedulerWin.Publisher
 
         }
         
-        public Publisher(IPublisherStrategy publisherStrategy, PublishNotifier publishNotifier) { 
+        public PublisherClient(IPublisherStrategy publisherStrategy, PublishNotifier publishNotifier) { 
             _publishStrategy = publisherStrategy;
             _publishNotifier = publishNotifier;
             _supressError = false;
