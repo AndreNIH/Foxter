@@ -22,6 +22,7 @@ namespace AO3SchedulerWin.AO3
         private HttpClient _httpClient;
         private Ao3Session _session;
         private Ao3WorkFactory _workFactory;
+        private Uploader _draftUploader;
         public Ao3Client(Ao3Session session)
         {
             _session = session;
@@ -115,6 +116,13 @@ namespace AO3SchedulerWin.AO3
 
             return chaptersList;
         }
+
+        public async Task<bool> PostDraft(int storyId, int draftId)
+        {
+           return await _draftUploader.PostDraft(storyId, draftId);
+            
+        }
+
 
         public Ao3Session GetSession()
         {
