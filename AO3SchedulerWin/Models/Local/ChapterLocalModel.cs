@@ -101,7 +101,7 @@ namespace AO3SchedulerWin.Models.Local
                 connection.ConnectionString = _connectionString;
                 await connection.OpenAsync();
                 var cmd = connection.CreateCommand();
-                cmd.CommandText = $"select * from CHAPTERS where WrittenBy={authorId}";
+                cmd.CommandText = $"select * from CHAPTERS where WrittenBy={authorId} order by publishingDate desc";
                 try
                 {
                     await using (var reader = await cmd.ExecuteReaderAsync())
