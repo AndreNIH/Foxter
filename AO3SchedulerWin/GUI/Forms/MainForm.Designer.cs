@@ -36,6 +36,7 @@
             closeButton = new Button();
             topBarDetailPanel = new Panel();
             panel2 = new Panel();
+            label1 = new Label();
             settingsButton = new Button();
             accountsButton = new Button();
             scheduleButton = new Button();
@@ -131,6 +132,7 @@
             // 
             // panel2
             // 
+            panel2.Controls.Add(label1);
             panel2.Controls.Add(settingsButton);
             panel2.Controls.Add(accountsButton);
             panel2.Controls.Add(scheduleButton);
@@ -141,6 +143,18 @@
             panel2.Name = "panel2";
             panel2.Size = new Size(170, 496);
             panel2.TabIndex = 4;
+            // 
+            // label1
+            // 
+            label1.AutoSize = true;
+            label1.Dock = DockStyle.Bottom;
+            label1.Font = new Font("Segoe UI", 11.25F, FontStyle.Regular, GraphicsUnit.Point);
+            label1.ForeColor = SystemColors.WindowFrame;
+            label1.Location = new Point(0, 476);
+            label1.Name = "label1";
+            label1.Size = new Size(135, 20);
+            label1.TabIndex = 4;
+            label1.Text = "Version: alpha 1.0.0";
             // 
             // settingsButton
             // 
@@ -249,6 +263,7 @@
             topBarPanel.ResumeLayout(false);
             topBarPanel.PerformLayout();
             panel2.ResumeLayout(false);
+            panel2.PerformLayout();
             sideBarPanel.ResumeLayout(false);
             ResumeLayout(false);
         }
@@ -268,5 +283,6 @@
         private Button maximizeButton;
         private Button closeButton;
         private Panel mainContentPanel;
+        private Label label1;
     }
 }
