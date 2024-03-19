@@ -233,11 +233,6 @@ namespace AO3SchedulerWin
             await ChangeScreen("SC_SETTINGS");
         }
 
-        private void testButton_Click(object sender, EventArgs e)
-        {
-            var form = new DevForm(new Ao3Client(_session));
-            form.Show();
-        }
 
         private void notifyIcon_MouseDoubleClick(object sender, MouseEventArgs e)
         {
