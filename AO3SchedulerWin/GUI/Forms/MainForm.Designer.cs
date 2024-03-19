@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             topBarPanel = new Panel();
             minimizeButton = new Button();
@@ -44,6 +45,7 @@
             sideBarDetailPanel = new Panel();
             sideBarPanel = new Panel();
             mainContentPanel = new Panel();
+            notifyIcon = new NotifyIcon(components);
             topBarPanel.SuspendLayout();
             panel2.SuspendLayout();
             sideBarPanel.SuspendLayout();
@@ -246,6 +248,14 @@
             mainContentPanel.Size = new Size(938, 485);
             mainContentPanel.TabIndex = 3;
             // 
+            // notifyIcon
+            // 
+            notifyIcon.BalloonTipText = "The application is still running on the background";
+            notifyIcon.BalloonTipTitle = "AO3 Scheduler";
+            notifyIcon.Icon = (Icon)resources.GetObject("notifyIcon.Icon");
+            notifyIcon.Text = "notifyIcon";
+            notifyIcon.MouseDoubleClick += notifyIcon_MouseDoubleClick;
+            // 
             // MainForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -284,5 +294,6 @@
         private Button closeButton;
         private Panel mainContentPanel;
         private Label label1;
+        private NotifyIcon notifyIcon;
     }
 }

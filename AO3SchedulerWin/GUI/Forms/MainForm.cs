@@ -36,6 +36,7 @@ namespace AO3SchedulerWin
             _authorModel = serviceFactory.CreateAuthorModel();
             _chapterModel = serviceFactory.CreateChapterModel();
             _session = session;
+            
             //Publishing
             var publishingStrategy = new LocalPublishingStrategy(_authorModel, _chapterModel, session);
             _publishNotifier = new PublishNotifier();
@@ -44,12 +45,22 @@ namespace AO3SchedulerWin
             _publishTimer.Elapsed += publishTimer_Elapsed;
             _publishTimer.AutoReset = false;
             _publishTimer.Start();
-            
+
+            //Tray icon
+            notifyIcon.ContextMenuStrip = new ContextMenuStrip();
+            var closeTrayBtn = notifyIcon.ContextMenuStrip.Items.Add("Close application");
+            closeTrayBtn.Click += CloseTrayBtn_Click;
+
             //Resizing
             MaximizedBounds = Screen.FromHandle(this.Handle).WorkingArea;
 
-            
-            
+
+
+        }
+
+        private void CloseTrayBtn_Click(object? sender, EventArgs e)
+        {
+            Application.Exit();
         }
 
         private async void publishTimer_Elapsed(object? sender, System.Timers.ElapsedEventArgs e)
@@ -102,7 +113,9 @@ namespace AO3SchedulerWin
         //Form Size Controls
         private void closeButton_Click(object sender, EventArgs e)
         {
-            Application.Exit();
+            notifyIcon.Visible = true;
+            notifyIcon.ShowBalloonTip(500);
+            Hide();
         }
 
         private void maximizeButton_Click(object sender, EventArgs e)
@@ -136,7 +149,7 @@ namespace AO3SchedulerWin
         public async Task ChangeScreen(string screenId)
         {
             _logger.Info($"Transitioning to screen with id {screenId}");
-            if(_activeForm != null)
+            if (_activeForm != null)
             {
                 _activeForm.Close();
             }
@@ -226,5 +239,9 @@ namespace AO3SchedulerWin
             form.Show();
         }
 
+        private void notifyIcon_MouseDoubleClick(object sender, MouseEventArgs e)
+        {
+            Show();
+        }
     }
 }
