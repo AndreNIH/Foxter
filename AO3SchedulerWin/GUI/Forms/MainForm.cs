@@ -26,7 +26,6 @@ namespace AO3SchedulerWin
         private IChapterModel _chapterModel;
         private Ao3Session _session;
         private Form _activeForm;
-        private PublisherClient _publisher;
         private PublishNotifier _publishNotifier;
         private System.Timers.Timer _publishTimer;
 
@@ -36,11 +35,10 @@ namespace AO3SchedulerWin
             _authorModel = serviceFactory.CreateAuthorModel();
             _chapterModel = serviceFactory.CreateChapterModel();
             _session = session;
-            
+
             //Publishing
-            var publishingStrategy = new LocalPublishingStrategy(_authorModel, _chapterModel, session);
             _publishNotifier = new PublishNotifier();
-            _publisher = new PublisherClient(publishingStrategy, _publishNotifier);
+
             _publishTimer = new(3000);
             _publishTimer.Elapsed += publishTimer_Elapsed;
             _publishTimer.AutoReset = false;
@@ -65,9 +63,24 @@ namespace AO3SchedulerWin
 
         private async void publishTimer_Elapsed(object? sender, System.Timers.ElapsedEventArgs e)
         {
-            Invoke((MethodInvoker)async delegate
+            //If the user isn't logged just skip
+            if (_session.Autenticated == false) return;
+                Invoke((MethodInvoker)async delegate
             {
-                await _publisher.PublishChapters();
+                try
+                {
+                    //This approach is not flexible, move publishing strategy
+                    //into the service factory.
+                    //Also this is not very performnt, because of the multip
+                    var publishingStrategy = new LocalPublishingStrategy(_authorModel, _chapterModel, _session);
+                    var publisher = new PublisherClient(publishingStrategy, _publishNotifier);
+                    await publisher.PublishChapters();
+                }
+                catch (Ao3GenericException ex)
+                {
+                    _logger.Error("an AO3 exception was thrown trying to publish a chapter: " + ex.Message);
+                }
+                
                 _publishTimer.Start(); //keep the clock running
             });
         }
