@@ -171,23 +171,34 @@ namespace AO3SchedulerWin
             }
         }
 
-
+        //Reset Sidebar Button Colors
+        private void ClearSidebarStyle()
+        {
+            var color = Color.FromArgb(60,60,60);
+            homeButton.BackColor = color;
+            scheduleButton.BackColor = color;
+            accountsButton.BackColor = color;
+            settingsButton.BackColor = color;
+        }
 
         //Screen-id to scene mapping
         public void ChangeScreen(ScreenId screenId)
         {
             _logger.Info($"Transitioning to scene id:{screenId}");
+            ClearSidebarStyle();
             if (_activeForm != null)
             {
                 _activeForm.Close();
             }
 
+            var activeColor = Color.FromArgb(72,72,72);
             switch (screenId)
             {
                 case ScreenId.MAIN:
                     {
                         var screen = new HomeScreen(_authorModel, _chapterModel, _session, _publishNotifier);
                         SetMainContent(screen);
+                        homeButton.BackColor=activeColor;
                         break;
                     }
 
@@ -196,30 +207,35 @@ namespace AO3SchedulerWin
 
                         var screen = new SchedulerScreen(_session, _chapterModel, _publishNotifier);
                         SetMainContent(screen);
+                        scheduleButton.BackColor=activeColor;
                         break;
                     }
                 case ScreenId.LOGIN:
                     {
                         var screen = new LoginScreen(ref _session, _authorModel, this);
                         SetMainContent(screen);
+                        accountsButton.BackColor=activeColor;
                         break;
                     }
                 case ScreenId.LOGGED_IN:
                     {
                         var screen = new LoggedUserScreen(ref _session, _authorModel, this);
                         SetMainContent(screen);
+                        accountsButton.BackColor = activeColor;
                         break;
                     }
                 case ScreenId.NO_USER:
                     {
                         var screen = new NoActiveUserScreen();
                         SetMainContent(screen);
+                        accountsButton.BackColor = activeColor;
                         break;
                     }
                 case ScreenId.SETTINGS:
                     {
                         var screen = new SettingsScreen();
                         SetMainContent(screen);
+                        accountsButton.BackColor = activeColor;
                         break;
                     }
                 default:
