@@ -43,11 +43,14 @@
             scheduleButton = new Button();
             homeButton = new Button();
             sideBarDetailPanel = new Panel();
+            pictureBox1 = new PictureBox();
             sideBarPanel = new Panel();
             mainContentPanel = new Panel();
             notifyIcon = new NotifyIcon(components);
             topBarPanel.SuspendLayout();
             panel2.SuspendLayout();
+            sideBarDetailPanel.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
             sideBarPanel.SuspendLayout();
             SuspendLayout();
             // 
@@ -88,9 +91,9 @@
             formTitleLabel.ForeColor = Color.White;
             formTitleLabel.Location = new Point(18, 18);
             formTitleLabel.Name = "formTitleLabel";
-            formTitleLabel.Size = new Size(383, 59);
+            formTitleLabel.Size = new Size(177, 59);
             formTitleLabel.TabIndex = 0;
-            formTitleLabel.Text = "AO3 Scheduler";
+            formTitleLabel.Text = "Foxter";
             formTitleLabel.MouseDown += formTitleLabel_MouseDown;
             // 
             // maximizeButton
@@ -221,13 +224,25 @@
             // sideBarDetailPanel
             // 
             sideBarDetailPanel.BackColor = SystemColors.ActiveCaptionText;
-            sideBarDetailPanel.BackgroundImage = (Image)resources.GetObject("sideBarDetailPanel.BackgroundImage");
-            sideBarDetailPanel.BackgroundImageLayout = ImageLayout.Stretch;
+            sideBarDetailPanel.BackgroundImageLayout = ImageLayout.Zoom;
+            sideBarDetailPanel.Controls.Add(pictureBox1);
             sideBarDetailPanel.Dock = DockStyle.Top;
             sideBarDetailPanel.Location = new Point(0, 0);
             sideBarDetailPanel.Name = "sideBarDetailPanel";
+            sideBarDetailPanel.Padding = new Padding(5);
             sideBarDetailPanel.Size = new Size(170, 94);
             sideBarDetailPanel.TabIndex = 2;
+            // 
+            // pictureBox1
+            // 
+            pictureBox1.Dock = DockStyle.Fill;
+            pictureBox1.Image = (Image)resources.GetObject("pictureBox1.Image");
+            pictureBox1.Location = new Point(5, 5);
+            pictureBox1.Name = "pictureBox1";
+            pictureBox1.Size = new Size(160, 84);
+            pictureBox1.SizeMode = PictureBoxSizeMode.Zoom;
+            pictureBox1.TabIndex = 0;
+            pictureBox1.TabStop = false;
             // 
             // sideBarPanel
             // 
@@ -267,6 +282,7 @@
             Controls.Add(topBarPanel);
             Controls.Add(sideBarPanel);
             FormBorderStyle = FormBorderStyle.None;
+            Icon = (Icon)resources.GetObject("$this.Icon");
             MinimumSize = new Size(1064, 590);
             Name = "MainForm";
             Text = "AO3 Scheduler";
@@ -275,6 +291,8 @@
             topBarPanel.PerformLayout();
             panel2.ResumeLayout(false);
             panel2.PerformLayout();
+            sideBarDetailPanel.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)pictureBox1).EndInit();
             sideBarPanel.ResumeLayout(false);
             ResumeLayout(false);
         }
@@ -296,5 +314,6 @@
         private Panel mainContentPanel;
         private Label label1;
         private NotifyIcon notifyIcon;
+        private PictureBox pictureBox1;
     }
 }

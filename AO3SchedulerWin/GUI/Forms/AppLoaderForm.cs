@@ -5,6 +5,7 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
 using System.Data.SQLite;
@@ -30,6 +31,10 @@ namespace AO3SchedulerWin.GUI.Forms
         private extern static void SendMessage(System.IntPtr hwndm, int msg, int wParam, int lParam);
         //End of external DLL imports
 
+        private Ao3Session _session;
+        private IAppServiceFactory _appServiceFactory;
+
+
         private IAppServiceFactory CreateAppServiceFactory()
         {
             try
@@ -53,54 +58,84 @@ namespace AO3SchedulerWin.GUI.Forms
             return null;
 
         }
-        
-        
-        protected async override void OnShown(EventArgs e)
+
+        private async Task<Ao3Session?> CreateSession(Author author)
         {
-            base.OnShown(e);
-            var factory = this.CreateAppServiceFactory();
-            if(factory == null)
+            try
             {
-                Close();
+                var session = new Ao3Session();
+                bool success = await session.Login(author.Name, author.Password);
+                if (success) return session;
+                else return null;
+            }
+            catch(Ao3GenericException ex)
+            {
+                _logger.Error(ex.Message);
+            }
+            catch(HttpRequestException ex)
+            {
+                _logger.Warn(ex.Message);
+                MessageBox.Show(
+                        ex.Message,
+                        "Connection Error",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Warning
+                        );
+            }
+            return null;
+        }
+        
+        private async Task InitializeApplication() { 
+            _session = new Ao3Session();
+            _appServiceFactory = CreateAppServiceFactory();
+            
+            //Theres no service factory
+            //terminate the program
+            if(_appServiceFactory == null){
+                Application.Exit();
+                return;
+            }
+            
+            var authorModel = _appServiceFactory.CreateAuthorModel();
+            var author = await authorModel.Get();
+            //Theres no logged author
+            //return early
+            if(author == null)
+            {
                 return;
             }
 
-            var authorModel = factory.CreateAuthorModel();
-            var author = await authorModel.Get();
-            var session = new Ao3Session();
-            if( author != null)
+            //Try to log in
+            try
             {
-                try
+                var newSession = await CreateSession(author);
+                if (newSession == null)
                 {
-                    bool success = await session.Login(author.Name, author.Password);
-                    if (!success)
-                    {
-                        _logger.Info($"{author.Name} login failure. Removing author from database");
-                        await authorModel.Delete();
-                    }
+                    //Failed to log in
+                    await authorModel.Delete();
                 }
-                catch (Ao3GenericException ex)
+                else
                 {
-                    _logger.Error(ex.Message);
-                    Close();
+                    _session = newSession;
                 }
-                catch (HttpRequestException ex)
-                {
-                    _logger.Warn(ex.Message);
-                    MessageBox.Show(
-                            ex.Message,
-                            "Connection Error",
-                            MessageBoxButtons.OK,
-                            MessageBoxIcon.Warning
-                            );
-                }
+            }catch(Ao3GenericException)
+            {
+                MessageBox.Show("An unknwon error occured", "Unknown Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-
-            var form = new MainForm(factory, session);
-            form.Show();
-            this.Hide();
-
-
+            catch(HttpRequestException ex)
+            {
+                _logger.Warn(ex.Message);
+                MessageBox.Show(ex.Message,"Connection Error",MessageBoxButtons.OK,MessageBoxIcon.Warning);
+            }
+            
+        }
+        
+        protected override async  void OnShown(EventArgs e)
+        {
+            base.OnShown(e);
+            await Task.Run(InitializeApplication);
+            new MainForm(_appServiceFactory, _session).Show();
+            Hide();
         }
 
 

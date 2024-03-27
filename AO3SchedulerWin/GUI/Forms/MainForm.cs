@@ -281,6 +281,7 @@ namespace AO3SchedulerWin
         private void notifyIcon_MouseDoubleClick(object sender, MouseEventArgs e)
         {
             Show();
+            notifyIcon.Visible = false;
         }
     }
 }
