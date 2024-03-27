@@ -266,6 +266,7 @@
             Controls.Add(topBarDetailPanel);
             Controls.Add(topBarPanel);
             Controls.Add(sideBarPanel);
+            FormBorderStyle = FormBorderStyle.None;
             MinimumSize = new Size(1064, 590);
             Name = "MainForm";
             Text = "AO3 Scheduler";

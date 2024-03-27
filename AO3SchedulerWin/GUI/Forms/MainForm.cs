@@ -162,8 +162,11 @@ namespace AO3SchedulerWin
             get
             {
                 const int CS_DROPSHADOW = 0x20000;
+                const int WS_MINIMIZEBOX = 0x20000;
+                const int CS_DBLCLKS = 0x8;
                 CreateParams cp = base.CreateParams;
-                cp.ClassStyle |= CS_DROPSHADOW;
+                cp.ClassStyle |= CS_DROPSHADOW | CS_DBLCLKS;
+                cp.Style |= WS_MINIMIZEBOX;
                 return cp;
             }
         }
