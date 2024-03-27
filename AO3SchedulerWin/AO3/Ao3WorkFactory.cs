@@ -59,7 +59,6 @@ namespace AO3SchedulerWin.AO3
 
             var uri = new Uri("https://archiveofourown.org/");
             _httpClient = new HttpClient(handler) { BaseAddress = uri };
-            _logger.Info("Created Ao3WorkFactory object");
         }
     }
 }
