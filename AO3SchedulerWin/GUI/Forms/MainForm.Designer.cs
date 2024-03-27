@@ -261,11 +261,11 @@
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(1108, 590);
+            ControlBox = false;
             Controls.Add(mainContentPanel);
             Controls.Add(topBarDetailPanel);
             Controls.Add(topBarPanel);
             Controls.Add(sideBarPanel);
-            FormBorderStyle = FormBorderStyle.None;
             MinimumSize = new Size(1064, 590);
             Name = "MainForm";
             Text = "AO3 Scheduler";

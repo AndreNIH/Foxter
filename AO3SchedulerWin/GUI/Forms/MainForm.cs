@@ -6,6 +6,7 @@ using AO3SchedulerWin.GUI.Screens;
 using AO3SchedulerWin.Models;
 using AO3SchedulerWin.Publisher;
 using AO3SchedulerWin.Publisher.Notifier;
+using System.Configuration;
 using System.Runtime.InteropServices;
 
 namespace AO3SchedulerWin
@@ -63,6 +64,9 @@ namespace AO3SchedulerWin
 
         private async void publishTimer_Elapsed(object? sender, System.Timers.ElapsedEventArgs e)
         {
+            //Stop the timer loop if the window handle is no longer valid
+            if (!IsHandleCreated || InvokeRequired) return;
+
             //If the user isn't logged just skip
             if (_session.Autenticated == false) return;
                 Invoke((MethodInvoker)async delegate
@@ -85,6 +89,7 @@ namespace AO3SchedulerWin
             });
         }
 
+        //Form Overrides
         protected async override void OnLoad(EventArgs e)
         {
             base.OnLoad(e);
@@ -93,6 +98,12 @@ namespace AO3SchedulerWin
             else await ChangeScreen("SC_LOGIN");
 
         }
+
+        protected override void OnClosed(EventArgs e)
+        {
+            Application.Exit();
+        }
+
         //Child Form Loading
         private void SetMainContent(Form childForm)
         {
