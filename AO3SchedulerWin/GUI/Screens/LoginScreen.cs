@@ -75,7 +75,7 @@ namespace AO3SchedulerWin.GUI.Screens
                     Name = _session.User,
                     Password = passwordTextBox.Text.ToString()
                 });
-                await _updater.ChangeScreen("SC_MAIN");
+                _updater.ChangeScreen(ScreenId.MAIN);
             }
             else
             {

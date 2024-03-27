@@ -8,6 +8,16 @@ namespace AO3SchedulerWin.GUI.Forms
 {
     public interface IScreenUpdater
     {
-        Task ChangeScreen(string screenId);
+        void ChangeScreen(ScreenId screenId);
     }
+    public enum ScreenId
+    {
+        MAIN,
+        SCHEDULE,
+        LOGIN,
+        LOGGED_IN,
+        NO_USER,
+        SETTINGS,
+    }
+
 }

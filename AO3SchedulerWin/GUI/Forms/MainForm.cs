@@ -14,6 +14,7 @@ namespace AO3SchedulerWin
     public partial class MainForm : Form, IScreenUpdater
     {
 
+        
         //WinAPI DLL Imports
         [DllImport("user32.dll", EntryPoint = "ReleaseCapture")]
         private extern static void ReleaseCapture();
@@ -94,8 +95,8 @@ namespace AO3SchedulerWin
         {
             base.OnLoad(e);
             bool logged = (await _authorModel.Get()) != null;
-            if (logged) await ChangeScreen("SC_MAIN");
-            else await ChangeScreen("SC_LOGIN");
+            if (logged) ChangeScreen(ScreenId.MAIN);
+            else ChangeScreen(ScreenId.NO_USER);
 
         }
 
@@ -170,9 +171,9 @@ namespace AO3SchedulerWin
 
 
         //Screen-id to scene mapping
-        public async Task ChangeScreen(string screenId)
+        public void ChangeScreen(ScreenId screenId)
         {
-            _logger.Info($"Transitioning to screen with id {screenId}");
+            _logger.Info($"Transitioning to scene id:{screenId}");
             if (_activeForm != null)
             {
                 _activeForm.Close();
@@ -180,39 +181,39 @@ namespace AO3SchedulerWin
 
             switch (screenId)
             {
-                case "SC_MAIN":
+                case ScreenId.MAIN:
                     {
                         var screen = new HomeScreen(_authorModel, _chapterModel, _session, _publishNotifier);
                         SetMainContent(screen);
                         break;
                     }
 
-                case "SC_SCHEDULE":
+                case ScreenId.SCHEDULE:
                     {
 
                         var screen = new SchedulerScreen(_session, _chapterModel, _publishNotifier);
                         SetMainContent(screen);
                         break;
                     }
-                case "SC_LOGIN":
+                case ScreenId.LOGIN:
                     {
                         var screen = new LoginScreen(ref _session, _authorModel, this);
                         SetMainContent(screen);
                         break;
                     }
-                case "SC_LOGGED":
+                case ScreenId.LOGGED_IN:
                     {
                         var screen = new LoggedUserScreen(ref _session, _authorModel, this);
                         SetMainContent(screen);
                         break;
                     }
-                case "SC_LOGREQUIRED":
+                case ScreenId.NO_USER:
                     {
                         var screen = new NoActiveUserScreen();
                         SetMainContent(screen);
                         break;
                     }
-                case "SC_SETTINGS":
+                case ScreenId.SETTINGS:
                     {
                         var screen = new SettingsScreen();
                         SetMainContent(screen);
@@ -232,29 +233,29 @@ namespace AO3SchedulerWin
         private async void homeButton_Click(object sender, EventArgs e)
         {
             bool logged = (await _authorModel.Get()) != null;
-            if (logged) await ChangeScreen("SC_MAIN");
-            else await ChangeScreen("SC_LOGREQUIRED");
+            if (logged) ChangeScreen(ScreenId.MAIN);
+            else ChangeScreen(ScreenId.NO_USER);
         }
 
 
         private async void scheduleButton_Click(object sender, EventArgs e)
         {
             bool logged = (await _authorModel.Get()) != null;
-            if (logged) await ChangeScreen("SC_SCHEDULE");
-            else await ChangeScreen("SC_LOGREQUIRED");
+            if (logged) ChangeScreen(ScreenId.SCHEDULE);
+            else ChangeScreen(ScreenId.NO_USER);
         }
 
         private async void accountsButton_Click(object sender, EventArgs e)
         {
             bool logged = (await _authorModel.Get()) != null;
-            if (logged) await ChangeScreen("SC_LOGGED");
-            else await ChangeScreen("SC_LOGIN");
+            if (logged) ChangeScreen(ScreenId.LOGGED_IN);
+            else ChangeScreen(ScreenId.LOGIN);
 
         }
 
-        private async void settingsButton_Click(object sender, EventArgs e)
+        private void settingsButton_Click(object sender, EventArgs e)
         {
-            await ChangeScreen("SC_SETTINGS");
+            ChangeScreen(ScreenId.SETTINGS);
         }
 
 

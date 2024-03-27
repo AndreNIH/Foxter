@@ -39,7 +39,7 @@ namespace AO3SchedulerWin.GUI.Screens
         {
             await _authroController.UnregisterAuthor();
             _session.Reset();
-            await _updater.ChangeScreen("SC_LOGIN");
+            _updater.ChangeScreen(ScreenId.LOGIN);
         }
     }
 }
