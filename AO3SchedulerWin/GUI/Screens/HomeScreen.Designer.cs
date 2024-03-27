@@ -32,6 +32,8 @@
             authorLabel = new Label();
             label2 = new Label();
             failedUploadLabel = new Label();
+            tableLayoutPanel1 = new TableLayoutPanel();
+            tableLayoutPanel1.SuspendLayout();
             SuspendLayout();
             // 
             // pendingUploadLabel
@@ -49,7 +51,7 @@
             authorLabel.AutoSize = true;
             authorLabel.Font = new Font("Segoe UI", 27.75F, FontStyle.Regular, GraphicsUnit.Point);
             authorLabel.ForeColor = Color.FromArgb(153, 0, 0);
-            authorLabel.Location = new Point(273, 9);
+            authorLabel.Location = new Point(285, 0);
             authorLabel.Name = "authorLabel";
             authorLabel.Size = new Size(95, 50);
             authorLabel.TabIndex = 7;
@@ -57,9 +59,8 @@
             // 
             // label2
             // 
-            label2.AutoSize = true;
             label2.Font = new Font("Segoe UI Semibold", 27.75F, FontStyle.Bold, GraphicsUnit.Point);
-            label2.Location = new Point(12, 9);
+            label2.Location = new Point(3, 0);
             label2.Name = "label2";
             label2.Size = new Size(276, 50);
             label2.TabIndex = 6;
@@ -78,17 +79,32 @@
             failedUploadLabel.TabIndex = 9;
             failedUploadLabel.Text = "N stories failed to upload";
             // 
+            // tableLayoutPanel1
+            // 
+            tableLayoutPanel1.ColumnCount = 2;
+            tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle());
+            tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
+            tableLayoutPanel1.Controls.Add(label2, 0, 0);
+            tableLayoutPanel1.Controls.Add(authorLabel, 1, 0);
+            tableLayoutPanel1.Location = new Point(12, 12);
+            tableLayoutPanel1.Name = "tableLayoutPanel1";
+            tableLayoutPanel1.RowCount = 1;
+            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
+            tableLayoutPanel1.Size = new Size(776, 55);
+            tableLayoutPanel1.TabIndex = 10;
+            // 
             // HomeScreen
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(800, 450);
+            Controls.Add(tableLayoutPanel1);
             Controls.Add(failedUploadLabel);
             Controls.Add(pendingUploadLabel);
-            Controls.Add(authorLabel);
-            Controls.Add(label2);
             Name = "HomeScreen";
             Text = "HomeScreen";
+            tableLayoutPanel1.ResumeLayout(false);
+            tableLayoutPanel1.PerformLayout();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -99,5 +115,6 @@
         private Label authorLabel;
         private Label label2;
         private Label failedUploadLabel;
+        private TableLayoutPanel tableLayoutPanel1;
     }
 }
