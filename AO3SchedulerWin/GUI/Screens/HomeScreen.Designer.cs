@@ -59,6 +59,7 @@
             // 
             // label2
             // 
+            label2.AutoSize = true;
             label2.Font = new Font("Segoe UI Semibold", 27.75F, FontStyle.Bold, GraphicsUnit.Point);
             label2.Location = new Point(3, 0);
             label2.Name = "label2";
