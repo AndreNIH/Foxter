@@ -94,6 +94,8 @@ namespace AO3SchedulerWin
         protected async override void OnLoad(EventArgs e)
         {
             base.OnLoad(e);
+
+            versionLabel.Text = "Version: " +  System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString();
             bool logged = (await _authorModel.Get()) != null;
             if (logged) ChangeScreen(ScreenId.MAIN);
             else ChangeScreen(ScreenId.NO_USER);

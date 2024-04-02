@@ -29,6 +29,8 @@ namespace AO3SchedulerWin
 #endif
             ILoggerRepository repository = log4net.LogManager.GetRepository(Assembly.GetCallingAssembly());
             log4net.Config.XmlConfigurator.Configure(repository, new System.IO.FileInfo("log4net.config"));
+            log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+            log.Info("running application v" +  System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString());
 
             ApplicationConfiguration.Initialize();
             Application.Run(new AppLoaderForm());
