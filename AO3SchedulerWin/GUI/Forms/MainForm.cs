@@ -14,7 +14,7 @@ namespace AO3SchedulerWin
     public partial class MainForm : Form, IScreenUpdater
     {
 
-        
+
         //WinAPI DLL Imports
         [DllImport("user32.dll", EntryPoint = "ReleaseCapture")]
         private extern static void ReleaseCapture();
@@ -30,6 +30,7 @@ namespace AO3SchedulerWin
         private Form _activeForm;
         private PublishNotifier _publishNotifier;
         private System.Timers.Timer _publishTimer;
+        private bool _supressFormClosing;
 
         public MainForm(IAppServiceFactory serviceFactory, Ao3Session session)
         {
@@ -54,13 +55,16 @@ namespace AO3SchedulerWin
             //Resizing
             MaximizedBounds = Screen.FromHandle(this.Handle).WorkingArea;
 
+            //Supress closing
+            _supressFormClosing = true;
 
 
         }
 
         private void CloseTrayBtn_Click(object? sender, EventArgs e)
         {
-            Application.Exit();
+            _supressFormClosing = false;
+            Close();
         }
 
         private async void publishTimer_Elapsed(object? sender, System.Timers.ElapsedEventArgs e)
@@ -70,24 +74,24 @@ namespace AO3SchedulerWin
 
             //If the user isn't logged just skip
             if (_session.Autenticated == false) return;
-                Invoke((MethodInvoker)async delegate
+            Invoke((MethodInvoker)async delegate
+        {
+            try
             {
-                try
-                {
-                    //This approach is not flexible, move publishing strategy
-                    //into the service factory.
-                    //Also this is not very performnt, because of the multip
-                    var publishingStrategy = new LocalPublishingStrategy(_authorModel, _chapterModel, _session);
-                    var publisher = new PublisherClient(publishingStrategy, _publishNotifier);
-                    await publisher.PublishChapters();
-                }
-                catch (Ao3GenericException ex)
-                {
-                    _logger.Error("an AO3 exception was thrown trying to publish a chapter: " + ex.Message);
-                }
-                
-                _publishTimer.Start(); //keep the clock running
-            });
+                //This approach is not flexible, move publishing strategy
+                //into the service factory.
+                //Also this is not very performnt, because of the multip
+                var publishingStrategy = new LocalPublishingStrategy(_authorModel, _chapterModel, _session);
+                var publisher = new PublisherClient(publishingStrategy, _publishNotifier);
+                await publisher.PublishChapters();
+            }
+            catch (Ao3GenericException ex)
+            {
+                _logger.Error("an AO3 exception was thrown trying to publish a chapter: " + ex.Message);
+            }
+
+            _publishTimer.Start(); //keep the clock running
+        });
         }
 
         //Form Overrides
@@ -95,13 +99,39 @@ namespace AO3SchedulerWin
         {
             base.OnLoad(e);
 
-            versionLabel.Text = "Version: " +  System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString();
+            versionLabel.Text = "Version: " + System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString();
             bool logged = (await _authorModel.Get()) != null;
             if (logged) ChangeScreen(ScreenId.MAIN);
             else ChangeScreen(ScreenId.NO_USER);
 
         }
 
+
+        private void SendToTray()
+        {
+            notifyIcon.Visible = true;
+            notifyIcon.ShowBalloonTip(500);
+            Hide();
+        }
+
+        //Override default close behavior
+        //to minimize the app(instead of closing).
+        //Othwerwise, call Application.Exit() to get rid of AppLoaderForm
+        private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if (_supressFormClosing)
+            {
+                e.Cancel = true;
+                SendToTray();
+            }
+            else
+            {
+                Application.Exit();
+            }
+        }
+
+        //Ensure the application actually closes
+        //instead of hanging on the hidden ApplicationLoader form
         protected override void OnClosed(EventArgs e)
         {
             Application.Exit();
@@ -140,9 +170,7 @@ namespace AO3SchedulerWin
         //Form Size Controls
         private void closeButton_Click(object sender, EventArgs e)
         {
-            notifyIcon.Visible = true;
-            notifyIcon.ShowBalloonTip(500);
-            Hide();
+            Close();
         }
 
         private void maximizeButton_Click(object sender, EventArgs e)
@@ -176,7 +204,7 @@ namespace AO3SchedulerWin
         //Reset Sidebar Button Colors
         private void ClearSidebarStyle()
         {
-            var color = Color.FromArgb(60,60,60);
+            var color = Color.FromArgb(60, 60, 60);
             homeButton.BackColor = color;
             scheduleButton.BackColor = color;
             accountsButton.BackColor = color;
@@ -193,14 +221,14 @@ namespace AO3SchedulerWin
                 _activeForm.Close();
             }
 
-            var activeColor = Color.FromArgb(72,72,72);
+            var activeColor = Color.FromArgb(72, 72, 72);
             switch (screenId)
             {
                 case ScreenId.MAIN:
                     {
                         var screen = new HomeScreen(_authorModel, _chapterModel, _session, _publishNotifier);
                         SetMainContent(screen);
-                        homeButton.BackColor=activeColor;
+                        homeButton.BackColor = activeColor;
                         break;
                     }
 
@@ -209,14 +237,14 @@ namespace AO3SchedulerWin
 
                         var screen = new SchedulerScreen(_session, _chapterModel, _publishNotifier);
                         SetMainContent(screen);
-                        scheduleButton.BackColor=activeColor;
+                        scheduleButton.BackColor = activeColor;
                         break;
                     }
                 case ScreenId.LOGIN:
                     {
                         var screen = new LoginScreen(ref _session, _authorModel, this);
                         SetMainContent(screen);
-                        accountsButton.BackColor=activeColor;
+                        accountsButton.BackColor = activeColor;
                         break;
                     }
                 case ScreenId.LOGGED_IN:
@@ -285,5 +313,7 @@ namespace AO3SchedulerWin
             Show();
             notifyIcon.Visible = false;
         }
+
+       
     }
 }
