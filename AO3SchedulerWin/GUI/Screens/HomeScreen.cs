@@ -15,7 +15,6 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using ZetaIpc.Runtime.Server;
 
 namespace AO3SchedulerWin.Forms
 {

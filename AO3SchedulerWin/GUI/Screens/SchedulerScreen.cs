@@ -15,7 +15,6 @@ using AO3SchedulerWin.AO3;
 using AO3SchedulerWin.GUI.ChapterViews.TableView;
 using AO3SchedulerWin.Models.Base;
 using AO3SchedulerWin.Controllers.ChapterControllers;
-using ZetaIpc.Runtime.Server;
 using AO3SchedulerWin.Publisher.Notifier;
 
 namespace AO3SchedulerWin.Forms
