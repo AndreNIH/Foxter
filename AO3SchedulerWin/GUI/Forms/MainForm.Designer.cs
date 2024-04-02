@@ -281,9 +281,9 @@
             // notifyIcon
             // 
             notifyIcon.BalloonTipText = "The application is still running on the background";
-            notifyIcon.BalloonTipTitle = "AO3 Scheduler";
+            notifyIcon.BalloonTipTitle = "Application minimized";
             notifyIcon.Icon = (Icon)resources.GetObject("notifyIcon.Icon");
-            notifyIcon.Text = "notifyIcon";
+            notifyIcon.Text = "Foxter";
             notifyIcon.MouseDoubleClick += notifyIcon_MouseDoubleClick;
             // 
             // MainForm
