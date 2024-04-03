@@ -11,7 +11,7 @@
 
 [Setup]
 #define MyAppSetupName 'Foxter'
-#define MyAppVersion '0.0.0.13'
+#define MyAppVersion '0.1.1.0'
 #define MyAppPublisher 'Drew IT Solutions'
 
 AppName={#MyAppSetupName}
@@ -40,9 +40,8 @@ Name: es; MessagesFile: "compiler:Languages\Spanish.isl"
 
 [Files]
 
-Source: "..\Foxter\bin\Release\net7.0-windows10.0.17763.0\Foxter.exe"; DestDir: "{app}"; Flags: ignoreversion
-Source: "..\Foxter\bin\Release\net7.0-windows10.0.17763.0\*.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "..\Foxter\bin\Release\net7.0-windows10.0.17763.0\runtimes\*"; DestDir: "{app}\runtimes"; Flags: ignoreversion recursesubdirs createallsubdirs external
+Source: "..\Foxter\bin\Release\net7.0-windows10.0.17763.0\*"; Excludes: *.log *.json  ;DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
+
 
 
 [Registry]
