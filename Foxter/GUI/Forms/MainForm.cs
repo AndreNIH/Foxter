@@ -266,7 +266,7 @@ namespace Foxter
                     {
                         var screen = new SettingsScreen();
                         SetMainContent(screen);
-                        accountsButton.BackColor = activeColor;
+                        settingsButton.BackColor = activeColor;
                         break;
                     }
                 default:
