@@ -22,4 +22,22 @@ Global
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {4ED9F5A2-8FA8-4515-B45B-93E04641F5C0}
 	EndGlobalSection
+	GlobalSection(AutomaticVersions) = postSolution
+		UpdateAssemblyVersion = True
+		UpdateAssemblyFileVersion = False
+		UpdateAssemblyInfoVersion = False
+		AdvancedSettingsExpanded = True
+		AssemblyVersionSettings = None.None.None.IncrementWithResetOnIncrease
+		UpdatePackageVersion = False
+		AssemblyInfoVersionType = SettingsVersion
+		InheritWinAppVersionFrom = None
+		UpdateAssemblyVersion.Release|Any CPU = False
+		UpdateAssemblyFileVersion.Release|Any CPU = True
+		UpdateAssemblyInfoVersion.Release|Any CPU = False
+		AdvancedSettingsExpanded.Release|Any CPU = True
+		AssemblyFileVersionSettings.Release|Any CPU = None.None.None.None
+		UpdatePackageVersion.Release|Any CPU = False
+		AssemblyInfoVersionType.Release|Any CPU = SettingsVersion
+		InheritWinAppVersionFrom.Release|Any CPU = None
+	EndGlobalSection
 EndGlobal
