@@ -101,7 +101,7 @@ namespace Foxter.Models.Local
                 connection.ConnectionString = _connectionString;
                 await connection.OpenAsync();
                 var cmd = connection.CreateCommand();
-                cmd.CommandText = $"select * from CHAPTERS where WrittenBy={authorId} order by publishingDate desc";
+                cmd.CommandText = $"select * from CHAPTERS where WrittenBy={authorId} order by publishingDate asc";
                 try
                 {
                     await using (var reader = await cmd.ExecuteReaderAsync())
