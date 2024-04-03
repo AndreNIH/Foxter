@@ -102,7 +102,7 @@ namespace Foxter
             versionLabel.Text = "Version: " + System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString();
             bool logged = (await _authorModel.Get()) != null;
             if (logged) ChangeScreen(ScreenId.MAIN);
-            else ChangeScreen(ScreenId.NO_USER);
+            else ChangeScreen(ScreenId.LOGIN);
 
         }
 
