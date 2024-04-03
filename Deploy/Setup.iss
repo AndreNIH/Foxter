@@ -11,7 +11,7 @@
 
 [Setup]
 #define MyAppSetupName 'Foxter'
-#define MyAppVersion '1.0'
+#define MyAppVersion '0.0.0.13'
 #define MyAppPublisher 'Drew IT Solutions'
 
 AppName={#MyAppSetupName}
@@ -29,7 +29,7 @@ AllowNoIcons=yes
 PrivilegesRequired=admin
 
 ; remove next line if you only deploy 32-bit binaries and dependencies
-ArchitecturesInstallIn64BitMode=x64
+; ArchitecturesInstallIn64BitMode=x64
 
 [Languages]
 Name: en; MessagesFile: "compiler:Default.isl"
@@ -41,12 +41,17 @@ Name: es; MessagesFile: "compiler:Languages\Spanish.isl"
 [Files]
 
 Source: "..\Foxter\bin\Release\net7.0-windows10.0.17763.0\Foxter.exe"; DestDir: "{app}"; Flags: ignoreversion
-Source: "..\Foxter\bin\Release\net7.0-windows10.0.17763.0\*"; DestDir: "{app}"; Flags: ignoreversion
+Source: "..\Foxter\bin\Release\net7.0-windows10.0.17763.0\*.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "..\Foxter\bin\Release\net7.0-windows10.0.17763.0\runtimes\*"; DestDir: "{app}\runtimes"; Flags: ignoreversion recursesubdirs createallsubdirs external
+
+
+[Registry]
+Root: HKCU; Subkey: "SOFTWARE\Microsoft\Windows\CurrentVersion\Run"; ValueType: string; ValueName: "Foxter"; ValueData: """{app}\Foxter.exe"""; Flags: uninsdeletevalue
 
 
 
 [Icons]
-Name: "{group}\{#MyAppSetupName}"; Filename: "{app}\MyProg.exe"
+Name: "{group}\{#MyAppSetupName}"; Filename: "{app}\Foxter.exe"
 Name: "{group}\{cm:UninstallProgram,{#MyAppSetupName}}"; Filename: "{uninstallexe}"
 Name: "{commondesktop}\{#MyAppSetupName}"; Filename: "{app}\Foxter.exe"; Tasks: desktopicon
 
