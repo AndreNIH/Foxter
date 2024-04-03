@@ -85,6 +85,7 @@
             ClientSize = new Size(680, 263);
             Controls.Add(tableLayoutPanel1);
             FormBorderStyle = FormBorderStyle.None;
+            Icon = (Icon)resources.GetObject("$this.Icon");
             Margin = new Padding(2);
             Name = "AppLoaderForm";
             StartPosition = FormStartPosition.CenterScreen;
