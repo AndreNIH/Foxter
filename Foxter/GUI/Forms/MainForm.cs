@@ -117,9 +117,10 @@ namespace Foxter
         //Override default close behavior
         //to minimize the app(instead of closing).
         //Othwerwise, call Application.Exit() to get rid of AppLoaderForm
-        private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
+        private async void MainForm_FormClosing(object sender, FormClosingEventArgs e)
         {
-            if (_supressFormClosing)
+            bool logged = (await _authorModel.Get()) != null;
+            if (_supressFormClosing && logged)
             {
                 e.Cancel = true;
                 SendToTray();
