@@ -70,7 +70,7 @@ namespace Foxter
         private async void publishTimer_Elapsed(object? sender, System.Timers.ElapsedEventArgs e)
         {
             //Stop the timer loop if the window handle is no longer valid
-            if (!IsHandleCreated || InvokeRequired) return;
+            //if (!IsHandleCreated || InvokeRequired) return;
 
             //If the user isn't logged just skip
             if (_session.Autenticated == false) return;

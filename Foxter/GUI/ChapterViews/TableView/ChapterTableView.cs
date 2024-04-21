@@ -16,7 +16,6 @@ namespace Foxter.GUI.ChapterViews.TableView
     public class ChapterTableView : IChapterModelUpdateListener, ITableEventListener
     {
         private IChapterModel _model;
-        private ChapterTableController _controller;
         private TableLayoutPanel _tableView;
         private Ao3Session _session;
         private TabControl _tabView;
@@ -49,10 +48,9 @@ namespace Foxter.GUI.ChapterViews.TableView
 
         }
 
-        public async Task OnEditChapter(object sender)
+        public async Task OnEditChapter(int chapterId)
         {
-            var chapterTableItem = (ChapterTableItem)sender;
-            var chapter = await _model.GetChapterById(chapterTableItem.GetId());
+            var chapter = await _model.GetChapterById(chapterId);
             if (chapter == null)
             {
                 return;
@@ -64,10 +62,9 @@ namespace Foxter.GUI.ChapterViews.TableView
             formController.ShowForm();
         }
 
-        public ChapterTableView(ChapterTableController controller, IChapterModel model, TableLayoutPanel tableView, TabControl tabView, Ao3Session session)
+        public ChapterTableView(IChapterModel model, TableLayoutPanel tableView, TabControl tabView, Ao3Session session)
         {
             _model = model;
-            //_controller = controller;
             _tableView = tableView;
             _tabView = tabView;
             _session = session;
@@ -79,48 +76,5 @@ namespace Foxter.GUI.ChapterViews.TableView
         {
             _model.UnregisterObserver(this);
         }
-
-
-
-
-        //Yes, the view holds a model. It is forwarded to table items
-        //which itself forwards it to a ChapterDataForm, where therin
-        //a form controller is instaciated
-        /*private IChapterModel _model;
-        private ITableUpdateListener _updateListener;
-        private TableLayoutPanel _view;
-        private Ao3Client _ao3Client;
-        
-        public ChapterTableView(TableLayoutPanel view, IChapterModel model, ITableUpdateListener updateListener, Ao3Client client)
-        {
-            _view = view;
-            _model = model;
-            _ao3Client = client;
-            _updateListener = updateListener;
-        }
-
-        public void UpdateView(List<Chapter> chapters)
-        {
-            _view.SuspendLayout();
-            foreach (var c in chapters)
-            {
-                Debug.Assert(_model != null, "a model must be bound to the adapter before upadating the view");
-                IChapterTableItemBuilder builder = new ChapterTableItemBuilder();
-                var item = builder.SetDatabaseId(c.ChapterId)
-                                  .SetAo3Client(_ao3Client)
-                                  .SetTableListener(_updateListener)
-                                  .SetChapterModel(_model)
-                                  .SetStoryTitle(c.StoryTitle)
-                                  .SetChapterTitle(c.ChapterTitle)
-                                  .SetPublishingDate(c.PublishingDate)
-                                  .Build();
-                item.Anchor = AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Top;
-                _view.Controls.Add(item);
-            }
-            _view.ResumeLayout();
-        }
-
-        
-        */
     }
 }

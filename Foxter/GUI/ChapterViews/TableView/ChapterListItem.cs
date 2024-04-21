@@ -21,8 +21,6 @@ namespace Foxter.Forms
     public partial class ChapterTableItem : UserControl
     {
         private ITableEventListener _updateListener; //Used to update view
-        private IChapterModel _model;
-        private Ao3Client _session; //Must be passed as a param because the object holds a state (Set on AppLoad or on account switch)
         private int _postId; //Corresponds to the internal id of the story in the database(not the Work ID on AO3)
         private static log4net.ILog _logger = log4net.LogManager.GetLogger(typeof(ChapterTableItem));
 
@@ -63,7 +61,8 @@ namespace Foxter.Forms
 
         private async void editButton_Click(object sender, EventArgs e)
         {
-            await _updateListener.OnEditChapter(this);
+            _logger.Info($"selected chapter {_postId}");
+            await _updateListener.OnEditChapter(_postId);
         }
 
 

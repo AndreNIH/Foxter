@@ -24,6 +24,7 @@ namespace Foxter.Controllers.ChapterControllers
 
         public async Task<bool> Create(Chapter chapter)
         {
+            _logger.Info("creating new chapter: " + chapter);
             chapter.AuthorId = _client.GetSession().Id;
             return await _model.Create(chapter);
         }

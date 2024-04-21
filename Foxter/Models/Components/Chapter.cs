@@ -18,7 +18,20 @@ namespace Foxter.Models.Base
         //time consuming requests to AO3
         public string StoryTitle { get; set; } 
         public string ChapterTitle { get; set; }
-        
+
+
+        public override string ToString()
+        {
+            return $"ChapterId: {ChapterId}, " +
+                   $"StoryId: {StoryId}, " +
+                   $"PublishingDate: {PublishingDate.ToShortDateString()}, " +
+                   $"AuthorId: {AuthorId}, " +
+                   $"StoryTitle: {StoryTitle}, " +
+                   $"ChapterTitle: {ChapterTitle}";
+        }
+
+
+
 
     }
 }

@@ -8,6 +8,6 @@ namespace Foxter.GUI.ChapterViews.TableView
 {
     public interface ITableEventListener
     {
-        Task OnEditChapter(object sender);
+        Task OnEditChapter(int chapterId);
     }
 }

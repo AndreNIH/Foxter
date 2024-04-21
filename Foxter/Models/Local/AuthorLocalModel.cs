@@ -44,6 +44,7 @@ namespace Foxter.Models.Local
                 //Execute statement
                 try
                 {
+                    _logger.Info("inserting Author in local database:" + author.ToString());
                     await cmd.ExecuteNonQueryAsync();
                     return true;
                 }
@@ -67,6 +68,7 @@ namespace Foxter.Models.Local
                 //Execute statement
                 try
                 {
+                    _logger.Info("deleting Author in local database");
                     await cmd.ExecuteNonQueryAsync();
                     return true;
                 }

@@ -51,7 +51,7 @@ namespace Foxter.Controllers.ChapterControllers
         public ChapterTableController(IChapterModel model, TableLayoutPanel tableView, TabControl tabView, Ao3Session session)
         {
             _model = model;
-            _view = new ChapterTableView(this, model, tableView, tabView, session);
+            _view = new ChapterTableView(model, tableView, tabView, session);
             _session = session;
         }
 
