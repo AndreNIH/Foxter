@@ -4,7 +4,7 @@ using System.Diagnostics;
 using System.Net;
 using System.Reflection;
 using System.Runtime.InteropServices;
-
+using System.Runtime.Remoting;
 
 
 
@@ -27,13 +27,25 @@ namespace Foxter
 #if DEBUG
             AllocConsole();
 #endif
-            ILoggerRepository repository = log4net.LogManager.GetRepository(Assembly.GetCallingAssembly());
-            log4net.Config.XmlConfigurator.Configure(repository, new System.IO.FileInfo("log4net.config"));
-            log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
-            log.Info("running application v" +  System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString());
+            string AppId = "Local\\c41fe00c-96c6-4fe5-b536-8db4f45b35a1";
+            using (Mutex mtx = new Mutex(false, AppId))
+            {
+                if (!mtx.WaitOne(0))
+                {
+                    return;
+                }
 
-            ApplicationConfiguration.Initialize();
-            Application.Run(new AppLoaderForm());
+                //First application instance
+                ILoggerRepository repository = log4net.LogManager.GetRepository(Assembly.GetCallingAssembly());
+                log4net.Config.XmlConfigurator.Configure(repository, new System.IO.FileInfo("log4net.config"));
+                log4net.ILog log = log4net.LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
+                log.Info("running application v" + Assembly.GetExecutingAssembly().GetName().Version.ToString());
+                ApplicationConfiguration.Initialize();
+                Application.Run(new AppLoaderForm());
+            }
+
+
+            
         }
     }
 }
