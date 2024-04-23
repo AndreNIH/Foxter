@@ -118,7 +118,6 @@
             runAtStartupCheckbox.TabIndex = 7;
             runAtStartupCheckbox.Text = "Run application on startup";
             runAtStartupCheckbox.UseVisualStyleBackColor = true;
-            runAtStartupCheckbox.CheckedChanged += checkBox1_CheckedChanged;
             // 
             // SettingsScreen
             // 

@@ -122,7 +122,7 @@ namespace Foxter
         private async void MainForm_FormClosing(object sender, FormClosingEventArgs e)
         {
             bool logged = (await _authorModel.Get()) != null;
-            if (_supressFormClosing && logged)
+            if (_supressFormClosing && logged && SettingsManager.Get.Configuration.sendToTray)
             {
                 e.Cancel = true;
                 SendToTray();
@@ -137,8 +137,6 @@ namespace Foxter
         //instead of hanging on the hidden ApplicationLoader form
         protected override void OnClosed(EventArgs e)
         {
-            //Persist application settings
-            Debug.Assert(SettingsManager.Get.Persist(), "application settings were not persisted" );
             Application.Exit();
         }
 

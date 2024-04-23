@@ -10,6 +10,7 @@ using System.Windows.Forms;
 using System.ServiceProcess;
 using System.Diagnostics;
 using Foxter.Settings;
+using Microsoft.Win32;
 
 namespace Foxter.GUI.Screens
 {
@@ -19,12 +20,6 @@ namespace Foxter.GUI.Screens
         public SettingsScreen()
         {
             InitializeComponent();
-            
-            
-            /*runAtStartupCheckbox.DataBindings.Add("Checked", SettingsManager.Instance, "runAtStartup", false, DataSourceUpdateMode.OnPropertyChanged);
-            runAtStartupCheckbox.DataBindings.Add("Checked", SettingsManager.Instance, "startMinimized", false, DataSourceUpdateMode.OnPropertyChanged);
-            runAtStartupCheckbox.DataBindings.Add("Checked", SettingsManager.Instance, "sendToTray", false, DataSourceUpdateMode.OnPropertyChanged);
-            runAtStartupCheckbox.DataBindings.Add("Checked", SettingsManager.Instance, "runAtStartup", false, DataSourceUpdateMode.OnPropertyChanged);*/
         }
 
         //Event Handlers
@@ -33,6 +28,17 @@ namespace Foxter.GUI.Screens
             var obj = (CheckBox)sender!;
             SettingsManager.Get.Configuration.runAtStartup = obj.Checked;
             SettingsManager.Get.Persist();
+            var regKey = Registry.CurrentUser.OpenSubKey("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", true)!;
+            if (obj.Checked)
+            {
+                regKey.SetValue("Foxter", $"\"{Application.ExecutablePath}\" --launch");
+                _logger.Info("added startup registry key");
+            }
+            else
+            {
+                regKey.DeleteValue("Foxter");
+                _logger.Info("removed startup registry key");
+            }
         }
 
         private void SendToTrayCheckbox_CheckedChanged(object? sender, EventArgs e)
@@ -74,11 +80,6 @@ namespace Foxter.GUI.Screens
             base.OnLoad(e);
             ReadSettings();
             RegisterHandlers();
-
-        }
-
-        private void checkBox1_CheckedChanged(object sender, EventArgs e)
-        {
 
         }
     }

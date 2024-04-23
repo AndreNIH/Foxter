@@ -77,6 +77,7 @@ namespace Foxter.Settings
             Configuration = new AppConfiguration();
             Configuration.runAtStartup = true;
             Configuration.startMinimized = true;
+            Configuration.sendToTray = true;
             Configuration.publishMode = AppConfiguration.PublishMode.KLocal;
             _configPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), "AO3S", "appsettings.json");
         }
