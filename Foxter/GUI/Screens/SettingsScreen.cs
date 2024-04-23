@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.ServiceProcess;
 using System.Diagnostics;
+using Foxter.Settings;
 
 namespace Foxter.GUI.Screens
 {
@@ -18,11 +19,66 @@ namespace Foxter.GUI.Screens
         public SettingsScreen()
         {
             InitializeComponent();
+            
+            
+            /*runAtStartupCheckbox.DataBindings.Add("Checked", SettingsManager.Instance, "runAtStartup", false, DataSourceUpdateMode.OnPropertyChanged);
+            runAtStartupCheckbox.DataBindings.Add("Checked", SettingsManager.Instance, "startMinimized", false, DataSourceUpdateMode.OnPropertyChanged);
+            runAtStartupCheckbox.DataBindings.Add("Checked", SettingsManager.Instance, "sendToTray", false, DataSourceUpdateMode.OnPropertyChanged);
+            runAtStartupCheckbox.DataBindings.Add("Checked", SettingsManager.Instance, "runAtStartup", false, DataSourceUpdateMode.OnPropertyChanged);*/
         }
 
+        //Event Handlers
+        private void RunAtStartupCheckbox_CheckedChanged(object? sender, EventArgs e)
+        {
+            var obj = (CheckBox)sender!;
+            SettingsManager.Get.Configuration.runAtStartup = obj.Checked;
+            SettingsManager.Get.Persist();
+        }
+
+        private void SendToTrayCheckbox_CheckedChanged(object? sender, EventArgs e)
+        {
+            var obj = (CheckBox)sender!;
+            SettingsManager.Get.Configuration.sendToTray = obj.Checked;
+            SettingsManager.Get.Persist();
+        }
+
+        private void StartMinimizedCheckbox_CheckedChanged(object? sender, EventArgs e)
+        {
+            var obj = (CheckBox)sender!;
+            SettingsManager.Get.Configuration.startMinimized = obj.Checked;
+            SettingsManager.Get.Persist();
+        }
+
+
+        //Load settings
+        private void ReadSettings()
+        {
+            runAtStartupCheckbox.Checked = SettingsManager.Get.Configuration.runAtStartup;
+            startMinimizedCheckbox.Checked = SettingsManager.Get.Configuration.startMinimized;
+            sendToTrayCheckbox.Checked = SettingsManager.Get.Configuration.sendToTray;
+        }
+
+        //Register event handlers
+        private void RegisterHandlers()
+        {
+            runAtStartupCheckbox.CheckedChanged += RunAtStartupCheckbox_CheckedChanged;
+            startMinimizedCheckbox.CheckedChanged += StartMinimizedCheckbox_CheckedChanged;
+            sendToTrayCheckbox.CheckedChanged += SendToTrayCheckbox_CheckedChanged;
+        }
+
+        
+
+        //OnLoad
         protected override void OnLoad(EventArgs e)
         {
             base.OnLoad(e);
+            ReadSettings();
+            RegisterHandlers();
+
+        }
+
+        private void checkBox1_CheckedChanged(object sender, EventArgs e)
+        {
 
         }
     }

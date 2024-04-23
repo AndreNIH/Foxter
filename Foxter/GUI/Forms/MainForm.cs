@@ -6,7 +6,9 @@ using Foxter.GUI.Screens;
 using Foxter.Models;
 using Foxter.Publisher;
 using Foxter.Publisher.Notifier;
+using Foxter.Settings;
 using System.Configuration;
+using System.Diagnostics;
 using System.Runtime.InteropServices;
 
 namespace Foxter
@@ -135,6 +137,8 @@ namespace Foxter
         //instead of hanging on the hidden ApplicationLoader form
         protected override void OnClosed(EventArgs e)
         {
+            //Persist application settings
+            Debug.Assert(SettingsManager.Get.Persist(), "application settings were not persisted" );
             Application.Exit();
         }
 

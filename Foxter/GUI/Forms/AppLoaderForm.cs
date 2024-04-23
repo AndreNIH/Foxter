@@ -1,6 +1,7 @@
 ﻿using Foxter.AO3;
 using Foxter.Factories;
 using Foxter.Models.Base;
+using Foxter.Settings;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -85,7 +86,13 @@ namespace Foxter.GUI.Forms
             return null;
         }
         
-        private async Task InitializeApplication() { 
+        private async Task InitializeApplication() {
+            //Initialize settings
+            if (!SettingsManager.Get.Load())
+            {
+                SettingsManager.Get.Persist();
+            }
+            
             _session = new Ao3Session();
             _appServiceFactory = CreateAppServiceFactory();
             

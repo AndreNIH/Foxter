@@ -29,61 +29,121 @@
         private void InitializeComponent()
         {
             groupBox2 = new GroupBox();
-            radioButton2 = new RadioButton();
-            radioButton1 = new RadioButton();
+            remotePublishRadio = new RadioButton();
+            localPublishRadio = new RadioButton();
+            groupBox1 = new GroupBox();
+            sendToTrayCheckbox = new CheckBox();
+            startMinimizedCheckbox = new CheckBox();
+            runAtStartupCheckbox = new CheckBox();
             groupBox2.SuspendLayout();
+            groupBox1.SuspendLayout();
             SuspendLayout();
             // 
             // groupBox2
             // 
-            groupBox2.Controls.Add(radioButton2);
-            groupBox2.Controls.Add(radioButton1);
-            groupBox2.Location = new Point(12, 38);
+            groupBox2.Controls.Add(remotePublishRadio);
+            groupBox2.Controls.Add(localPublishRadio);
+            groupBox2.Location = new Point(438, 12);
+            groupBox2.Margin = new Padding(4, 5, 4, 5);
             groupBox2.Name = "groupBox2";
-            groupBox2.Size = new Size(293, 157);
+            groupBox2.Padding = new Padding(4, 5, 4, 5);
+            groupBox2.Size = new Size(419, 262);
             groupBox2.TabIndex = 5;
             groupBox2.TabStop = false;
             groupBox2.Text = "Publish Mode";
             // 
-            // radioButton2
+            // remotePublishRadio
             // 
-            radioButton2.AutoSize = true;
-            radioButton2.Enabled = false;
-            radioButton2.Location = new Point(6, 95);
-            radioButton2.Name = "radioButton2";
-            radioButton2.Size = new Size(177, 19);
-            radioButton2.TabIndex = 6;
-            radioButton2.Text = "Publish from a remote server";
-            radioButton2.UseVisualStyleBackColor = true;
+            remotePublishRadio.AutoSize = true;
+            remotePublishRadio.Enabled = false;
+            remotePublishRadio.Location = new Point(9, 158);
+            remotePublishRadio.Margin = new Padding(4, 5, 4, 5);
+            remotePublishRadio.Name = "remotePublishRadio";
+            remotePublishRadio.Size = new Size(266, 29);
+            remotePublishRadio.TabIndex = 6;
+            remotePublishRadio.Text = "Publish from a remote server";
+            remotePublishRadio.UseVisualStyleBackColor = true;
             // 
-            // radioButton1
+            // localPublishRadio
             // 
-            radioButton1.AutoSize = true;
-            radioButton1.Checked = true;
-            radioButton1.Location = new Point(6, 70);
-            radioButton1.Name = "radioButton1";
-            radioButton1.Size = new Size(152, 19);
-            radioButton1.TabIndex = 6;
-            radioButton1.TabStop = true;
-            radioButton1.Text = "Publish from this device";
-            radioButton1.UseVisualStyleBackColor = true;
+            localPublishRadio.AutoSize = true;
+            localPublishRadio.Checked = true;
+            localPublishRadio.Location = new Point(9, 117);
+            localPublishRadio.Margin = new Padding(4, 5, 4, 5);
+            localPublishRadio.Name = "localPublishRadio";
+            localPublishRadio.Size = new Size(226, 29);
+            localPublishRadio.TabIndex = 6;
+            localPublishRadio.TabStop = true;
+            localPublishRadio.Text = "Publish from this device";
+            localPublishRadio.UseVisualStyleBackColor = true;
+            // 
+            // groupBox1
+            // 
+            groupBox1.Controls.Add(sendToTrayCheckbox);
+            groupBox1.Controls.Add(startMinimizedCheckbox);
+            groupBox1.Controls.Add(runAtStartupCheckbox);
+            groupBox1.Location = new Point(12, 12);
+            groupBox1.Name = "groupBox1";
+            groupBox1.Size = new Size(419, 262);
+            groupBox1.TabIndex = 6;
+            groupBox1.TabStop = false;
+            groupBox1.Text = "General";
+            // 
+            // sendToTrayCheckbox
+            // 
+            sendToTrayCheckbox.AutoSize = true;
+            sendToTrayCheckbox.Location = new Point(18, 168);
+            sendToTrayCheckbox.Name = "sendToTrayCheckbox";
+            sendToTrayCheckbox.Size = new Size(206, 29);
+            sendToTrayCheckbox.TabIndex = 9;
+            sendToTrayCheckbox.Text = "Send to tray on close";
+            sendToTrayCheckbox.UseVisualStyleBackColor = true;
+            // 
+            // startMinimizedCheckbox
+            // 
+            startMinimizedCheckbox.AutoSize = true;
+            startMinimizedCheckbox.Location = new Point(18, 133);
+            startMinimizedCheckbox.Name = "startMinimizedCheckbox";
+            startMinimizedCheckbox.Size = new Size(161, 29);
+            startMinimizedCheckbox.TabIndex = 8;
+            startMinimizedCheckbox.Text = "Start minimized";
+            startMinimizedCheckbox.UseVisualStyleBackColor = true;
+            // 
+            // runAtStartupCheckbox
+            // 
+            runAtStartupCheckbox.AutoSize = true;
+            runAtStartupCheckbox.Location = new Point(18, 98);
+            runAtStartupCheckbox.Name = "runAtStartupCheckbox";
+            runAtStartupCheckbox.Size = new Size(248, 29);
+            runAtStartupCheckbox.TabIndex = 7;
+            runAtStartupCheckbox.Text = "Run application on startup";
+            runAtStartupCheckbox.UseVisualStyleBackColor = true;
+            runAtStartupCheckbox.CheckedChanged += checkBox1_CheckedChanged;
             // 
             // SettingsScreen
             // 
-            AutoScaleDimensions = new SizeF(7F, 15F);
+            AutoScaleDimensions = new SizeF(10F, 25F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(800, 450);
+            ClientSize = new Size(1143, 750);
+            Controls.Add(groupBox1);
             Controls.Add(groupBox2);
+            Margin = new Padding(4, 5, 4, 5);
             Name = "SettingsScreen";
             Text = "SettingsScreen";
             groupBox2.ResumeLayout(false);
             groupBox2.PerformLayout();
+            groupBox1.ResumeLayout(false);
+            groupBox1.PerformLayout();
             ResumeLayout(false);
         }
 
         #endregion
         private GroupBox groupBox2;
-        private RadioButton radioButton2;
-        private RadioButton radioButton1;
+        private RadioButton remotePublishRadio;
+        private RadioButton localPublishRadio;
+        private GroupBox groupBox1;
+        private CheckBox runAtStartupCheckbox;
+        private CheckBox sendToTrayCheckbox;
+        private CheckBox startMinimizedCheckbox;
     }
 }
