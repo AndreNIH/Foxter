@@ -1,5 +1,4 @@
 ﻿using Foxter.AO3;
-using Foxter.Factories;
 using Foxter.Models.Base;
 using Foxter.Providers;
 using Foxter.Settings;

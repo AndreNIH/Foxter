@@ -1,5 +1,4 @@
 using Foxter.AO3;
-using Foxter.Factories;
 using Foxter.Forms;
 using Foxter.GUI.Forms;
 using Foxter.GUI.Screens;
@@ -302,7 +301,7 @@ namespace Foxter
         {
             bool logged = _sessionMgr.HasActiveSession();
             if (logged) ChangeScreen(ScreenId.MAIN);
-            else ChangeScreen(ScreenId.NO_USER);
+            else ChangeScreen(ScreenId.LOGIN);
         }
 
 
@@ -310,7 +309,7 @@ namespace Foxter
         {
             bool logged = _sessionMgr.HasActiveSession();
             if (logged) ChangeScreen(ScreenId.SCHEDULE);
-            else ChangeScreen(ScreenId.NO_USER);
+            else ChangeScreen(ScreenId.LOGIN);
         }
 
         private async void accountsButton_Click(object sender, EventArgs e)
