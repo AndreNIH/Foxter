@@ -20,7 +20,7 @@ namespace Foxter.Forms
 {
     public partial class HomeScreen : Form, IPublishEventListener
     {
-        private static readonly log4net.ILog _logger = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+        private static readonly log4net.ILog _logger = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod()!.DeclaringType);
         public HomeScreen(IAuthorModel authorModel, IChapterModel chapterModel, Ao3Session session, PublishNotifier notifier)
         {
             InitializeComponent();

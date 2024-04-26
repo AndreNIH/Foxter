@@ -15,7 +15,7 @@ namespace Foxter.Publisher
         private IChapterModel _chapterModel;
         private Ao3Client _client;
 
-        public LocalPublishingStrategy(IAuthorModel authorModel, IChapterModel chapterModel, Ao3Session session)
+        public LocalPublishingStrategy(IAuthorModel authorModel, IChapterModel chapterModel, ISession session)
         {
             _authorModel = authorModel;
             _chapterModel = chapterModel;

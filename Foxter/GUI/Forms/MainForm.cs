@@ -28,18 +28,18 @@ namespace Foxter
         private static readonly log4net.ILog _logger = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
         private IAuthorModel _authorModel;
         private IChapterModel _chapterModel;
-        private Ao3Session _session;
+        private SessionManager _sessionMgr;
         private Form _activeForm;
         private PublishNotifier _publishNotifier;
         private System.Timers.Timer _publishTimer;
         private bool _supressFormClosing;
 
-        public MainForm(IAppServiceFactory serviceFactory, Ao3Session session)
+        public MainForm(IAppServiceFactory serviceFactory, SessionManager sessionMgr)
         {
             InitializeComponent();
             _authorModel = serviceFactory.CreateAuthorModel();
             _chapterModel = serviceFactory.CreateChapterModel();
-            _session = session;
+            _sessionMgr = sessionMgr;
 
             //Publishing
             _publishNotifier = new PublishNotifier();
@@ -75,7 +75,7 @@ namespace Foxter
             //if (!IsHandleCreated || InvokeRequired) return;
 
             //If the user isn't logged just skip
-            if (_session.Autenticated == false) return;
+            if (_sessionMgr.HasActiveSession() == false) return;
             Invoke((MethodInvoker)async delegate
         {
             try
@@ -83,7 +83,7 @@ namespace Foxter
                 //This approach is not flexible, move publishing strategy
                 //into the service factory.
                 //Also this is not very performnt, because of the multip
-                var publishingStrategy = new LocalPublishingStrategy(_authorModel, _chapterModel, _session);
+                var publishingStrategy = new LocalPublishingStrategy(_authorModel, _chapterModel, _sessionMgr.GetExistingSession());
                 var publisher = new PublisherClient(publishingStrategy, _publishNotifier);
                 await publisher.PublishChapters();
             }
@@ -101,7 +101,8 @@ namespace Foxter
         {
             base.OnLoad(e);
 
-            versionLabel.Text = "Version: " + System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString();
+            var assemblyName = System.Reflection.Assembly.GetExecutingAssembly().GetName();
+            versionLabel.Text = "Version: " + (assemblyName != null ? assemblyName.Version : "N/A");
             bool logged = (await _authorModel.Get()) != null;
             if (logged) ChangeScreen(ScreenId.MAIN);
             else ChangeScreen(ScreenId.LOGIN);
@@ -229,7 +230,7 @@ namespace Foxter
             {
                 case ScreenId.MAIN:
                     {
-                        var screen = new HomeScreen(_authorModel, _chapterModel, _session, _publishNotifier);
+                        var screen = new HomeScreen(_authorModel, _chapterModel, _sessionMgr.GetExistingSession(), _publishNotifier);
                         SetMainContent(screen);
                         homeButton.BackColor = activeColor;
                         break;

@@ -10,20 +10,21 @@ using static System.Windows.Forms.VisualStyles.VisualStyleElement.StartPanel;
 
 namespace Foxter.AO3
 {
-    public class Ao3Session
+    public class Ao3Session : ISession
     {
-        private static readonly log4net.ILog _logger = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+        private static readonly log4net.ILog _logger = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod()!.DeclaringType);
         private HttpClient _httpClient;
-        public CookieContainer SessionCookies { get; private set; }
-        public int Id { get; private set; }
-        public string User { get; private set; }
-        public bool Autenticated { get; private set; }
+        private CookieContainer _cookies;
+        private bool _authenticated;
+        private string _username;
+        private int _userId;
 
         
-        private async Task<int> GetUserId()
+        
+        private async Task<int> FetchRemoteUserId()
         {
             var rootDoc = new HtmlAgilityPack.HtmlDocument();
-            rootDoc.LoadHtml(await _httpClient.GetStringAsync($"users/{User}/profile"));
+            rootDoc.LoadHtml(await _httpClient.GetStringAsync($"users/{_username}/profile"));
             var userIdNode = rootDoc.DocumentNode.SelectSingleNode("//input[@id='subscription_subscribable_id'][1]/@value");
             if(userIdNode != null)
             {
@@ -40,11 +41,11 @@ namespace Foxter.AO3
         
         public void Reset()
         {
-            SessionCookies = new CookieContainer();
+            _cookies = new CookieContainer();
             var handler = new HttpClientHandler()
             {
                 AllowAutoRedirect = false,
-                CookieContainer = SessionCookies,
+                CookieContainer = _cookies,
             };
 
             var uri = new Uri("https://archiveofourown.org/");
@@ -86,13 +87,13 @@ namespace Foxter.AO3
             var form = new FormUrlEncodedContent(loginFormData);
             var loginRequest = await _httpClient.PostAsync("users/login", form);
             bool authenticated = loginRequest.StatusCode == HttpStatusCode.Redirect;
-            this.Autenticated = authenticated;
+            _authenticated = authenticated;
             if(authenticated) {
                 _logger.Info("Login attempt was successful successful");
                 string userLinkMatchExpression = @"<a href=""https://archiveofourown\.org/users/(?<Username>[^""]+)""";
                 var userLinkMatch = Regex.Match(await loginRequest.Content.ReadAsStringAsync(), userLinkMatchExpression);
-                User = userLinkMatch.Groups["Username"].Value;
-                Id = await GetUserId();
+                _username = userLinkMatch.Groups["Username"].Value;
+                _userId = await FetchRemoteUserId();
                 return true;
             }
             else
@@ -104,7 +105,41 @@ namespace Foxter.AO3
 
         }
 
+        public Task<bool> LoadPreviousSession(string data)
+        {
+            throw new NotImplementedException();
+        }
 
-        
+        //Getters
+        public CookieContainer GetCookies()
+        {
+            return _cookies;
+        }
+
+        public int GetId()
+        {
+            return _userId;
+        }
+
+        public string GetUser()
+        {
+            return _username;
+        }
+
+        public bool IsAuthenticated()
+        {
+            return _authenticated;
+        }
+
+        //ctor
+        public Ao3Session()
+        {
+            
+            _httpClient = null;
+            _cookies = null;
+            _authenticated = false;
+            _username = "";
+            _userId = 0;
+        }
     }
 }

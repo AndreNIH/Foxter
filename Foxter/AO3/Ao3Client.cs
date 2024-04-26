@@ -20,13 +20,13 @@ namespace Foxter.AO3
     {
         private static readonly log4net.ILog _logger = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
         private HttpClient _httpClient;
-        private Ao3Session _session;
+        private ISession _session;
         private Ao3WorkFactory _workFactory;
         private Uploader _draftUploader;
-        public Ao3Client(Ao3Session session)
+        public Ao3Client(ISession session)
         {
             _session = session;
-            if (!session.Autenticated) {
+            if (!session.IsAuthenticated()) {
                 throw new Ao3GenericException("Session not authenticated");
             }
 
@@ -35,7 +35,7 @@ namespace Foxter.AO3
             var clientHandler = new HttpClientHandler()
             {
                 AllowAutoRedirect = false,
-                CookieContainer = session.SessionCookies
+                CookieContainer = session.GetCookies()
             };
             _httpClient = new HttpClient(clientHandler) { BaseAddress = uri };
             _workFactory = new Ao3WorkFactory(_session); //No DI here
@@ -48,8 +48,8 @@ namespace Foxter.AO3
             var worksList = new List<Ao3Work>();
             for(int pageNumber = 1; ; pageNumber++)
             {
-                _logger.Info($"Fetching all works on page {pageNumber} for user {_session.User}");
-                var rawDoc = await _httpClient.GetStringAsync($"users/{_session.User}/works?page={pageNumber}");
+                _logger.Info($"Fetching all works on page {pageNumber} for user {_session.GetUser()}");
+                var rawDoc = await _httpClient.GetStringAsync($"users/{_session.GetUser()}/works?page={pageNumber}");
                 var docRoot = new HtmlAgilityPack.HtmlDocument();
                 docRoot.LoadHtml(rawDoc);
                 var userWorks = docRoot.DocumentNode.SelectNodes("//li[contains(@class, 'blurb')]/descendant::a[1]");
@@ -125,7 +125,7 @@ namespace Foxter.AO3
         }
 
 
-        public Ao3Session GetSession()
+        public ISession GetSession()
         {
             return _session;
         }

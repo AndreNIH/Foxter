@@ -1,11 +1,14 @@
 using Foxter.GUI.Forms;
+using Foxter.Settings;
 using log4net.Repository;
 using System.Diagnostics;
 using System.Net;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Runtime.Remoting;
-
+using log4net;
+using Foxter.Providers;
+using log4net.Config;
 
 
 namespace Foxter
@@ -15,6 +18,47 @@ namespace Foxter
         [DllImport("kernel32.dll", SetLastError = true)]
         [return: MarshalAs(UnmanagedType.Bool)]
         static extern bool AllocConsole();
+        
+        private static ILog _logger = LogManager.GetLogger(MethodBase.GetCurrentMethod()!.DeclaringType);
+        private static void ConfigureLogger()
+        {
+            ILoggerRepository repository = LogManager.GetRepository(Assembly.GetCallingAssembly());
+            XmlConfigurator.Configure(repository, new System.IO.FileInfo("log4net.config"));
+        }
+
+
+        private static void LoadApplicationSettings()
+        {
+            //Initialize settings
+            if (!SettingsManager.Get.Load())
+            {
+                SettingsManager.Get.Persist();
+            }
+        }
+
+        private static IDatabaseProvider GetDatabaseProvider()
+        {
+            if(SettingsManager.Get.Configuration.publishMode == AppConfiguration.PublishMode.KLocal)
+            {
+                return new LocalDbProvider();
+            }
+
+            return null;
+        }
+
+        static void StartApplication(bool startupLaunch)
+        {
+            LoadApplicationSettings();
+            IDatabaseProvider dbProvider = GetDatabaseProvider();
+            SessionManager sessionMgr = new SessionManager(new SessionProvider(), dbProvider.GetAuthorModel());
+            if (startupLaunch && SettingsManager.Get.Configuration.startMinimized)
+            {
+                var session = sessionMgr.CreateSession();
+                new MainForm(null, sessionMgr);
+            }
+
+        }
+
         /// <summary>
         ///  The main entry point for the application.
         /// </summary>
@@ -30,18 +74,14 @@ namespace Foxter
             string AppId = "Local\\c41fe00c-96c6-4fe5-b536-8db4f45b35a1";
             using (Mutex mtx = new Mutex(false, AppId))
             {
-                if (!mtx.WaitOne(0))
-                {
-                    return;
-                }
-
-                //First application instance
-                ILoggerRepository repository = log4net.LogManager.GetRepository(Assembly.GetCallingAssembly());
-                log4net.Config.XmlConfigurator.Configure(repository, new System.IO.FileInfo("log4net.config"));
-                log4net.ILog log = log4net.LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
-                log.Info("running application v" + Assembly.GetExecutingAssembly().GetName().Version.ToString());
+                //Single instance check
+                if (!mtx.WaitOne(0)) return; 
+                
+                ConfigureLogger();
+                ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod()!.DeclaringType);
+                log.Info("running application v" + Assembly.GetExecutingAssembly().GetName().Version!.ToString());
                 ApplicationConfiguration.Initialize();
-                Application.Run(new AppLoaderForm());
+                StartApplication(true);
             }
 
 

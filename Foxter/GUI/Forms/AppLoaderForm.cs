@@ -34,7 +34,7 @@ namespace Foxter.GUI.Forms
 
         private Ao3Session _session;
         private IAppServiceFactory _appServiceFactory;
-
+        private bool _startMinimized = false;
 
         private IAppServiceFactory CreateAppServiceFactory()
         {
@@ -59,7 +59,7 @@ namespace Foxter.GUI.Forms
             return null;
 
         }
-
+            
         private async Task<Ao3Session?> CreateSession(Author author)
         {
             try
@@ -86,13 +86,9 @@ namespace Foxter.GUI.Forms
             return null;
         }
         
+        
+        
         private async Task InitializeApplication() {
-            //Initialize settings
-            if (!SettingsManager.Get.Load())
-            {
-                SettingsManager.Get.Persist();
-            }
-            
             _session = new Ao3Session();
             _appServiceFactory = CreateAppServiceFactory();
             
@@ -136,17 +132,29 @@ namespace Foxter.GUI.Forms
             }
             
         }
+
+        protected override async void OnLoad(EventArgs e)
+        {
+            base.OnLoad(e);
+            //LoadApplicationSettings();
+            
+        }
         
         protected override async  void OnShown(EventArgs e)
         {
             base.OnShown(e);
-            await Task.Run(InitializeApplication);
-            new MainForm(_appServiceFactory, _session).Show();
+            /*if (SettingsManager.Get.Configuration.startMinimized == false)
+            {
+                await Task.Run(InitializeApplication);
+                new MainForm(_appServiceFactory, _session).Show();
+            }
+            
             Hide();
+            //Hide();*/
         }
 
 
-        public AppLoaderForm()
+        public AppLoaderForm(bool startHidden)
         {
             InitializeComponent();
         }
@@ -155,11 +163,6 @@ namespace Foxter.GUI.Forms
         {
             ReleaseCapture();
             SendMessage(this.Handle, 0x112, 0xf012, 0);
-        }
-
-        private void label1_Click(object sender, EventArgs e)
-        {
-
         }
     }
 }

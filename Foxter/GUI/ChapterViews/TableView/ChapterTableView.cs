@@ -27,7 +27,7 @@ namespace Foxter.GUI.ChapterViews.TableView
 
         public async Task OnChapterModelUpdated()
         {
-            var allChapters = await _model.GetAllChaptersFromAuthor(_session.Id);
+            var allChapters = await _model.GetAllChaptersFromAuthor(_session.GetId());
             _tableView.SuspendLayout();
             _tableView.Controls.Clear();
             foreach (var c in allChapters)

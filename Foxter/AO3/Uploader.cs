@@ -10,20 +10,20 @@ namespace Foxter.AO3
 {
     internal class Uploader
     {
-        private Ao3Session _session;
+        private ISession _session;
         private HttpClient _http;
         private string _url;
-        public Uploader(Ao3Session session)
+        public Uploader(ISession session)
         {
             _session = session;
-            if (_session.Autenticated == false)
+            if (!_session.IsAuthenticated())
             {
                 throw new Ao3ForbiddenException("session not authenticated");
             }
             var handler = new HttpClientHandler()
             {
                 AllowAutoRedirect = true,
-                CookieContainer = _session.SessionCookies
+                CookieContainer = _session.GetCookies()
             };
 
             _http = new HttpClient(handler);

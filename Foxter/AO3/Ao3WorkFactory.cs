@@ -49,12 +49,12 @@ namespace Foxter.AO3
             return work;
         }
         
-        public Ao3WorkFactory(Ao3Session session)
+        public Ao3WorkFactory(ISession session)
         {
             var handler = new HttpClientHandler()
             {
                 AllowAutoRedirect = true,
-                CookieContainer = session.SessionCookies,
+                CookieContainer = session.GetCookies(),
             };
 
             var uri = new Uri("https://archiveofourown.org/");
