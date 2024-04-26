@@ -47,18 +47,24 @@ namespace Foxter
             return null;
         }
 
-        static async Task StartApplication(bool startupLaunch)
+        static void StartApplication(bool startupLaunch)
         {
+            _logger.Info($"Launching main window. starupLaunch={startupLaunch}");
             LoadApplicationSettings();
             IDatabaseProvider dbProvider = GetDatabaseProvider();
             SessionManager sessionMgr = new SessionManager(new SessionProvider(), dbProvider.GetAuthorModel());
-            await sessionMgr.RestorePreviousSession();
-            Application.Run(new MainForm(dbProvider, sessionMgr));
-            /*if (startupLaunch && SettingsManager.Get.Configuration.startMinimized)
+
+            if (startupLaunch && SettingsManager.Get.Configuration.startMinimized)
             {
-                
-                new MainForm(dbProvider, sessionMgr);
-            }*/
+                sessionMgr.RestorePreviousSession().Wait();
+                Application.Run(new MainForm(dbProvider, sessionMgr, true));
+            }
+            else
+            {
+                Application.Run(new AppLoaderForm(dbProvider, sessionMgr));
+            }
+
+            
 
         }
 
@@ -66,7 +72,7 @@ namespace Foxter
         ///  The main entry point for the application.
         /// </summary>
         [STAThread]
-        static async Task Main()
+        static void Main(string[] args)
         {
             // To customize application configuration such as set high DPI settings or default font,
             // see https://aka.ms/applicationconfiguration.
@@ -80,11 +86,14 @@ namespace Foxter
                 //Single instance check
                 if (!mtx.WaitOne(0)) return; 
                 
+                //Configuration
                 ConfigureLogger();
-                ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod()!.DeclaringType);
-                log.Info("running application v" + Assembly.GetExecutingAssembly().GetName().Version!.ToString());
                 ApplicationConfiguration.Initialize();
-                await StartApplication(true);
+                _logger.Info("running application v" + Assembly.GetExecutingAssembly().GetName().Version!.ToString());
+                
+                //Application launch
+                bool startupLaunch = Array.Exists(args, arg => arg == "--startup");
+                StartApplication(startupLaunch);
             }
 
 

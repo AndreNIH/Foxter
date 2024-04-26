@@ -34,8 +34,9 @@ namespace Foxter
         private PublishNotifier _publishNotifier;
         private System.Timers.Timer _publishTimer;
         private bool _supressFormClosing;
+        private bool _hidden;
 
-        public MainForm(IDatabaseProvider dbProvider, SessionManager sessionMgr)
+        public MainForm(IDatabaseProvider dbProvider, SessionManager sessionMgr, bool hidden=false)
         {
             InitializeComponent();
             _authorModel = dbProvider.GetAuthorModel();
@@ -61,6 +62,13 @@ namespace Foxter
             //Supress closing
             _supressFormClosing = true;
 
+            //Startup hidden form
+            _hidden = hidden;
+            if (_hidden)
+            {
+                _logger.Info("application started up in hidden mode, sending to tray...");
+                SendToTray();
+            }
 
         }
 
@@ -101,7 +109,6 @@ namespace Foxter
         protected async override void OnLoad(EventArgs e)
         {
             base.OnLoad(e);
-
             var assemblyName = System.Reflection.Assembly.GetExecutingAssembly().GetName();
             versionLabel.Text = "Version: " + (assemblyName != null ? assemblyName.Version : "N/A");
             bool logged = (await _authorModel.Get()) != null;
@@ -110,11 +117,11 @@ namespace Foxter
 
         }
 
-
         private void SendToTray()
         {
+            _logger.Info("application sent to tray");
             notifyIcon.Visible = true;
-            notifyIcon.ShowBalloonTip(500);
+            if(!_hidden) notifyIcon.ShowBalloonTip(500);
             Hide();
         }
 
@@ -141,6 +148,13 @@ namespace Foxter
         {
             Application.Exit();
         }
+
+        //Hide form on form Show
+        protected override void SetVisibleCore(bool value)
+        {
+            base.SetVisibleCore(_hidden ? false : value);
+        }
+
 
         //Child Form Loading
         private void SetMainContent(Form childForm)
@@ -315,6 +329,8 @@ namespace Foxter
 
         private void notifyIcon_MouseDoubleClick(object sender, MouseEventArgs e)
         {
+            _logger.Info("sent application to the foreground");
+            _hidden = false;
             Show();
             notifyIcon.Visible = false;
         }

@@ -1,6 +1,7 @@
 ﻿using Foxter.AO3;
 using Foxter.Factories;
 using Foxter.Models.Base;
+using Foxter.Providers;
 using Foxter.Settings;
 using Newtonsoft.Json;
 using System;
@@ -31,107 +32,9 @@ namespace Foxter.GUI.Forms
         [DllImport("user32.dll", EntryPoint = "SendMessage")]
         private extern static void SendMessage(System.IntPtr hwndm, int msg, int wParam, int lParam);
         //End of external DLL imports
+        SessionManager _sessionMgr;
+        IDatabaseProvider _dbProvider;
 
-        private Ao3Session _session;
-        private IAppServiceFactory _appServiceFactory;
-        private bool _startMinimized = false;
-
-        private IAppServiceFactory CreateAppServiceFactory()
-        {
-            try
-            {
-                var path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData),"AO3S");
-                var serviceFactory = new LocalAppServiceFactory(path);
-                return serviceFactory;
-
-
-            }catch(SqlException ex)
-            {
-                _logger.Error(ex.Message);
-                MessageBox.Show("An error occured while accessing the database");
-                
-            }catch(UnauthorizedAccessException ex)
-            {
-                _logger.Error(ex.Message);
-                MessageBox.Show(ex.Message);
-            }
-            
-            return null;
-
-        }
-            
-        private async Task<Ao3Session?> CreateSession(Author author)
-        {
-            try
-            {
-                var session = new Ao3Session();
-                bool success = await session.Login(author.Name, author.Password);
-                if (success) return session;
-                else return null;
-            }
-            catch(Ao3GenericException ex)
-            {
-                _logger.Error(ex.Message);
-            }
-            catch(HttpRequestException ex)
-            {
-                _logger.Warn(ex.Message);
-                MessageBox.Show(
-                        ex.Message,
-                        "Connection Error",
-                        MessageBoxButtons.OK,
-                        MessageBoxIcon.Warning
-                        );
-            }
-            return null;
-        }
-        
-        
-        
-        private async Task InitializeApplication() {
-            _session = new Ao3Session();
-            _appServiceFactory = CreateAppServiceFactory();
-            
-            //Theres no service factory
-            //terminate the program
-            if(_appServiceFactory == null){
-                Application.Exit();
-                return;
-            }
-            
-            var authorModel = _appServiceFactory.CreateAuthorModel();
-            var author = await authorModel.Get();
-            //Theres no logged author
-            //return early
-            if(author == null)
-            {
-                return;
-            }
-
-            //Try to log in
-            try
-            {
-                var newSession = await CreateSession(author);
-                if (newSession == null)
-                {
-                    //Failed to log in
-                    await authorModel.Delete();
-                }
-                else
-                {
-                    _session = newSession;
-                }
-            }catch(Ao3GenericException)
-            {
-                MessageBox.Show("An unknwon error occured", "Unknown Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-            catch(HttpRequestException ex)
-            {
-                _logger.Warn(ex.Message);
-                MessageBox.Show(ex.Message,"Connection Error",MessageBoxButtons.OK,MessageBoxIcon.Warning);
-            }
-            
-        }
 
         protected override async void OnLoad(EventArgs e)
         {
@@ -143,19 +46,16 @@ namespace Foxter.GUI.Forms
         protected override async  void OnShown(EventArgs e)
         {
             base.OnShown(e);
-            /*if (SettingsManager.Get.Configuration.startMinimized == false)
-            {
-                await Task.Run(InitializeApplication);
-                new MainForm(_appServiceFactory, _session).Show();
-            }
-            
+            await Task.Run(_sessionMgr.RestorePreviousSession);
             Hide();
-            //Hide();*/
+            new MainForm(_dbProvider, _sessionMgr).Show();
         }
 
 
-        public AppLoaderForm(bool startHidden)
+        public AppLoaderForm(IDatabaseProvider dbProvider, SessionManager sessionManager)
         {
+            _dbProvider = dbProvider;
+            _sessionMgr = sessionManager;
             InitializeComponent();
         }
 
