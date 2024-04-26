@@ -38,24 +38,27 @@ namespace Foxter
 
         private static IDatabaseProvider GetDatabaseProvider()
         {
-            if(SettingsManager.Get.Configuration.publishMode == AppConfiguration.PublishMode.KLocal)
+            string path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData),"AO3S","las.sqlite");
+            if (SettingsManager.Get.Configuration.publishMode == AppConfiguration.PublishMode.KLocal)
             {
-                return new LocalDbProvider();
+                return new LocalDbProvider(path);
             }
 
             return null;
         }
 
-        static void StartApplication(bool startupLaunch)
+        static async Task StartApplication(bool startupLaunch)
         {
             LoadApplicationSettings();
             IDatabaseProvider dbProvider = GetDatabaseProvider();
             SessionManager sessionMgr = new SessionManager(new SessionProvider(), dbProvider.GetAuthorModel());
-            if (startupLaunch && SettingsManager.Get.Configuration.startMinimized)
+            await sessionMgr.RestorePreviousSession();
+            Application.Run(new MainForm(dbProvider, sessionMgr));
+            /*if (startupLaunch && SettingsManager.Get.Configuration.startMinimized)
             {
-                var session = sessionMgr.CreateSession();
-                new MainForm(null, sessionMgr);
-            }
+                
+                new MainForm(dbProvider, sessionMgr);
+            }*/
 
         }
 
@@ -63,7 +66,7 @@ namespace Foxter
         ///  The main entry point for the application.
         /// </summary>
         [STAThread]
-        static void Main()
+        static async Task Main()
         {
             // To customize application configuration such as set high DPI settings or default font,
             // see https://aka.ms/applicationconfiguration.
@@ -81,7 +84,7 @@ namespace Foxter
                 ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod()!.DeclaringType);
                 log.Info("running application v" + Assembly.GetExecutingAssembly().GetName().Version!.ToString());
                 ApplicationConfiguration.Initialize();
-                StartApplication(true);
+                await StartApplication(true);
             }
 
 

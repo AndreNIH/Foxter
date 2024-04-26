@@ -19,15 +19,47 @@ namespace Foxter
         private log4net.ILog _logger = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod()!.DeclaringType);
         
 
-        private async Task<ISession?> RestorePreviousSession(Author author)
+        public async Task<bool> RestorePreviousSession()
         {
-            var session = _sessionProvider.GetSession();
-            if (await session.Login(author.Name, author.Password) == false)
+            var author = await _model.Get();
+            if(author != null)
             {
-                return session;
+                var session = _sessionProvider.GetSession();
+                if (await session.Login(author.Name, author.Password))
+                {
+                    _logger.Info("restored existing session");
+                    _session = session;
+                    return true;
+                }
             }
+            
             _logger.Warn("session is no longer valid");
-            return null;
+            await _model.Delete();
+            return false;
+        }
+
+        public async Task<bool> CreateNewSession(string user, string password)
+        {
+            _logger.Info("creating new session");
+            var session =  _sessionProvider.GetSession();
+            if(await session.Login(user, password))
+            {
+                bool success = await _model.Create(new Author { Name = session.GetUser(), Password = password, Id = session.GetId() }) ;
+                if (success)
+                {
+                    _logger.Info("successfully created a new session");
+                    _session = session;
+                    return true;
+                }
+                else
+                {
+                    _logger.Warn("login was succesful but a database record couldn't be created");
+                    return false;
+                }
+                
+            }
+            
+            return false;
         }
 
         public async Task DeleteSession()
@@ -50,23 +82,7 @@ namespace Foxter
             return false;
         }
         
-        public async Task<ISession> CreateSession()
-        {
-            _logger.Info("creating new session");
-            var author = await _model.Get();
-            if(author != null)
-            {
-                var session = await RestorePreviousSession(author);
-                if (session != null)
-                {
-                    await _model.Delete();
-                    return session;
-                }
-            }
-            
-            return _sessionProvider.GetSession();
-
-        }
+        
 
         public ISession GetExistingSession()
         {

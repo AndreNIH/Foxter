@@ -34,7 +34,7 @@ namespace Foxter.Controllers.ChapterControllers
 
         public async Task<bool> Update(int chapterId, Chapter newChapter)
         {
-            newChapter.AuthorId = _client.GetSession().Id;
+            newChapter.AuthorId = _client.GetSession().GetId();
             return await  _model.Update(chapterId, newChapter);
         }
 
@@ -98,7 +98,7 @@ namespace Foxter.Controllers.ChapterControllers
 
         public UpdateChapterController(
             IChapterModel model,
-            Ao3Session session,
+            ISession session,
             int workId,
             int chapterId)
         {

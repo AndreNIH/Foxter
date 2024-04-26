@@ -13,7 +13,7 @@ namespace Foxter.Controllers.ChapterControllers
 {
     public class ChapterTableController : IChapterController
     {
-        private Ao3Session _session;
+        private ISession _session;
         private ChapterTableView _view;
         private IChapterModel _model;
 
@@ -37,7 +37,7 @@ namespace Foxter.Controllers.ChapterControllers
         public async Task RefreshUI()
         {
             await _view.OnChapterModelUpdated();
-            int? chapters = await _model.GetChapterCountFromAuthor(_session.Id); 
+            int? chapters = await _model.GetChapterCountFromAuthor(_session.GetId()); 
             if(chapters != null && chapters > 0)
             {
                 _view.DisplayActive(true);
@@ -48,7 +48,7 @@ namespace Foxter.Controllers.ChapterControllers
             }
         }
 
-        public ChapterTableController(IChapterModel model, TableLayoutPanel tableView, TabControl tabView, Ao3Session session)
+        public ChapterTableController(IChapterModel model, TableLayoutPanel tableView, TabControl tabView, ISession session)
         {
             _model = model;
             _view = new ChapterTableView(model, tableView, tabView, session);

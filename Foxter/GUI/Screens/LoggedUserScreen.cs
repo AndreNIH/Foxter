@@ -17,28 +17,24 @@ namespace Foxter.GUI.Screens
     public partial class LoggedUserScreen : Form
     {
         private IAuthorController _authorDisplayController;
-        private IAuthorController _authroController;
-        private Ao3Session _session;
+        private SessionManager _sessionMgr;
         private IScreenUpdater _updater;
-        public LoggedUserScreen(ref Ao3Session session, IAuthorModel authorModel, IScreenUpdater updater)
+        public LoggedUserScreen(SessionManager sessionMgr, IScreenUpdater updater)
         {
             InitializeComponent();
-            _authorDisplayController = new DisplayAuthorController(authorModel, authorLabel);
-            _authroController = new LoginAuthorController(authorModel);
-            _session = session;
+            _sessionMgr = sessionMgr;
             _updater = updater;
         }
 
         protected async override void OnLoad(EventArgs e)
         {
             base.OnLoad(e);
-            await _authorDisplayController.UpdateViews();
+            authorLabel.Text = _sessionMgr.GetExistingSession().GetUser();
         }
 
         private async void logoutButton_Click(object sender, EventArgs e)
         {
-            await _authroController.UnregisterAuthor();
-            _session.Reset();
+            await _sessionMgr.DeleteSession();
             _updater.ChangeScreen(ScreenId.LOGIN);
         }
     }

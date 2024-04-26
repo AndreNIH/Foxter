@@ -23,7 +23,12 @@ namespace Foxter.Forms
     public partial class SchedulerScreen : Form, IPublishEventListener
     {
         private static readonly log4net.ILog _logger = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
-        public SchedulerScreen(Ao3Session session, IChapterModel model, PublishNotifier notifier)
+        private IChapterModel _model;
+        private ISession _session;
+        private PublishNotifier _notifier;
+        private ChapterTableController _controller;
+
+        public SchedulerScreen(ISession session, IChapterModel model, PublishNotifier notifier)
         {
             InitializeComponent();
             _controller = new ChapterTableController(model, storyListContainer, mainContainer, session);
@@ -59,10 +64,7 @@ namespace Foxter.Forms
             await _controller.RefreshUI();
         }
 
-        private IChapterModel _model;
-        private ChapterTableController _controller;
-        private Ao3Session _session;
-        private PublishNotifier _notifier;
+        
     }
 
 

@@ -17,7 +17,7 @@ namespace Foxter.GUI.ChapterViews.TableView
     {
         private IChapterModel _model;
         private TableLayoutPanel _tableView;
-        private Ao3Session _session;
+        private ISession _session;
         private TabControl _tabView;
 
         public void DisplayActive(bool value)
@@ -62,7 +62,7 @@ namespace Foxter.GUI.ChapterViews.TableView
             formController.ShowForm();
         }
 
-        public ChapterTableView(IChapterModel model, TableLayoutPanel tableView, TabControl tabView, Ao3Session session)
+        public ChapterTableView(IChapterModel model, TableLayoutPanel tableView, TabControl tabView, ISession session)
         {
             _model = model;
             _tableView = tableView;

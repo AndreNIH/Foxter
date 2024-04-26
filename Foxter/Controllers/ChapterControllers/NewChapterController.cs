@@ -92,7 +92,7 @@ namespace Foxter.Controllers.ChapterControllers
         }
         
 
-        public NewChapterController(IChapterModel model,Ao3Session session)
+        public NewChapterController(IChapterModel model,ISession session)
         {
             _model = model;
             _client = new Ao3Client(session);

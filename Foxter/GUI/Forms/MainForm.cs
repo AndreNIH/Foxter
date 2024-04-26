@@ -4,6 +4,7 @@ using Foxter.Forms;
 using Foxter.GUI.Forms;
 using Foxter.GUI.Screens;
 using Foxter.Models;
+using Foxter.Providers;
 using Foxter.Publisher;
 using Foxter.Publisher.Notifier;
 using Foxter.Settings;
@@ -34,11 +35,11 @@ namespace Foxter
         private System.Timers.Timer _publishTimer;
         private bool _supressFormClosing;
 
-        public MainForm(IAppServiceFactory serviceFactory, SessionManager sessionMgr)
+        public MainForm(IDatabaseProvider dbProvider, SessionManager sessionMgr)
         {
             InitializeComponent();
-            _authorModel = serviceFactory.CreateAuthorModel();
-            _chapterModel = serviceFactory.CreateChapterModel();
+            _authorModel = dbProvider.GetAuthorModel();
+            _chapterModel = dbProvider.GetChapterModel();
             _sessionMgr = sessionMgr;
 
             //Publishing
@@ -239,21 +240,21 @@ namespace Foxter
                 case ScreenId.SCHEDULE:
                     {
 
-                        var screen = new SchedulerScreen(_session, _chapterModel, _publishNotifier);
+                        var screen = new SchedulerScreen(_sessionMgr.GetExistingSession(), _chapterModel, _publishNotifier);
                         SetMainContent(screen);
                         scheduleButton.BackColor = activeColor;
                         break;
                     }
                 case ScreenId.LOGIN:
                     {
-                        var screen = new LoginScreen(ref _session, _authorModel, this);
+                        var screen = new LoginScreen(_sessionMgr, _authorModel, this);
                         SetMainContent(screen);
                         accountsButton.BackColor = activeColor;
                         break;
                     }
                 case ScreenId.LOGGED_IN:
                     {
-                        var screen = new LoggedUserScreen(ref _session, _authorModel, this);
+                        var screen = new LoggedUserScreen(_sessionMgr, this);
                         SetMainContent(screen);
                         accountsButton.BackColor = activeColor;
                         break;
@@ -285,7 +286,7 @@ namespace Foxter
         //Sidebar Buttons
         private async void homeButton_Click(object sender, EventArgs e)
         {
-            bool logged = (await _authorModel.Get()) != null;
+            bool logged = _sessionMgr.HasActiveSession();
             if (logged) ChangeScreen(ScreenId.MAIN);
             else ChangeScreen(ScreenId.NO_USER);
         }
@@ -293,14 +294,14 @@ namespace Foxter
 
         private async void scheduleButton_Click(object sender, EventArgs e)
         {
-            bool logged = (await _authorModel.Get()) != null;
+            bool logged = _sessionMgr.HasActiveSession();
             if (logged) ChangeScreen(ScreenId.SCHEDULE);
             else ChangeScreen(ScreenId.NO_USER);
         }
 
         private async void accountsButton_Click(object sender, EventArgs e)
         {
-            bool logged = (await _authorModel.Get()) != null;
+            bool logged = _sessionMgr.HasActiveSession();
             if (logged) ChangeScreen(ScreenId.LOGGED_IN);
             else ChangeScreen(ScreenId.LOGIN);
 
