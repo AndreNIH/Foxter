@@ -23,7 +23,7 @@ namespace Foxter.Models.Local
                 connection.ConnectionString = _connectionString;
                 await connection.OpenAsync();
                 var cmd = connection.CreateCommand();
-                cmd.CommandText = "insert into AUTHORS(AuthorId, Username, Password) values(@id, @username, @password) ";
+                cmd.CommandText = "insert into AUTHORS(AuthorId, Username, Sessdata) values(@id, @username, @sessdata) ";
 
                 //Prepared statement setup
                 var idParam = cmd.CreateParameter();
@@ -36,10 +36,10 @@ namespace Foxter.Models.Local
                 usernameParam.Value = author.Name;
                 cmd.Parameters.Add(usernameParam);
 
-                var passwordParam = cmd.CreateParameter();
-                passwordParam.ParameterName = "password";
-                passwordParam.Value = author.Password;
-                cmd.Parameters.Add(passwordParam);
+                var sessiondDataParameter = cmd.CreateParameter();
+                sessiondDataParameter.ParameterName = "sessdata";
+                sessiondDataParameter.Value = author.Sessdata;
+                cmd.Parameters.Add(sessiondDataParameter);
 
                 //Execute statement
                 try
@@ -98,7 +98,7 @@ namespace Foxter.Models.Local
                             var author = new Author();
                             author.Id = reader.GetInt32(0);
                             author.Name = reader.GetString(1);
-                            author.Password = reader.GetString(2);
+                            author.Sessdata = reader.GetString(2);
                             return author;
                         }
                     }

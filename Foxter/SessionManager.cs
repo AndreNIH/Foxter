@@ -5,7 +5,9 @@ using Foxter.Providers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace Foxter
@@ -21,21 +23,31 @@ namespace Foxter
 
         public async Task<bool> RestorePreviousSession()
         {
-            var author = await _model.Get();
-            if(author != null)
+            try
             {
-                var session = _sessionProvider.GetSession();
-                if (await session.Login(author.Name, author.Password))
+                var author = await _model.Get();
+                if (author != null)
                 {
-                    _logger.Info("restored existing session");
-                    _session = session;
-                    return true;
+                    var session = _sessionProvider.GetSession();
+                    if (await session.LoadPreviousSession(author.Sessdata))
+                    {
+                        _logger.Info("restored existing session");
+                        _session = session;
+                        return true;
+                    }
                 }
+
+                _logger.Warn("session is no longer valid");
+                //await _model.Delete();
+                return false;
+            }
+            catch (Ao3GenericException ex)
+            {
+                _logger.Error(ex.Message);
+                //await _model.Delete();
+                return false;
             }
             
-            _logger.Warn("session is no longer valid");
-            await _model.Delete();
-            return false;
         }
 
         public async Task<bool> CreateNewSession(string user, string password)
@@ -44,9 +56,18 @@ namespace Foxter
             var session =  _sessionProvider.GetSession();
             if(await session.Login(user, password))
             {
-                bool success = await _model.Create(new Author { Name = session.GetUser(), Password = password, Id = session.GetId() }) ;
+                //session.GetCookies().
+                var serdat = JsonSerializer.Serialize(session.GetCookies().GetAllCookies());
+                
+                bool success = await _model.Create(new Author { 
+                    Id = session.GetId(), 
+                    Name = session.GetUser(), 
+                    Sessdata=serdat }
+                );
+                
                 if (success)
                 {
+                    
                     _logger.Info("successfully created a new session");
                     _session = session;
                     return true;
@@ -64,7 +85,7 @@ namespace Foxter
 
         public async Task DeleteSession()
         {
-            _session = null;
+            _session.Reset();
             var author = await _model.Get();
             if (author != null)
             {
@@ -93,7 +114,7 @@ namespace Foxter
         {
             _sessionProvider = sessionProvider;
             _model = model;
-            _session = null;
+            _session = sessionProvider.GetSession();
         }
     }
 }

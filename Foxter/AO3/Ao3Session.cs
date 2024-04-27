@@ -3,9 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Security.Policy;
 using System.Text;
+using System.Text.Json;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using static System.Windows.Forms.Design.AxImporter;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.StartPanel;
 
 namespace Foxter.AO3
@@ -19,26 +22,63 @@ namespace Foxter.AO3
         private string _username;
         private int _userId;
 
-        
-        
-        private async Task<int> FetchRemoteUserId()
+
+
+
+
+        private async Task<(int,string)?> FetchIdAndUsername()
         {
-            var rootDoc = new HtmlAgilityPack.HtmlDocument();
-            rootDoc.LoadHtml(await _httpClient.GetStringAsync($"users/{_username}/profile"));
-            var userIdNode = rootDoc.DocumentNode.SelectSingleNode("//input[@id='subscription_subscribable_id'][1]/@value");
-            if(userIdNode != null)
+            var doc = new HtmlAgilityPack.HtmlDocument();
+            string username;
+            int userId;
+
+            //Get username
+            _logger.Info("GET /users/login");
+            var page = await _httpClient.GetAsync("users/login");
+            if (page.StatusCode == HttpStatusCode.Redirect)
             {
-                string id = userIdNode.GetAttributeValue("value", null); 
-                if(id == null) throw new Ao3GenericException("Could not read user id from the page");
-                return int.Parse(id);
+                string exp = @"<a href=""https://archiveofourown\.org/users/(?<Username>.+)/.+""";
+                var match = Regex.Match(await page.Content.ReadAsStringAsync(), exp);
+                username = match.Groups["Username"].Value;
             }
             else
             {
-                throw new Ao3GenericException("Could not read user id from the page");
+                _logger.Warn("could not to obtain username: field lookup failed");
+                return null;
+            }
 
+
+            _logger.Info($"GET /users/{username}/profile");
+            page = await _httpClient.GetAsync($"users/{username}/profile");
+            doc.LoadHtml(await page.Content.ReadAsStringAsync());
+            var userIdNode = doc.DocumentNode.SelectSingleNode("//input[@id='subscription_subscribable_id']/@value");
+            if (userIdNode == null || !int.TryParse(userIdNode.GetAttributeValue("value", ""), out userId))
+            {
+                _logger.Warn("could not to obtain id: field lookup failed");
+                return null;
+            }
+
+            return (userId, username);
+
+        }
+
+        private async Task SetSessionIdentifiers()
+        {
+            var identifiers = await FetchIdAndUsername();
+            if (identifiers != null)
+            {
+                var (id, username) = identifiers.Value;
+                _userId = id;
+                _username = username;
+                _authenticated = true;
+            }
+            else
+            {
+                throw new Ao3GenericException("session values retrieval failed");
             }
         }
-        
+
+
         public void Reset()
         {
             _cookies = new CookieContainer();
@@ -46,7 +86,13 @@ namespace Foxter.AO3
             {
                 AllowAutoRedirect = false,
                 CookieContainer = _cookies,
+                Proxy = new WebProxy()
+                {
+                    //Address = new("http://127.0.1:8080")
+                }
+                //,ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator
             };
+            
 
             var uri = new Uri("https://archiveofourown.org/");
             _httpClient = new HttpClient(handler) { BaseAddress = uri };
@@ -87,13 +133,10 @@ namespace Foxter.AO3
             var form = new FormUrlEncodedContent(loginFormData);
             var loginRequest = await _httpClient.PostAsync("users/login", form);
             bool authenticated = loginRequest.StatusCode == HttpStatusCode.Redirect;
-            _authenticated = authenticated;
+            
             if(authenticated) {
-                _logger.Info("Login attempt was successful successful");
-                string userLinkMatchExpression = @"<a href=""https://archiveofourown\.org/users/(?<Username>[^""]+)""";
-                var userLinkMatch = Regex.Match(await loginRequest.Content.ReadAsStringAsync(), userLinkMatchExpression);
-                _username = userLinkMatch.Groups["Username"].Value;
-                _userId = await FetchRemoteUserId();
+                await SetSessionIdentifiers();
+                _authenticated = true;
                 return true;
             }
             else
@@ -105,9 +148,31 @@ namespace Foxter.AO3
 
         }
 
-        public Task<bool> LoadPreviousSession(string data)
+        public async Task<bool> LoadPreviousSession(string data)
         {
-            throw new NotImplementedException();
+
+            Reset();
+            var collection = JsonSerializer.Deserialize<CookieCollection>(data);
+            if (collection == null)
+            {
+                _logger.Warn($"failed to deserialize cookies, data: {data}");
+                return false;
+            }
+            
+            _cookies.GetAllCookies().Clear();
+            _cookies.Add(new Uri("https://archiveofourown.org"), collection);
+            _logger.Info("loaded session data to http client");
+            try
+            {
+                await SetSessionIdentifiers();
+                _authenticated = true;
+                return true;
+            }
+            catch (Ao3GenericException)
+            {
+                _logger.Warn("session data does not correspond to a logged user");
+                return false;
+            }
         }
 
         //Getters
@@ -135,8 +200,8 @@ namespace Foxter.AO3
         public Ao3Session()
         {
             
-            _httpClient = null;
-            _cookies = null;
+            _httpClient = new HttpClient();
+            _cookies = new CookieContainer();
             _authenticated = false;
             _username = "";
             _userId = 0;

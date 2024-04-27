@@ -110,7 +110,7 @@ namespace Foxter
             base.OnLoad(e);
             var assemblyName = System.Reflection.Assembly.GetExecutingAssembly().GetName();
             versionLabel.Text = "Version: " + (assemblyName != null ? assemblyName.Version : "N/A");
-            bool logged = (await _authorModel.Get()) != null;
+            bool logged = _sessionMgr.HasActiveSession();
             if (logged) ChangeScreen(ScreenId.MAIN);
             else ChangeScreen(ScreenId.LOGIN);
 

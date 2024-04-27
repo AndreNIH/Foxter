@@ -21,14 +21,14 @@ namespace Foxter.Forms
     public partial class HomeScreen : Form, IPublishEventListener
     {
         private static readonly log4net.ILog _logger = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod()!.DeclaringType);
-        private IAuthorController _authorController;
+        private ISession _session;
         private IChapterController _chapterDisplayController;
         private PublishNotifier _notifier;
 
         public HomeScreen(IAuthorModel authorModel, IChapterModel chapterModel, ISession session, PublishNotifier notifier)
         {
             InitializeComponent();
-            _authorController = new DisplayAuthorController(authorModel, authorLabel);
+            _session = session;
             _chapterDisplayController = new ChapterStatusController(chapterModel, pendingUploadLabel, failedUploadLabel, session.GetId());
             _notifier = notifier;
             _notifier.Subscribe(this);
@@ -38,7 +38,7 @@ namespace Foxter.Forms
         protected override async void OnLoad(EventArgs e)
         {
             base.OnLoad(e);
-            await _authorController.UpdateViews();
+            authorLabel.Text = _session.GetUser();
             await _chapterDisplayController.RefreshUI();
         }
 

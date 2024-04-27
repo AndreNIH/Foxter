@@ -9,6 +9,7 @@ using System.Runtime.Remoting;
 using log4net;
 using Foxter.Providers;
 using log4net.Config;
+using System.Data.SQLite;
 
 
 namespace Foxter
@@ -36,9 +37,46 @@ namespace Foxter
             }
         }
 
+        private static bool CreatePhysicalDatabaseStructure()
+        {
+            string root = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), "Foxter");
+            string dbFile = Path.Combine(root, "las.sqlite");
+            try
+            {
+                if (File.Exists(dbFile))
+                {
+                    _logger.Info($"database found in '${dbFile}'. Skipping file creation");
+                    return true;
+                }
+                _logger.Info($"database was not found in '${dbFile}'. Creating file");
+                if (!Directory.Exists(root))
+                {
+                    Directory.CreateDirectory(root);
+                    _logger.Info("subdirectories created");
+                }
+                
+                SQLiteConnection.CreateFile(dbFile);
+                var conn = new SQLiteConnection($"Data Source={dbFile};Version=3;");
+                conn.Open();
+                using (var cmd = new SQLiteCommand(Resources.AppStrings.DbCreationScript, conn))
+                {
+                    cmd.ExecuteNonQuery();
+                }
+                conn.Dispose();
+                _logger.Info("database file created");
+                return true;
+            }
+            catch (SQLiteException ex)
+            {
+                _logger.Error("SQLiteExcepion on database creation: " + ex.Message);
+                File.Delete(dbFile);
+                return false;
+            }
+        }
+
         private static IDatabaseProvider GetDatabaseProvider()
         {
-            string path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData),"AO3S","las.sqlite");
+            string path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData),"Foxter","las.sqlite");
             if (SettingsManager.Get.Configuration.publishMode == AppConfiguration.PublishMode.KLocal)
             {
                 return new LocalDbProvider(path);
@@ -49,8 +87,6 @@ namespace Foxter
 
         static void StartApplication(bool startupLaunch)
         {
-            _logger.Info($"Launching main window. starupLaunch={startupLaunch}");
-            LoadApplicationSettings();
             IDatabaseProvider dbProvider = GetDatabaseProvider();
             SessionManager sessionMgr = new SessionManager(new SessionProvider(), dbProvider.GetAuthorModel());
 
@@ -93,6 +129,8 @@ namespace Foxter
                 
                 //Application launch
                 bool startupLaunch = Array.Exists(args, arg => arg == "--startup");
+                if (!CreatePhysicalDatabaseStructure()) return;
+                LoadApplicationSettings();
                 StartApplication(startupLaunch);
             }
 

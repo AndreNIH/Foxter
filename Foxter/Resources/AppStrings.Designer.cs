@@ -64,9 +64,9 @@ namespace Foxter.Resources {
         ///   Looks up a localized string similar to -- AUTHORS definition
         ///
         ///CREATE TABLE &quot;AUTHORS&quot; (
-        ///	&quot;AuthorId&quot;	INTEGER NOT NULL,
-        ///	&quot;Username&quot;	TEXT NOT NULL,
-        ///	&quot;Password&quot;	TEXT NOT NULL,
+        ///	&quot;AuthorId&quot; INTEGER NOT NULL,
+        ///	&quot;Username&quot;  TEXT NOT NULL,
+        ///	&quot;Sessdata&quot;	TEXT NOT NULL,
         ///	PRIMARY KEY(&quot;AuthorId&quot;)
         ///);
         ///
@@ -81,7 +81,7 @@ namespace Foxter.Resources {
         ///	PublishingDate TEXT NOT NULL,
         ///	WrittenBy INTEGER,
         ///	CONSTRAINT CHAPTERS_PK PRIMARY KEY (ChapterId),
-        ///	CONSTRAINT CHAPTERS_AUTHORS_FK FOREIGN KEY (WrittenBy) REFERENCES AUTHORS(Auth [rest of string was truncated]&quot;;.
+        ///	CONSTRAINT CHAPTERS_AUTHORS_FK FOREIGN KEY (WrittenBy) REFERENCES AUTHORS(Aut [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string DbCreationScript {
             get {

@@ -121,9 +121,9 @@
     <value>-- AUTHORS definition
 
 CREATE TABLE "AUTHORS" (
-	"AuthorId"	INTEGER NOT NULL,
-	"Username"	TEXT NOT NULL,
-	"Password"	TEXT NOT NULL,
+	"AuthorId" INTEGER NOT NULL,
+	"Username"  TEXT NOT NULL,
+	"Sessdata"	TEXT NOT NULL,
 	PRIMARY KEY("AuthorId")
 );
 
