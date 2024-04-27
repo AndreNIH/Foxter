@@ -6,7 +6,7 @@
     <Nullable>enable</Nullable>
     <UseWindowsForms>true</UseWindowsForms>
     <ImplicitUsings>enable</ImplicitUsings>
-    <AssemblyVersion>0.1.1.75</AssemblyVersion>
+    <AssemblyVersion>0.1.1.78</AssemblyVersion>
     <FileVersion>0.1.1.0</FileVersion>
     <Version>0.1.1.0</Version>
     <ApplicationIcon>Images\foxter-main-icon-512.ico</ApplicationIcon>

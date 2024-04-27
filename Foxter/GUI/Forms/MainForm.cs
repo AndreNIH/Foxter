@@ -297,7 +297,7 @@ namespace Foxter
 
 
         //Sidebar Buttons
-        private async void homeButton_Click(object sender, EventArgs e)
+        private void homeButton_Click(object sender, EventArgs e)
         {
             bool logged = _sessionMgr.HasActiveSession();
             if (logged) ChangeScreen(ScreenId.MAIN);
@@ -305,14 +305,14 @@ namespace Foxter
         }
 
 
-        private async void scheduleButton_Click(object sender, EventArgs e)
+        private  void scheduleButton_Click(object sender, EventArgs e)
         {
             bool logged = _sessionMgr.HasActiveSession();
             if (logged) ChangeScreen(ScreenId.SCHEDULE);
             else ChangeScreen(ScreenId.LOGIN);
         }
 
-        private async void accountsButton_Click(object sender, EventArgs e)
+        private  void accountsButton_Click(object sender, EventArgs e)
         {
             bool logged = _sessionMgr.HasActiveSession();
             if (logged) ChangeScreen(ScreenId.LOGGED_IN);

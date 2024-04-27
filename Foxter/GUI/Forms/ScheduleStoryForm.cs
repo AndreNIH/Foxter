@@ -94,6 +94,7 @@ namespace Foxter.Forms
             chapterComboBox.DataSource = _chapterDS;
             chapterComboBox.DisplayMember = "DisplayField";
             chapterComboBox.ValueMember = "Id";
+            chapterComboBox.Enabled = chapterComboBox.Items.Count > 0;
         }
 
 
