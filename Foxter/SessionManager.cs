@@ -1,4 +1,5 @@
 ﻿using Foxter.AO3;
+using Foxter.AO3.Exceptions;
 using Foxter.Models;
 using Foxter.Models.Base;
 using Foxter.Providers;

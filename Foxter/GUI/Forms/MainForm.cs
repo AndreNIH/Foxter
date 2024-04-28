@@ -1,4 +1,4 @@
-using Foxter.AO3;
+using Foxter.AO3.Exceptions;
 using Foxter.Forms;
 using Foxter.GUI.Forms;
 using Foxter.GUI.Screens;
@@ -35,7 +35,7 @@ namespace Foxter
         private bool _supressFormClosing;
         private bool _hidden;
 
-        public MainForm(IDatabaseProvider dbProvider, SessionManager sessionMgr, bool hidden=false)
+        public MainForm(IDatabaseProvider dbProvider, SessionManager sessionMgr, bool hidden=false, bool offline=false)
         {
             InitializeComponent();
             _authorModel = dbProvider.GetAuthorModel();

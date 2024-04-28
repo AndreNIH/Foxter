@@ -1,4 +1,4 @@
-﻿using Foxter.AO3;
+﻿using Foxter.AO3.Exceptions;
 using Foxter.Controllers.AuthorControllers;
 using Foxter.GUI.Forms;
 using Foxter.Models;

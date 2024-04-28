@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Foxter.AO3.Exceptions;
 
 namespace Foxter.AO3
 {

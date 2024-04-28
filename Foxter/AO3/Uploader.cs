@@ -1,4 +1,5 @@
-﻿using HtmlAgilityPack;
+﻿using Foxter.AO3.Exceptions;
+using HtmlAgilityPack;
 using System;
 using System.Collections.Generic;
 using System.Linq;

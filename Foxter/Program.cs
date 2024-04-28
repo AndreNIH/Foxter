@@ -92,8 +92,19 @@ namespace Foxter
 
             if (startupLaunch && SettingsManager.Get.Configuration.startMinimized)
             {
-                sessionMgr.RestorePreviousSession().Wait();
-                Application.Run(new MainForm(dbProvider, sessionMgr, true));
+                try
+                {
+                    sessionMgr.RestorePreviousSession().Wait();
+                    Application.Run(new MainForm(dbProvider, sessionMgr, hidden: true));
+                }
+                catch (HttpRequestException exception)
+                {
+                    //silent startup, just log the error
+                    _logger.Error(exception.Message);
+                    Application.Run(new MainForm(dbProvider, sessionMgr, hidden: true, offline: true));
+                }
+                
+                
             }
             else
             {

@@ -12,6 +12,7 @@ using System.Runtime.Serialization.Formatters.Binary;
 using Newtonsoft.Json;
 using System.Net.Sockets;
 using Foxter.Models.Base;
+using Foxter.AO3.Exceptions;
 
 namespace Foxter.AO3
 {
@@ -27,7 +28,7 @@ namespace Foxter.AO3
         {
             _session = session;
             if (!session.IsAuthenticated()) {
-                throw new Ao3GenericException("Session not authenticated");
+                throw new Ao3ForbiddenException("Session not authenticated");
             }
 
             //No-redirect client
