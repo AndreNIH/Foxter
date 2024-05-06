@@ -32,15 +32,22 @@ namespace Foxter.AO3
             var doc = new HtmlAgilityPack.HtmlDocument();
             string username;
             int userId;
-
+            string rawHtml = "";
             //Get username
-            _logger.Info("GET /users/login");
-            var page = await _httpClient.GetAsync("users/login");
-            if (page.StatusCode == HttpStatusCode.Redirect)
+            _logger.Info("GET /");
+            var page = await _httpClient.GetAsync("/");
+            rawHtml = await page.Content.ReadAsStringAsync();
+            doc.LoadHtml(rawHtml);
+            
+            string exp = "//nav[@id='greeting']//li[@class='dropdown'][1]/a";
+            var userNode = doc.DocumentNode.SelectSingleNode(exp);
+            if (userNode != null)
             {
-                string exp = @"<a href=""https://archiveofourown\.org/users/(?<Username>.+)/.+""";
-                var match = Regex.Match(await page.Content.ReadAsStringAsync(), exp);
-                username = match.Groups["Username"].Value;
+
+                _logger.Debug(userNode.InnerText);
+                username = userNode.GetAttributeValue("href", null);
+                if (username == null) throw new Exception("menu item did not contain an href attribute");
+                username = username.Substring(7);
             }
             else
             {
