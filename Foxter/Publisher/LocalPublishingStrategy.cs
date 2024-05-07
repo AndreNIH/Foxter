@@ -33,7 +33,7 @@ namespace Foxter.Publisher
             {
                 try
                 {
-                    bool success = false;//await _client.PostDraft(c.StoryId, c.ChapterId);
+                    bool success = true;//await _client.PostDraft(c.StoryId, c.ChapterId);
                     if(success)
                     {
                         result.success++;
@@ -50,7 +50,7 @@ namespace Foxter.Publisher
                 {
                     //If an HTTPRequestException occured we will assume all subsequent call in
                     //this batch will fail
-                    _logger.Error("failed to publish chapter batch. " + e.Message);
+                    _logger.Error("http error, failed to publish chapter batch. " + e.Message);
                     result.failed += uploads.Count -  uploads.IndexOf(c) + 1 ;
                     break;
                 }

@@ -23,10 +23,6 @@ namespace Foxter.AO3
         private string _username;
         private int _userId;
 
-
-
-
-
         private async Task<(int,string)?> FetchIdAndUsername()
         {
             var doc = new HtmlAgilityPack.HtmlDocument();
@@ -34,7 +30,7 @@ namespace Foxter.AO3
             int userId=0;
             string rawHtml = "";
             //Get username
-            _logger.Info("GET /");
+            _logger.Info("retrieving username data. GET /");
             var page = await _httpClient.GetAsync("/");
             rawHtml = await page.Content.ReadAsStringAsync();
             doc.LoadHtml(rawHtml);
@@ -45,17 +41,20 @@ namespace Foxter.AO3
             {
 
                 username = userNode.GetAttributeValue("href", null);
-                if (username == null) throw new Exception("menu item did not contain an href attribute");
+                if (username == null) {
+                    _logger.Error("could not extract username because the corresponding menu item did not contain an href attribute");
+                    return null;
+                }
                 username = username.Substring(7);
             }
             else
             {
-                _logger.Warn("could not to obtain username: field lookup failed");
+                _logger.Warn("could not to obtain username: field not found");
                 return null;
             }
 
 
-            _logger.Info($"GET /users/{username}/profile");
+            _logger.Info($"retrieving user ID data. GET /users/{username}/profile");
             page = await _httpClient.GetAsync($"users/{username}/profile");
             rawHtml = await page.Content.ReadAsStringAsync();
             doc.LoadHtml(rawHtml);
@@ -80,10 +79,11 @@ namespace Foxter.AO3
                 _username = username;
                 _authenticated = true;
 
-                _logger.Info($"username={_username}, userId={_userId}");
+                _logger.Info($"set session identifiers to: username={_username}, userId={_userId}");
             }
             else
             {
+                _logger.Error("failed to retrieve session identifiers");
                 throw new Ao3GenericException("session values retrieval failed");
             }
         }
@@ -106,11 +106,11 @@ namespace Foxter.AO3
 
             var uri = new Uri("https://archiveofourown.org/");
             _httpClient = new HttpClient(handler) { BaseAddress = uri };
-            _logger.Info("Resetted Ao3Session object");
+            _logger.Info("cleared session object data");
         }
 
         public async Task<bool> Login(string user, string password) {
-            _logger.Info($"Logging in as '{user}'");
+            _logger.Info($"attempting to log in as '{user}'");
             
             //It is important to clear all the cookies, otherwise
             //AO3 will try to redirect us to the dashboard if we
@@ -147,11 +147,12 @@ namespace Foxter.AO3
             if(authenticated) {
                 await SetSessionIdentifiers();
                 _authenticated = true;
+                _logger.Info("login was sucessful");
                 return true;
             }
             else
             {
-                _logger.Info("Login attempt failed");
+                _logger.Info("login was unsuccesful");
                 return false;
             }
 
@@ -161,17 +162,18 @@ namespace Foxter.AO3
         public async Task<bool> LoadPreviousSession(string data)
         {
 
+            _logger.Info("attempting to restore a previous session using session cookies");
             Reset();
             var collection = JsonSerializer.Deserialize<CookieCollection>(data);
             if (collection == null)
             {
-                _logger.Warn($"failed to deserialize cookies, data: {data}");
+                _logger.Warn($"failed to deserialize session cookies, raw data: {data}");
                 return false;
             }
             
             _cookies.GetAllCookies().Clear();
             _cookies.Add(new Uri("https://archiveofourown.org"), collection);
-            _logger.Info("loaded session data to http client");
+            _logger.Info("session data decoded");
             try
             {
                 await SetSessionIdentifiers();
@@ -180,7 +182,7 @@ namespace Foxter.AO3
             }
             catch (Ao3GenericException)
             {
-                _logger.Warn("session data does not correspond to a logged user");
+                _logger.Warn("session data exists and is well-formed, but it is no longer valid");
                 return false;
             }
         }
@@ -209,7 +211,8 @@ namespace Foxter.AO3
         //ctor
         public Ao3Session()
         {
-            
+
+            _logger.Info("created new session object");
             _httpClient = new HttpClient();
             _cookies = new CookieContainer();
             _authenticated = false;

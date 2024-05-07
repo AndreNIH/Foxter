@@ -24,7 +24,12 @@ namespace Foxter
         private static void ConfigureLogger()
         {
             ILoggerRepository repository = LogManager.GetRepository(Assembly.GetCallingAssembly());
+
+#if DEBUG
+            XmlConfigurator.Configure(repository, new System.IO.FileInfo("log4net.debug.config"));
+#else
             XmlConfigurator.Configure(repository, new System.IO.FileInfo("log4net.config"));
+#endif
         }
 
 

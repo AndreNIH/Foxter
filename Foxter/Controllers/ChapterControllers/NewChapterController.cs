@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Foxter.Utils;
 
 namespace Foxter.Controllers.ChapterControllers
 {
@@ -18,13 +19,12 @@ namespace Foxter.Controllers.ChapterControllers
         private IChapterModel _model;
         private ScheduleStoryForm _view;
         private Ao3Client _client;
-        List<BoxItem> _workBuffer;
         Dictionary<int, List<BoxItem>> _chapterBuffer;
         bool _initializedUi;
 
         public async Task<bool> Create(Chapter chapter)
         {
-            _logger.Info("creating new chapter: " + chapter);
+            _logger.Info("creating new chapter, data=" + chapter);
             chapter.AuthorId = _client.GetSession().GetId();
             return await _model.Create(chapter);
         }
@@ -38,7 +38,7 @@ namespace Foxter.Controllers.ChapterControllers
         {
             try
             {
-                _logger.Info("refreshing user interface");
+                _logger.Info("a component requested a user interface refresh");
                 if(!_initializedUi)
                 {
                     //Assume work box isn't populated
@@ -53,18 +53,20 @@ namespace Foxter.Controllers.ChapterControllers
                     List<BoxItem> displayItems;
                     if (_chapterBuffer.ContainsKey(selectedWork.Value) == false)
                     {
-                        _logger.Info($"Retrieving chapter data for {selectedWork.Value} from the server");
+                        _logger.Info($"cache miss: no buffered chapters for story \"{selectedWork.Value}\", fetching from AO3 ");
                         var chapters = await _client.GetChaptersForWork(selectedWork.Value);
                         displayItems = chapters
                             .Where(c => c.Draft)
                             .Select(chapter => new BoxItem(chapter.Title, chapter.Id))
                             .ToList();
-                        _logger.Info($"Buffered {displayItems.Count} chapters for work {selectedWork.Value}");
                         _chapterBuffer.Add(selectedWork.Value, displayItems);
+                        _logger.Info($"buffered {displayItems.Count} chapters.");
+                        _logger.Info("newly buffered contents: " + ListToString<BoxItem>.Convert(displayItems));
                     }
                     else
                     {
-                        _logger.Info($"Retrieving chapter data for {selectedWork.Value} from the local buffer");
+                        _logger.Info($"{_chapterBuffer.Count} buffered chapters exist for work {selectedWork.Value}.");
+                        _logger.Info("buffer contents: " + ListToString<BoxItem>.Convert(_chapterBuffer[selectedWork.Value]));
                         displayItems = _chapterBuffer[selectedWork.Value];
                     }
                     _view.PopulateChaptersBox(displayItems);
@@ -73,7 +75,7 @@ namespace Foxter.Controllers.ChapterControllers
 
             }catch(HttpRequestException ex)
             {
-                _logger.Error(ex.Message);
+                _logger.Error("http error occured trying to refresh view: " + ex.Message);
                 throw ex;
             }
 
@@ -88,6 +90,7 @@ namespace Foxter.Controllers.ChapterControllers
 
         public void ShowForm()
         {
+            _logger.Info("brought NewChapterController managed view to foreground");
             _view.ShowDialog();
         }
         
@@ -97,9 +100,9 @@ namespace Foxter.Controllers.ChapterControllers
             _model = model;
             _client = new Ao3Client(session);
             _view = new ScheduleStoryForm(this);
-            _workBuffer = new List<BoxItem>();
             _chapterBuffer = new Dictionary<int, List<BoxItem>>();
             _initializedUi = false;
+            _logger.Info("created NewChapterController instance");
         }
     }
 }

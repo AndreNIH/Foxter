@@ -18,13 +18,13 @@ namespace Foxter.Publisher.Notifier
 
         public void Subscribe(IPublishEventListener listener)
         {
-            _logger.Info($"registered IPublishEventListener {listener}");
+            _logger.Info($"'{listener}' registered for chapter upload events");
             _publishListener.Add(listener);
         }
 
         public void Unsubscribe(IPublishEventListener listener)
         {
-            _logger.Info($"unregistered IPublishEventListener {listener}");
+            _logger.Info($"'{listener}' unregistered for chapter upload events");
             _publishListener.Remove(listener);
         }
 
@@ -32,8 +32,8 @@ namespace Foxter.Publisher.Notifier
         {
             foreach (var listener in _publishListener)
             {
-                _logger.Debug("firing up publish notification for " + listener);
-                listener.OnPublish();
+                _logger.Info("publish event occured, notifying " + listener);
+                await listener.OnPublish();
             }
         }
     }

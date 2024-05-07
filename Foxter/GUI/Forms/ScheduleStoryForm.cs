@@ -16,6 +16,7 @@ using log4net;
 using Foxter.Models;
 using Foxter.Controllers.ChapterControllers;
 using System.Diagnostics;
+using Foxter.Utils;
 
 namespace Foxter.Forms
 {
@@ -52,6 +53,7 @@ namespace Foxter.Forms
         //Update ctor
         public ScheduleStoryForm(IChapterController controller, int updateTarget)
         {
+            _logger.Info("created ScheduleStoryForm");
             InitializeComponent();
             mainContainer.Appearance = TabAppearance.FlatButtons;
             mainContainer.ItemSize = new Size(0, 1);
@@ -75,8 +77,8 @@ namespace Foxter.Forms
 
         public void PopulateWorksBox(List<BoxItem> items)
         {
+            _logger.Info($"populated works box with data: {ListToString<BoxItem>.Convert(items)}");
             var source = new AutoCompleteStringCollection();
-            _logger.Info("Populating works box");
             _worksDS.Clear();
             _worksDS.AddRange(items);
             worksComboBox.DataSource = null;
@@ -87,7 +89,7 @@ namespace Foxter.Forms
 
         public void PopulateChaptersBox(List<BoxItem> items)
         {
-            _logger.Info("Populated chapters box");
+            _logger.Info($"populated chapters box with data: {ListToString<BoxItem>.Convert(items)}");
             _chapterDS.Clear();
             _chapterDS.AddRange(items);
             chapterComboBox.DataSource = null;
@@ -101,6 +103,7 @@ namespace Foxter.Forms
         //Event handlers
         private async void deleteButton_Click(object sender, EventArgs e)
         {
+            _logger.Info("delete story button clicked");
             if (await _controller.Delete(_updateTarget) == false)
             {
                 MessageBox.Show(
@@ -126,6 +129,7 @@ namespace Foxter.Forms
             {
                 bool success = await _controller.Delete(_updateTarget);
                 if(!success) {
+                    _logger.Warn($"user requested a chapter({_updateTarget}) to be deleted, but the model failed to be updated");
                     //DRY!!!
                     MessageBox.Show(
                         $"Failed to cancel the upload task for '{chapterComboBox.Text}'",
@@ -133,6 +137,10 @@ namespace Foxter.Forms
                         MessageBoxButtons.OK,
                         MessageBoxIcon.Warning
                       );
+                }
+                else
+                {
+                    _logger.Info("chapter deleted");
                 }
 
             }
@@ -152,10 +160,12 @@ namespace Foxter.Forms
             {
                 if(ex.StatusCode == System.Net.HttpStatusCode.NotFound)
                 {
+                    _logger.Warn($"chapter id:${_updateTarget} no longer exists in AO3");
                     await HandleStoryNotFound();
                 }
                 else
                 {
+                    _logger.Error("http error: " + ex.Message);
                     MessageBox.Show(
                     ex.Message,
                     "Request Error",
@@ -170,6 +180,7 @@ namespace Foxter.Forms
 
         private async void scheduleButton_Click(object sender, EventArgs e)
         {
+            _logger.Info("schedule chapter button clicked");
             if (chapterComboBox.SelectedIndex == -1)
             {
                 _logger.Warn("cannot schedule story because no chapter was selected");
@@ -191,6 +202,7 @@ namespace Foxter.Forms
             var truncatedUploadDate = pdc.Date + new TimeSpan(pdc.Hour, pdc.Minute, 0);
             if (_uiBehavior == UiBehavior.kCreate)
             {
+                _logger.Info("creating new upload task");
                 var chapter = new Chapter();
                 chapter.StoryTitle = worksComboBox.Text;
                 chapter.ChapterTitle = chapterComboBox.Text;
@@ -211,6 +223,7 @@ namespace Foxter.Forms
             }
             else if (_uiBehavior == UiBehavior.kUpdate)
             {
+                _logger.Info("updating existing upload task");
                 var chapter = new Chapter();
                 chapter.StoryTitle = worksComboBox.Text;
                 chapter.ChapterTitle = chapterComboBox.Text;
@@ -237,7 +250,7 @@ namespace Foxter.Forms
             //This prevents the event fired whe first registering data bindings
             //from trying to refresh the view BEFORE it is fully initialized
             if (_skipUpdate) return;
-            _logger.Info("works index changed, refreshing ui");
+            _logger.Info("works index changed, requesting ui update");
             await _controller.RefreshUI();
         }
 
@@ -289,6 +302,13 @@ namespace Foxter.Forms
         {
             DisplayField = displayName;
             Id = id;
+        }
+        public override string ToString()
+        {
+            StringBuilder sb = new StringBuilder();
+            sb.Append($"DisplayField=\"{DisplayField}\", ");
+            sb.Append($"Id={Id}");
+            return sb.ToString();
         }
     }
 }

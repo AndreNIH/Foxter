@@ -1,4 +1,5 @@
 ﻿using Foxter.Models.Base;
+using Foxter.Utils;
 using System;
 using System.Collections.Generic;
 using System.Data.Common;
@@ -57,7 +58,7 @@ namespace Foxter.Models.Local
                 //Execute statement
                 try
                 {
-                    _logger.Info("inserting Chapter object in local database: " + chapter.ToString());
+                    _logger.Debug("inserting Chapter object in local database: " + chapter.ToString());
                     await cmd.PrepareAsync();
                     await cmd.ExecuteNonQueryAsync();
                     _updateListeners.ForEach(listener => listener.OnChapterModelUpdated());
@@ -73,7 +74,7 @@ namespace Foxter.Models.Local
 
         public async Task<bool> Delete(int chapterId)
         {
-            _logger.Info($"deleting chapter(id:{chapterId}) from local database");
+            _logger.Debug($"deleting chapter(id:{chapterId}) from local database");
             await using (var connection = _dbProvider.CreateConnection())
             {
                 connection.ConnectionString = _connectionString;
@@ -131,7 +132,6 @@ namespace Foxter.Models.Local
 
         public async Task<Chapter?> GetChapterById(int id)
         {
-            _logger.Info($"retrieving chapter {id} from the database");
             await using (var connection = _dbProvider.CreateConnection())
             {
                 connection.ConnectionString = _connectionString;
@@ -144,7 +144,7 @@ namespace Foxter.Models.Local
                     {
                         if(await reader.ReadAsync())
                         {
-                            return new Chapter()
+                            var c = new Chapter()
                             {
                                 ChapterId = reader.GetInt32(0),
                                 StoryId = reader.GetInt32(1),
@@ -153,6 +153,8 @@ namespace Foxter.Models.Local
                                 PublishingDate = reader.GetDateTime(4),
                                 AuthorId = reader.GetInt32(5)
                             };
+
+                            return c;
                         }
                         return null;
                     }
@@ -214,10 +216,9 @@ namespace Foxter.Models.Local
                 //Execute statement
                 try
                 {
-                    _logger.Info($"update chapter(id: {chapterId}) data in local database, new chapter data" + newChapter.ToString());
+                    _logger.Debug($"update chapter(id: {chapterId}) data in local database, new chapter data" + newChapter.ToString());
                     await cmd.PrepareAsync();
                     await cmd.ExecuteNonQueryAsync();
-                    _logger.Info("updated auhthor model");
                     _updateListeners.ForEach(listener => listener.OnChapterModelUpdated());
                     return true;
                 }
@@ -231,7 +232,6 @@ namespace Foxter.Models.Local
 
         public async Task<int?> GetChapterCountFromAuthor(int authorId)
         {
-            _logger.Info($"retrieving chapter count from author {authorId}");
             await using (var connection = _dbProvider.CreateConnection())
             {
                 connection.ConnectionString = _connectionString;

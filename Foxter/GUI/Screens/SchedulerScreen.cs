@@ -46,6 +46,7 @@ namespace Foxter.Forms
 
         private void schedulePostButton_Click(object sender, EventArgs e)
         {
+            _logger.Info("user interaction: schedule new story");
             var formController = new NewChapterController(_model, _session);
             formController.ShowForm();
         }

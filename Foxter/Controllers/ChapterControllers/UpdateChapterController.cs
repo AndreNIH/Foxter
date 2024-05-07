@@ -34,6 +34,7 @@ namespace Foxter.Controllers.ChapterControllers
 
         public async Task<bool> Update(int chapterId, Chapter newChapter)
         {
+            _logger.Info($"updating \"{chapterId}\", data=" + newChapter);
             newChapter.AuthorId = _client.GetSession().GetId();
             return await  _model.Update(chapterId, newChapter);
         }
@@ -42,16 +43,17 @@ namespace Foxter.Controllers.ChapterControllers
         {
             try
             {
+                _logger.Info("a component requested a user interface refresh");
                 if (_initializedUi)
                 {
-                    _logger.Info("supress ui update flag is set. exiting refresh function");
+                    _logger.Info("supress ui update flag is set, refresh aborted");
                     return;
                 }
-                _logger.Info("refresh ui");
                 var work = await _client.GetWork(_workId);
                 var workDisplay = new List<BoxItem>() { new(work.WorkTitle, work.WorkId) };
                 var chapters = await _client.GetChaptersForWork(_workId);
                 var chapter = chapters.First(c => c.Id == _chapterId);
+                _logger.Info("fetched story and chapter from AO3 servers");
                 _view.PopulateWorksBox(new List<BoxItem>() { new(work.WorkTitle, work.WorkId) });
                 _view.PopulateChaptersBox(new List<BoxItem>() { new(chapter.Title, chapter.Id) });
                 _initializedUi = true;
@@ -59,7 +61,7 @@ namespace Foxter.Controllers.ChapterControllers
             }
             catch (HttpRequestException ex)
             {
-                _logger.Warn("RefreshUI http exception: " + ex.Message);
+                _logger.Error("http exception: " + ex.Message);
                 if (ex.StatusCode == System.Net.HttpStatusCode.NotFound)
                 {
                     MessageBox.Show(
@@ -84,9 +86,15 @@ namespace Foxter.Controllers.ChapterControllers
                 }
 
                 _logger.Info("Falling back on local model data to populate views");
-                var bufferedChapter = await _model.GetChapterById(_chapterId); //This shouldn't throw
-                _view.PopulateWorksBox(new List<BoxItem>() { new(bufferedChapter.StoryTitle, bufferedChapter.StoryId) });
-                _view.PopulateChaptersBox(new List<BoxItem>() { new(bufferedChapter.ChapterTitle, bufferedChapter.ChapterId) });
+                //TODO: this works fine for the time being, but remote models
+                //are introduced this needs to be wrapped by a try-catch block
+                var storedChapter = await _model.GetChapterById(_chapterId); 
+                if(storedChapter != null)
+                {
+                    _view.PopulateWorksBox(new List<BoxItem>() { new(storedChapter.StoryTitle, storedChapter.StoryId) });
+                    _view.PopulateChaptersBox(new List<BoxItem>() { new(storedChapter.ChapterTitle, storedChapter.ChapterId) });
+                }
+                
             }
         }
 

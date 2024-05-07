@@ -1,3 +1,4 @@
+using Accessibility;
 using Foxter.AO3.Exceptions;
 using Foxter.Forms;
 using Foxter.GUI.Forms;
@@ -35,6 +36,7 @@ namespace Foxter
         private System.Timers.Timer _networkMonitorTimer;
         private bool _supressFormClosing;
         private bool _hidden;
+        private bool _networkErrorState;
         private PublisherClient _publisher;
         static HttpClient _networkProbeClient = new HttpClient();
 
@@ -42,9 +44,15 @@ namespace Foxter
         public MainForm(IDatabaseProvider dbProvider, SessionManager sessionMgr, bool hidden=false, bool offline=false)
         {
             InitializeComponent();
+            //Models/Services
             _authorModel = dbProvider.GetAuthorModel();
             _chapterModel = dbProvider.GetChapterModel();
             _sessionMgr = sessionMgr;
+
+            //Plain Old Data/Misc
+            _networkErrorState = false;
+
+
 
             //Publishing
             _publishNotifier = new PublishNotifier();
@@ -84,6 +92,8 @@ namespace Foxter
 
         void ToggleNetworkErrorMode(bool enabled)
         {
+            _logger.Info($"network error mode set to {enabled}");
+            _networkErrorState = enabled;
             if (networkErrorPanel.InvokeRequired)
             {
                 networkErrorPanel.Invoke(delegate { ToggleNetworkErrorMode(enabled); });
@@ -105,19 +115,22 @@ namespace Foxter
                 {
                     networkError = false;
                 }
-            }catch(HttpRequestException ex)
-            {
-                _logger.Error("Network Error: " + ex.Message);
-            }catch(TimeoutException ex)
-            {
-                _logger.Error("Timeout Error: " + ex.Message);
             }
-
-            ToggleNetworkErrorMode(networkError);
+            catch (HttpRequestException) { }
+            catch (TimeoutException) {}
+            
+            //Prevent unecessary UI updates and logs from
+            //being generated. Only update the state if
+            //it actually changed
+            if (_networkErrorState != networkError)
+            {
+                ToggleNetworkErrorMode(networkError);
+            }
         }
 
         private void CloseTrayBtn_Click(object? sender, EventArgs e)
         {
+            _logger.Info("CloseTrayBtn clicked");
             _supressFormClosing = false;
             Close();
         }
@@ -191,6 +204,7 @@ namespace Foxter
             }
             else
             {
+                _logger.Info("exiting application");
                 Application.Exit();
             }
         }
@@ -199,6 +213,8 @@ namespace Foxter
         //instead of hanging on the hidden ApplicationLoader form
         protected override void OnClosed(EventArgs e)
         {
+            _publishTimer.Stop();
+            _networkMonitorTimer.Stop();
             Application.Exit();
         }
 
@@ -222,6 +238,8 @@ namespace Foxter
             childForm.BringToFront();
             childForm.AutoScroll = true;
             childForm.Show();
+            _logger.Info($"current active screen: {_activeForm}");
+
 
         }
 
@@ -286,7 +304,7 @@ namespace Foxter
         //Screen-id to scene mapping
         public void ChangeScreen(ScreenId screenId)
         {
-            _logger.Info($"Transitioning to scene id:{screenId}");
+            _logger.Info($"screen change requested, moving to scene id:{screenId}");
             ClearSidebarStyle();
             if (_activeForm != null)
             {
@@ -352,6 +370,7 @@ namespace Foxter
                         break;
                     }
             }
+            
         }
 
 
@@ -359,6 +378,7 @@ namespace Foxter
         //Sidebar Buttons
         private async void homeButton_Click(object sender, EventArgs e)
         {
+            _logger.Info("homeButton clicked");
             bool logged = _sessionMgr.HasActiveSession();
             if (logged) ChangeScreen(ScreenId.MAIN);
             else if (await _sessionMgr.SessionDataExists() && !logged) ChangeScreen(ScreenId.BACKUP_LOGIN);
@@ -368,6 +388,7 @@ namespace Foxter
 
         private async void scheduleButton_Click(object sender, EventArgs e)
         {
+            _logger.Info("scheduleButton clicked");
             bool logged = _sessionMgr.HasActiveSession();
             if (logged) ChangeScreen(ScreenId.SCHEDULE);
             else if (await _sessionMgr.SessionDataExists() && !logged) ChangeScreen(ScreenId.BACKUP_LOGIN);
@@ -376,6 +397,7 @@ namespace Foxter
 
         private async void accountsButton_Click(object sender, EventArgs e)
         {
+            _logger.Info("accountsButton clicked");
             bool logged = _sessionMgr.HasActiveSession();
             if (logged) ChangeScreen(ScreenId.LOGGED_IN);
             else if(await _sessionMgr.SessionDataExists() && !logged) ChangeScreen(ScreenId.BACKUP_LOGIN);
@@ -385,6 +407,7 @@ namespace Foxter
 
         private void settingsButton_Click(object sender, EventArgs e)
         {
+            _logger.Info("settingsButton clicked");
             ChangeScreen(ScreenId.SETTINGS);
         }
 
