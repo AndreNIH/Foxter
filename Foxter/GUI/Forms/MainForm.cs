@@ -26,7 +26,7 @@ namespace Foxter
         private extern static void SendMessage(System.IntPtr hwndm, int msg, int wParam, int lParam);
         //End of external DLL imports
 
-        private static readonly log4net.ILog _logger = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+        private static readonly log4net.ILog _logger = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod()!.DeclaringType);
         private IAuthorModel _authorModel;
         private IChapterModel _chapterModel;
         private SessionManager _sessionMgr;
@@ -81,6 +81,13 @@ namespace Foxter
             _supressFormClosing = true;
 
             //Startup hidden form
+            bool sessDataExists = Task.Run(() => _sessionMgr.SessionDataExists()).Result;
+            if(sessDataExists && _sessionMgr.HasActiveSession() == false && hidden)
+            {
+                _logger.Info("hidden launch override: session is in exceptional state");
+                hidden = false;
+            }
+            
             _hidden = hidden;
             if (_hidden)
             {
@@ -221,6 +228,7 @@ namespace Foxter
         //Hide form on form Show
         protected override void SetVisibleCore(bool value)
         {
+            //base.SetVisibleCore(value);
             base.SetVisibleCore(_hidden ? false : value);
         }
 

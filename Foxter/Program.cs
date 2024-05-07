@@ -10,6 +10,8 @@ using log4net;
 using Foxter.Providers;
 using log4net.Config;
 using System.Data.SQLite;
+using Foxter.Utils;
+using System.Diagnostics.Eventing.Reader;
 
 
 namespace Foxter
@@ -94,29 +96,23 @@ namespace Foxter
         {
             IDatabaseProvider dbProvider = GetDatabaseProvider();
             SessionManager sessionMgr = new SessionManager(new SessionProvider(), dbProvider.GetAuthorModel());
-
+            
+            ApplicationContext appCtx;
+            _logger.Info("startup launch: " + startupLaunch);
             if (startupLaunch && SettingsManager.Get.Configuration.startMinimized)
             {
-                try
-                {
-                    sessionMgr.RestorePreviousSession().Wait();
-                    Application.Run(new MainForm(dbProvider, sessionMgr, hidden: true));
-                }
-                catch (HttpRequestException exception)
-                {
-                    //silent startup, just log the error
-                    _logger.Error(exception.Message);
-                    Application.Run(new MainForm(dbProvider, sessionMgr, hidden: true, offline: true));
-                }
-                
-                
+                Form form = new AppLoaderForm(dbProvider, sessionMgr, true);
+                _logger.Info("launching application in hidden mode");
+                appCtx = new HiddenApplicationContext(form);
             }
             else
             {
-                Application.Run(new AppLoaderForm(dbProvider, sessionMgr));
+                Form form = new AppLoaderForm(dbProvider, sessionMgr);
+                _logger.Info("launching application in regular mode");
+                appCtx = new ApplicationContext(form);
             }
 
-            
+            Application.Run(appCtx);
 
         }
 
@@ -136,14 +132,14 @@ namespace Foxter
             using (Mutex mtx = new Mutex(false, AppId))
             {
                 //Single instance check
-                if (!mtx.WaitOne(0)) return; 
+                if (!mtx.WaitOne(0)) return;
                 
                 //Configuration
                 ConfigureLogger();
                 ApplicationConfiguration.Initialize();
-                _logger.Info("running application v" + Assembly.GetExecutingAssembly().GetName().Version!.ToString());
                 
                 //Application launch
+                _logger.Info("running application v" + Assembly.GetExecutingAssembly().GetName().Version!.ToString());
                 bool startupLaunch = Array.Exists(args, arg => arg == "--startup");
                 if (!CreatePhysicalDatabaseStructure()) return;
                 LoadApplicationSettings();

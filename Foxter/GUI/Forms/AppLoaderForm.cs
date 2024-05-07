@@ -33,6 +33,7 @@ namespace Foxter.GUI.Forms
         //End of external DLL imports
         SessionManager _sessionMgr;
         IDatabaseProvider _dbProvider;
+        bool _hidden;
 
 
         protected override async void OnLoad(EventArgs e)
@@ -54,14 +55,15 @@ namespace Foxter.GUI.Forms
                 _logger.Error("session restore error: " + ex.Message);
             }
             Hide();
-            new MainForm(_dbProvider, _sessionMgr).Show();
+            new MainForm(_dbProvider, _sessionMgr, _hidden).Show();
         }
 
 
-        public AppLoaderForm(IDatabaseProvider dbProvider, SessionManager sessionManager)
+        public AppLoaderForm(IDatabaseProvider dbProvider, SessionManager sessionManager, bool hidden=false)
         {
             _dbProvider = dbProvider;
             _sessionMgr = sessionManager;
+            _hidden = hidden;
             InitializeComponent();
         }
 
