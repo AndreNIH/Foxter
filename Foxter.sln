@@ -26,14 +26,16 @@ Global
 		UpdateAssemblyVersion = True
 		UpdateAssemblyFileVersion = False
 		UpdateAssemblyInfoVersion = False
+		ShouldCreateLogs = True
 		AdvancedSettingsExpanded = True
-		AssemblyVersionSettings = None.None.None.IncrementWithResetOnIncrease
+		AssemblyVersionSettings = None.None.IncrementWithResetOnIncrease.None
 		UpdatePackageVersion = False
 		AssemblyInfoVersionType = SettingsVersion
 		InheritWinAppVersionFrom = None
 		UpdateAssemblyVersion.Release|Any CPU = False
 		UpdateAssemblyFileVersion.Release|Any CPU = True
 		UpdateAssemblyInfoVersion.Release|Any CPU = False
+		ShouldCreateLogs.Release|Any CPU = True
 		AdvancedSettingsExpanded.Release|Any CPU = True
 		AssemblyFileVersionSettings.Release|Any CPU = None.None.None.None
 		UpdatePackageVersion.Release|Any CPU = False

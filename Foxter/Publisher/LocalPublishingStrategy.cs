@@ -33,7 +33,7 @@ namespace Foxter.Publisher
             {
                 try
                 {
-                    bool success = true;//await _client.PostDraft(c.StoryId, c.ChapterId);
+                    bool success = await _client.PostDraft(c.StoryId, c.ChapterId);
                     if(success)
                     {
                         result.success++;

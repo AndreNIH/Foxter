@@ -160,9 +160,9 @@
             versionLabel.ForeColor = SystemColors.WindowFrame;
             versionLabel.Location = new Point(0, 476);
             versionLabel.Name = "versionLabel";
-            versionLabel.Size = new Size(135, 20);
+            versionLabel.Size = new Size(120, 20);
             versionLabel.TabIndex = 4;
-            versionLabel.Text = "Version: alpha 1.0.0";
+            versionLabel.Text = "<VERSION_STR>";
             // 
             // settingsButton
             // 

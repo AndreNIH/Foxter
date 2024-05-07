@@ -174,7 +174,7 @@ namespace Foxter
         {
             base.OnLoad(e);
             var assemblyName = System.Reflection.Assembly.GetExecutingAssembly().GetName();
-            versionLabel.Text = "Version: " + (assemblyName != null ? assemblyName.Version : "N/A");
+            versionLabel.Text = "Version: " + (assemblyName != null ? assemblyName.Version : "N/A") + " (Beta)" ;
             
 
             if(await _sessionMgr.SessionDataExists() && _sessionMgr.HasActiveSession() == false)
@@ -211,7 +211,6 @@ namespace Foxter
             }
             else
             {
-                _logger.Info("exiting application");
                 Application.Exit();
             }
         }
