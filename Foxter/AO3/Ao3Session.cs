@@ -31,7 +31,7 @@ namespace Foxter.AO3
         {
             var doc = new HtmlAgilityPack.HtmlDocument();
             string username;
-            int userId;
+            int userId=0;
             string rawHtml = "";
             //Get username
             _logger.Info("GET /");
@@ -44,7 +44,6 @@ namespace Foxter.AO3
             if (userNode != null)
             {
 
-                _logger.Debug(userNode.InnerText);
                 username = userNode.GetAttributeValue("href", null);
                 if (username == null) throw new Exception("menu item did not contain an href attribute");
                 username = username.Substring(7);
@@ -58,7 +57,8 @@ namespace Foxter.AO3
 
             _logger.Info($"GET /users/{username}/profile");
             page = await _httpClient.GetAsync($"users/{username}/profile");
-            doc.LoadHtml(await page.Content.ReadAsStringAsync());
+            rawHtml = await page.Content.ReadAsStringAsync();
+            doc.LoadHtml(rawHtml);
             var userIdNode = doc.DocumentNode.SelectSingleNode("//input[@id='subscription_subscribable_id']/@value");
             if (userIdNode == null || !int.TryParse(userIdNode.GetAttributeValue("value", ""), out userId))
             {
@@ -79,6 +79,8 @@ namespace Foxter.AO3
                 _userId = id;
                 _username = username;
                 _authenticated = true;
+
+                _logger.Info($"username={_username}, userId={_userId}");
             }
             else
             {

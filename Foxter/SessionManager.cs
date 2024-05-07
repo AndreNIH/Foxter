@@ -111,6 +111,13 @@ namespace Foxter
             return _session;
         }
 
+        public async Task<bool> SessionDataExists()
+        {
+            var m = await _model.Get();
+            bool val =  m != null;
+            return val;
+            
+        }
         public SessionManager(ISessionProvider sessionProvider, IAuthorModel model)
         {
             _sessionProvider = sessionProvider;

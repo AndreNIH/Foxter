@@ -187,6 +187,8 @@ namespace Foxter.Forms
             }
 
 
+            var pdc = publishingDatePicker.Value;
+            var truncatedUploadDate = pdc.Date + new TimeSpan(pdc.Hour, pdc.Minute, 0);
             if (_uiBehavior == UiBehavior.kCreate)
             {
                 var chapter = new Chapter();
@@ -194,7 +196,7 @@ namespace Foxter.Forms
                 chapter.ChapterTitle = chapterComboBox.Text;
                 chapter.ChapterId = (int)chapterComboBox.SelectedValue;
                 chapter.StoryId = (int)worksComboBox.SelectedValue;
-                chapter.PublishingDate = publishingDatePicker.Value;
+                chapter.PublishingDate = truncatedUploadDate;
                 //authorid is set by the controller
                 if (await _controller.Create(chapter) == false)
                 {
@@ -214,7 +216,7 @@ namespace Foxter.Forms
                 chapter.ChapterTitle = chapterComboBox.Text;
                 chapter.ChapterId = (int)chapterComboBox.SelectedValue;
                 chapter.StoryId = (int)worksComboBox.SelectedValue;
-                chapter.PublishingDate = publishingDatePicker.Value;
+                chapter.PublishingDate = truncatedUploadDate;
                 //authorid is set by the controller
                 if (await _controller.Update(_updateTarget, chapter) == false)
                 {

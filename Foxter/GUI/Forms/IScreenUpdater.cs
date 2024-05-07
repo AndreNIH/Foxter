@@ -18,6 +18,7 @@ namespace Foxter.GUI.Forms
         LOGGED_IN,
         NO_USER,
         SETTINGS,
+        BACKUP_LOGIN
     }
 
 }

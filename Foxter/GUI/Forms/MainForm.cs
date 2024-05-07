@@ -32,8 +32,12 @@ namespace Foxter
         private Form _activeForm;
         private PublishNotifier _publishNotifier;
         private System.Timers.Timer _publishTimer;
+        private System.Timers.Timer _networkMonitorTimer;
         private bool _supressFormClosing;
         private bool _hidden;
+        private PublisherClient _publisher;
+        static HttpClient _networkProbeClient = new HttpClient();
+
 
         public MainForm(IDatabaseProvider dbProvider, SessionManager sessionMgr, bool hidden=false, bool offline=false)
         {
@@ -44,11 +48,18 @@ namespace Foxter
 
             //Publishing
             _publishNotifier = new PublishNotifier();
+            _publisher = new PublisherClient(_publishNotifier);
 
             _publishTimer = new(3000);
             _publishTimer.Elapsed += publishTimer_Elapsed;
             _publishTimer.AutoReset = false;
             _publishTimer.Start();
+            _logger.Info("publish timer started ticking");
+
+            _networkMonitorTimer = new(5000);
+            _networkMonitorTimer.Elapsed += networkMonitorTimer_Elapsed;
+            _networkMonitorTimer.Start();
+            _logger.Info("network timer started ticking");
 
             //Tray icon
             notifyIcon.ContextMenuStrip = new ContextMenuStrip();
@@ -71,6 +82,40 @@ namespace Foxter
 
         }
 
+        void ToggleNetworkErrorMode(bool enabled)
+        {
+            if (networkErrorPanel.InvokeRequired)
+            {
+                networkErrorPanel.Invoke(delegate { ToggleNetworkErrorMode(enabled); });
+            }
+            else
+            {
+                networkErrorPanel.Visible = enabled; 
+            }
+        }
+
+
+        private async void networkMonitorTimer_Elapsed(object? sender, System.Timers.ElapsedEventArgs e)
+        {
+            bool networkError = true;
+            try
+            {
+                var response = await _networkProbeClient.GetStringAsync("http://www.msftncsi.com/ncsi.txt");
+                if (response == "Microsoft NCSI")
+                {
+                    networkError = false;
+                }
+            }catch(HttpRequestException ex)
+            {
+                _logger.Error("Network Error: " + ex.Message);
+            }catch(TimeoutException ex)
+            {
+                _logger.Error("Timeout Error: " + ex.Message);
+            }
+
+            ToggleNetworkErrorMode(networkError);
+        }
+
         private void CloseTrayBtn_Click(object? sender, EventArgs e)
         {
             _supressFormClosing = false;
@@ -79,29 +124,29 @@ namespace Foxter
 
         private async void publishTimer_Elapsed(object? sender, System.Timers.ElapsedEventArgs e)
         {
-            //Stop the timer loop if the window handle is no longer valid
-            //if (!IsHandleCreated || InvokeRequired) return;
 
             //If the user isn't logged just skip
-            if (_sessionMgr.HasActiveSession() == false) return;
-            Invoke((MethodInvoker)async delegate
-        {
-            try
+            if (_sessionMgr.HasActiveSession())
             {
-                //This approach is not flexible, move publishing strategy
-                //into the service factory.
-                //Also this is not very performnt, because of the multip
-                var publishingStrategy = new LocalPublishingStrategy(_authorModel, _chapterModel, _sessionMgr.GetExistingSession());
-                var publisher = new PublisherClient(publishingStrategy, _publishNotifier);
-                await publisher.PublishChapters();
-            }
-            catch (Ao3GenericException ex)
-            {
-                _logger.Error("an AO3 exception was thrown trying to publish a chapter: " + ex.Message);
-            }
+                Invoke((MethodInvoker)async delegate
+                {
+                    try
+                    {
+                        //TODO: Refactor this
+                        //This approach is not flexible, move publishing strategy
+                        //The publishing strategy is hardcoded and we are creating instances
+                        //on every upload attempt.
+                        _publisher.SetPublishStrategy(new LocalPublishingStrategy(_chapterModel, _sessionMgr.GetExistingSession()));
+                        await _publisher.PublishChapters();
+                    }
+                    catch (Ao3GenericException ex)
+                    {
+                        _logger.Error("an AO3 exception was thrown trying to publish a chapter: " + ex.Message);
+                    }
 
-            _publishTimer.Start(); //keep the clock running
-        });
+                    _publishTimer.Start(); //keep the clock running
+                });
+            }
         }
 
         //Form Overrides
@@ -110,10 +155,19 @@ namespace Foxter
             base.OnLoad(e);
             var assemblyName = System.Reflection.Assembly.GetExecutingAssembly().GetName();
             versionLabel.Text = "Version: " + (assemblyName != null ? assemblyName.Version : "N/A");
-            bool logged = _sessionMgr.HasActiveSession();
-            if (logged) ChangeScreen(ScreenId.MAIN);
-            else ChangeScreen(ScreenId.LOGIN);
+            
 
+            if(await _sessionMgr.SessionDataExists() && _sessionMgr.HasActiveSession() == false)
+            {
+                ChangeScreen(ScreenId.BACKUP_LOGIN);
+            }
+            else
+            {
+                bool logged = _sessionMgr.HasActiveSession();
+                if (logged) ChangeScreen(ScreenId.MAIN);
+                else ChangeScreen(ScreenId.LOGIN);
+            }
+            
         }
 
         private void SendToTray()
@@ -286,6 +340,12 @@ namespace Foxter
                         settingsButton.BackColor = activeColor;
                         break;
                     }
+                case ScreenId.BACKUP_LOGIN:
+                    {
+                        var screen = new BackupLoginScreen(_sessionMgr, this);
+                        SetMainContent(screen);
+                        break;
+                    }
                 default:
                     {
                         _logger.Warn($"screen-id {screenId} doesn't exist");
@@ -297,25 +357,28 @@ namespace Foxter
 
 
         //Sidebar Buttons
-        private void homeButton_Click(object sender, EventArgs e)
+        private async void homeButton_Click(object sender, EventArgs e)
         {
             bool logged = _sessionMgr.HasActiveSession();
             if (logged) ChangeScreen(ScreenId.MAIN);
+            else if (await _sessionMgr.SessionDataExists() && !logged) ChangeScreen(ScreenId.BACKUP_LOGIN);
             else ChangeScreen(ScreenId.LOGIN);
         }
 
 
-        private  void scheduleButton_Click(object sender, EventArgs e)
+        private async void scheduleButton_Click(object sender, EventArgs e)
         {
             bool logged = _sessionMgr.HasActiveSession();
             if (logged) ChangeScreen(ScreenId.SCHEDULE);
+            else if (await _sessionMgr.SessionDataExists() && !logged) ChangeScreen(ScreenId.BACKUP_LOGIN);
             else ChangeScreen(ScreenId.LOGIN);
         }
 
-        private  void accountsButton_Click(object sender, EventArgs e)
+        private async void accountsButton_Click(object sender, EventArgs e)
         {
             bool logged = _sessionMgr.HasActiveSession();
             if (logged) ChangeScreen(ScreenId.LOGGED_IN);
+            else if(await _sessionMgr.SessionDataExists() && !logged) ChangeScreen(ScreenId.BACKUP_LOGIN);
             else ChangeScreen(ScreenId.LOGIN);
 
         }

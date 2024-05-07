@@ -45,7 +45,14 @@ namespace Foxter.GUI.Forms
         protected override async  void OnShown(EventArgs e)
         {
             base.OnShown(e);
-            await Task.Run(_sessionMgr.RestorePreviousSession);
+            try
+            {
+                await Task.Run(_sessionMgr.RestorePreviousSession);
+            }
+            catch (HttpRequestException ex)
+            {
+                _logger.Error("session restore error: " + ex.Message);
+            }
             Hide();
             new MainForm(_dbProvider, _sessionMgr).Show();
         }

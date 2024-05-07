@@ -43,7 +43,6 @@ namespace Foxter.AO3
                 throw new Ao3GenericException(exceptMsg);
             }
 
-            _logger.Info($"Created Ao3Work object (id={id})");
             var work = new Ao3Work();
             work.WorkTitle = titleNode.InnerText.Replace("\n", ""); //AO3 for whatever reason inserts new-lines padding
             work.WorkId = id;

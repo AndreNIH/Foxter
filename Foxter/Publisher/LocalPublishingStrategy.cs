@@ -5,19 +5,19 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static System.Collections.Specialized.BitVector32;
 
 namespace Foxter.Publisher
 {
     public class LocalPublishingStrategy : IPublisherStrategy
     {
         private static readonly log4net.ILog _logger = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
-        private IAuthorModel _authorModel;
         private IChapterModel _chapterModel;
+        
         private Ao3Client _client;
 
-        public LocalPublishingStrategy(IAuthorModel authorModel, IChapterModel chapterModel, ISession session)
+        public LocalPublishingStrategy(IChapterModel chapterModel, ISession session)
         {
-            _authorModel = authorModel;
             _chapterModel = chapterModel;
             _client = new Ao3Client(session);
         }
@@ -27,16 +27,13 @@ namespace Foxter.Publisher
             PublishResult result = new();
             result.success = 0;
             result.failed = 0;
-            var author = await _authorModel.Get();
-            if(author == null) return result;
-
-            var chapters = await _chapterModel.GetAllChaptersFromAuthor(author.Id);
+            var chapters = await _chapterModel.GetAllChaptersFromAuthor(_client.GetSession().GetId());
             var uploads = chapters.Where(c => c.PublishingDate <= DateTime.Now).ToList();
             foreach( var c in uploads )
             {
                 try
                 {
-                    bool success = await _client.PostDraft(c.StoryId, c.ChapterId);
+                    bool success = false;//await _client.PostDraft(c.StoryId, c.ChapterId);
                     if(success)
                     {
                         result.success++;

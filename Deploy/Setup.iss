@@ -11,7 +11,7 @@
 
 [Setup]
 #define MyAppSetupName 'Foxter'
-#define MyAppVersion '0.1.1.11'
+#define MyAppVersion '0.1.1.181'
 #define MyAppPublisher 'Drew IT Solutions'
 
 AppName={#MyAppSetupName}

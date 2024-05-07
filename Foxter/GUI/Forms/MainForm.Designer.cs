@@ -47,11 +47,14 @@
             sideBarPanel = new Panel();
             mainContentPanel = new Panel();
             notifyIcon = new NotifyIcon(components);
+            networkErrorPanel = new Panel();
+            label1 = new Label();
             topBarPanel.SuspendLayout();
             panel2.SuspendLayout();
             sideBarDetailPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
             sideBarPanel.SuspendLayout();
+            networkErrorPanel.SuspendLayout();
             SuspendLayout();
             // 
             // topBarPanel
@@ -258,9 +261,9 @@
             // mainContentPanel
             // 
             mainContentPanel.Dock = DockStyle.Fill;
-            mainContentPanel.Location = new Point(170, 105);
+            mainContentPanel.Location = new Point(170, 140);
             mainContentPanel.Name = "mainContentPanel";
-            mainContentPanel.Size = new Size(938, 485);
+            mainContentPanel.Size = new Size(938, 450);
             mainContentPanel.TabIndex = 3;
             // 
             // notifyIcon
@@ -271,6 +274,29 @@
             notifyIcon.Text = "Foxter";
             notifyIcon.MouseDoubleClick += notifyIcon_MouseDoubleClick;
             // 
+            // networkErrorPanel
+            // 
+            networkErrorPanel.BackColor = Color.DimGray;
+            networkErrorPanel.Controls.Add(label1);
+            networkErrorPanel.Dock = DockStyle.Top;
+            networkErrorPanel.Location = new Point(170, 105);
+            networkErrorPanel.Name = "networkErrorPanel";
+            networkErrorPanel.Size = new Size(938, 35);
+            networkErrorPanel.TabIndex = 0;
+            networkErrorPanel.Visible = false;
+            // 
+            // label1
+            // 
+            label1.Dock = DockStyle.Fill;
+            label1.Font = new Font("Segoe UI", 14.25F, FontStyle.Regular, GraphicsUnit.Point);
+            label1.ForeColor = Color.White;
+            label1.Location = new Point(0, 0);
+            label1.Name = "label1";
+            label1.Size = new Size(938, 35);
+            label1.TabIndex = 0;
+            label1.Text = "Network Unavailable";
+            label1.TextAlign = ContentAlignment.MiddleLeft;
+            // 
             // MainForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -278,6 +304,7 @@
             ClientSize = new Size(1108, 590);
             ControlBox = false;
             Controls.Add(mainContentPanel);
+            Controls.Add(networkErrorPanel);
             Controls.Add(topBarDetailPanel);
             Controls.Add(topBarPanel);
             Controls.Add(sideBarPanel);
@@ -295,6 +322,7 @@
             sideBarDetailPanel.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)pictureBox1).EndInit();
             sideBarPanel.ResumeLayout(false);
+            networkErrorPanel.ResumeLayout(false);
             ResumeLayout(false);
         }
 
@@ -316,5 +344,7 @@
         private Label versionLabel;
         private NotifyIcon notifyIcon;
         private PictureBox pictureBox1;
+        private Panel networkErrorPanel;
+        private Label label1;
     }
 }
