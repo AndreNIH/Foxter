@@ -19,16 +19,35 @@ namespace Foxter.GUI.Screens
         private IAuthorController _loggedAuthorController;
         private SessionManager _sessionMgr;
         private IScreenUpdater _updater;
+        private bool _ignoreKeyboard;
+        private static readonly log4net.ILog _logger = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod()!.DeclaringType);
 
         public LoginScreen(SessionManager sessionManager, IAuthorModel authorModel, IScreenUpdater updater)
         {
+            InitializeComponent();
             _sessionMgr = sessionManager;
             _updater = updater;
             _loggedAuthorController = new LoginAuthorController(authorModel);
-            InitializeComponent();
+            _ignoreKeyboard = false;
+
+            userTextBox.KeyDown += UserTextBox_KeyDown;
+            passwordTextBox.KeyDown += PasswordTextBox_KeyDown;
         }
 
-        private async Task<bool> DoLogin()
+        private async void PasswordTextBox_KeyDown(object? sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter && !_ignoreKeyboard)
+            {
+                await DoLogin();
+            }
+        }
+
+        private void UserTextBox_KeyDown(object? sender, KeyEventArgs e)
+        {
+            if(e.KeyCode == Keys.Enter) passwordTextBox.Focus();
+        }
+
+        private async Task<bool> SendLoginRequest()
         {
             bool success = false;
             try
@@ -56,15 +75,17 @@ namespace Foxter.GUI.Screens
             return success;
         }
 
-        private async void loginButton_Click_1(object sender, EventArgs e)
-        {
 
+        private async Task DoLogin()
+        {
             loginButton.BackColor = Color.Gray;
             loginButton.Enabled = false;
-            bool success = await DoLogin();
-            loginButton.Enabled = true;
+            _ignoreKeyboard = true;
+            bool success = await SendLoginRequest();
             loginButton.BackColor = Color.FromArgb(153, 0, 0);
-            
+            loginButton.Enabled = true;
+            _ignoreKeyboard = false;
+
             if (!success)
             {
                 MessageBox.Show("Incorrect password", "Login Failed", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -74,6 +95,15 @@ namespace Foxter.GUI.Screens
                 _updater.ChangeScreen(ScreenId.MAIN);
             }
         }
+
+     
+        private async void loginButton_Click_1(object sender, EventArgs e)
+        {
+
+            await DoLogin();
+        }
+
+
 
 
         //UI Elements
