@@ -26,6 +26,7 @@ namespace Foxter
         {
             try
             {
+                _logger.Info("attempting to restore existing session");
                 var author = await _model.Get();
                 if (author != null)
                 {
@@ -36,9 +37,10 @@ namespace Foxter
                         _session = session;
                         return true;
                     }
+                    _logger.Warn("session is no longer valid");
                 }
+                _logger.Info("no session data is available");
 
-                _logger.Warn("session is no longer valid");
                 //await _model.Delete();
                 return false;
             }

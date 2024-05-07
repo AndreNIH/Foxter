@@ -92,6 +92,9 @@ namespace Foxter.AO3
         public void Reset()
         {
             _cookies = new CookieContainer();
+            _authenticated = false;
+            _username = "";
+            _userId = 0;
             var handler = new HttpClientHandler()
             {
                 AllowAutoRedirect = false,
