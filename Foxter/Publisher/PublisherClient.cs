@@ -18,7 +18,6 @@ namespace Foxter.Publisher
         private PublishNotifier _publishNotifier;
         private bool _supressNotifications;
         private PublishResult? _lastPublishResults;
-        private bool _publishFailed;
         public async Task PublishChapters()
         {
             if(_publishStrategy != null)
@@ -46,10 +45,15 @@ namespace Foxter.Publisher
         {
             if(result.success > 0)
             {
+                StringBuilder sb = new StringBuilder();
+                if (result.success == 1) sb.Append("Published one chapter.");
+                else sb.Append($"Published {result.success} chapters.");
+                if (result.failed > 0) sb.Append($" Errors: {result.failed}");
+
                 _logger.Info($"sending toast notification");
                 new ToastContentBuilder()
                 .AddText($"Chapters published")
-                .AddText($"Published {result.success} chapter(s). Errors: {result.failed}")
+                .AddText(sb.ToString())
                 .AddAppLogoOverride(new Uri(Path.GetFullPath(@"Images\info.png")))
                 .Show();
                 _supressNotifications = false;
@@ -77,7 +81,6 @@ namespace Foxter.Publisher
             _publishStrategy = null;
             _publishNotifier = publishNotifier;
             _supressNotifications = false;
-            _publishFailed = false;
         }
     }
 }
