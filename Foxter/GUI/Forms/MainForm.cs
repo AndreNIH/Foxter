@@ -38,7 +38,7 @@ namespace Foxter
         private bool _hidden;
         private bool _networkErrorState;
         private PublisherClient _publisher;
-        static HttpClient _networkProbeClient = new HttpClient();
+        private HttpClient _networkProbeClient;
 
 
         public MainForm(IDatabaseProvider dbProvider, SessionManager sessionMgr, bool hidden=false, bool offline=false)
@@ -52,6 +52,11 @@ namespace Foxter
             //Plain Old Data/Misc
             _networkErrorState = false;
 
+            //Network Probe Http Client
+            _networkProbeClient = new HttpClient
+            {
+                Timeout = TimeSpan.FromSeconds(10)
+            };
 
 
             //Publishing
@@ -124,7 +129,7 @@ namespace Foxter
                 }
             }
             catch (HttpRequestException) { }
-            catch (TimeoutException) {}
+            catch (TaskCanceledException) { }
             
             //Prevent unecessary UI updates and logs from
             //being generated. Only update the state if
@@ -174,7 +179,7 @@ namespace Foxter
         {
             base.OnLoad(e);
             var assemblyName = System.Reflection.Assembly.GetExecutingAssembly().GetName();
-            versionLabel.Text = "Version: " + (assemblyName != null ? assemblyName.Version : "N/A") + " (Beta)" ;
+            versionLabel.Text = "V-" + (assemblyName != null ? assemblyName.Version : "N/A") + " (Beta)" ;
             
 
             if(await _sessionMgr.SessionDataExists() && _sessionMgr.HasActiveSession() == false)

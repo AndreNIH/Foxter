@@ -65,9 +65,10 @@
             topBarPanel.Controls.Add(maximizeButton);
             topBarPanel.Controls.Add(closeButton);
             topBarPanel.Dock = DockStyle.Top;
-            topBarPanel.Location = new Point(170, 0);
+            topBarPanel.Location = new Point(243, 0);
+            topBarPanel.Margin = new Padding(4, 5, 4, 5);
             topBarPanel.Name = "topBarPanel";
-            topBarPanel.Size = new Size(938, 95);
+            topBarPanel.Size = new Size(1340, 158);
             topBarPanel.TabIndex = 1;
             topBarPanel.MouseDown += topBarPanel_MouseDown;
             // 
@@ -79,9 +80,10 @@
             minimizeButton.BackgroundImageLayout = ImageLayout.Stretch;
             minimizeButton.FlatAppearance.BorderSize = 0;
             minimizeButton.FlatStyle = FlatStyle.Flat;
-            minimizeButton.Location = new Point(824, 12);
+            minimizeButton.Location = new Point(1177, 20);
+            minimizeButton.Margin = new Padding(4, 5, 4, 5);
             minimizeButton.Name = "minimizeButton";
-            minimizeButton.Size = new Size(30, 30);
+            minimizeButton.Size = new Size(43, 50);
             minimizeButton.TabIndex = 8;
             minimizeButton.UseVisualStyleBackColor = false;
             minimizeButton.Click += minimizeButton_Click;
@@ -92,9 +94,10 @@
             formTitleLabel.AutoSize = true;
             formTitleLabel.Font = new Font("Verdana", 36F, FontStyle.Regular, GraphicsUnit.Point);
             formTitleLabel.ForeColor = Color.White;
-            formTitleLabel.Location = new Point(18, 18);
+            formTitleLabel.Location = new Point(26, 30);
+            formTitleLabel.Margin = new Padding(4, 0, 4, 0);
             formTitleLabel.Name = "formTitleLabel";
-            formTitleLabel.Size = new Size(177, 59);
+            formTitleLabel.Size = new Size(264, 86);
             formTitleLabel.TabIndex = 0;
             formTitleLabel.Text = "Foxter";
             formTitleLabel.MouseDown += formTitleLabel_MouseDown;
@@ -107,9 +110,10 @@
             maximizeButton.BackgroundImageLayout = ImageLayout.Stretch;
             maximizeButton.FlatAppearance.BorderSize = 0;
             maximizeButton.FlatStyle = FlatStyle.Flat;
-            maximizeButton.Location = new Point(860, 12);
+            maximizeButton.Location = new Point(1229, 20);
+            maximizeButton.Margin = new Padding(4, 5, 4, 5);
             maximizeButton.Name = "maximizeButton";
-            maximizeButton.Size = new Size(30, 30);
+            maximizeButton.Size = new Size(43, 50);
             maximizeButton.TabIndex = 7;
             maximizeButton.UseVisualStyleBackColor = false;
             maximizeButton.Click += maximizeButton_Click;
@@ -122,9 +126,10 @@
             closeButton.BackgroundImageLayout = ImageLayout.Stretch;
             closeButton.FlatAppearance.BorderSize = 0;
             closeButton.FlatStyle = FlatStyle.Flat;
-            closeButton.Location = new Point(896, 12);
+            closeButton.Location = new Point(1280, 20);
+            closeButton.Margin = new Padding(4, 5, 4, 5);
             closeButton.Name = "closeButton";
-            closeButton.Size = new Size(30, 30);
+            closeButton.Size = new Size(43, 50);
             closeButton.TabIndex = 6;
             closeButton.UseVisualStyleBackColor = false;
             closeButton.Click += closeButton_Click;
@@ -133,9 +138,10 @@
             // 
             topBarDetailPanel.BackColor = Color.FromArgb(200, 0, 0);
             topBarDetailPanel.Dock = DockStyle.Top;
-            topBarDetailPanel.Location = new Point(170, 95);
+            topBarDetailPanel.Location = new Point(243, 158);
+            topBarDetailPanel.Margin = new Padding(4, 5, 4, 5);
             topBarDetailPanel.Name = "topBarDetailPanel";
-            topBarDetailPanel.Size = new Size(938, 10);
+            topBarDetailPanel.Size = new Size(1340, 17);
             topBarDetailPanel.TabIndex = 2;
             // 
             // panel2
@@ -146,10 +152,10 @@
             panel2.Controls.Add(scheduleButton);
             panel2.Controls.Add(homeButton);
             panel2.Dock = DockStyle.Fill;
-            panel2.Location = new Point(0, 94);
+            panel2.Location = new Point(0, 157);
             panel2.Margin = new Padding(0);
             panel2.Name = "panel2";
-            panel2.Size = new Size(170, 496);
+            panel2.Size = new Size(243, 826);
             panel2.TabIndex = 4;
             // 
             // versionLabel
@@ -158,9 +164,10 @@
             versionLabel.Dock = DockStyle.Bottom;
             versionLabel.Font = new Font("Segoe UI", 11.25F, FontStyle.Regular, GraphicsUnit.Point);
             versionLabel.ForeColor = SystemColors.WindowFrame;
-            versionLabel.Location = new Point(0, 476);
+            versionLabel.Location = new Point(0, 795);
+            versionLabel.Margin = new Padding(4, 0, 4, 0);
             versionLabel.Name = "versionLabel";
-            versionLabel.Size = new Size(120, 20);
+            versionLabel.Size = new Size(186, 31);
             versionLabel.TabIndex = 4;
             versionLabel.Text = "<VERSION_STR>";
             // 
@@ -171,9 +178,10 @@
             settingsButton.FlatAppearance.BorderSize = 0;
             settingsButton.FlatStyle = FlatStyle.Flat;
             settingsButton.ForeColor = SystemColors.ControlLightLight;
-            settingsButton.Location = new Point(0, 225);
+            settingsButton.Location = new Point(0, 375);
+            settingsButton.Margin = new Padding(4, 5, 4, 5);
             settingsButton.Name = "settingsButton";
-            settingsButton.Size = new Size(170, 75);
+            settingsButton.Size = new Size(243, 125);
             settingsButton.TabIndex = 2;
             settingsButton.Text = "Settings";
             settingsButton.UseVisualStyleBackColor = false;
@@ -186,9 +194,10 @@
             accountsButton.FlatAppearance.BorderSize = 0;
             accountsButton.FlatStyle = FlatStyle.Flat;
             accountsButton.ForeColor = SystemColors.ControlLightLight;
-            accountsButton.Location = new Point(0, 150);
+            accountsButton.Location = new Point(0, 250);
+            accountsButton.Margin = new Padding(4, 5, 4, 5);
             accountsButton.Name = "accountsButton";
-            accountsButton.Size = new Size(170, 75);
+            accountsButton.Size = new Size(243, 125);
             accountsButton.TabIndex = 3;
             accountsButton.Text = "Accounts";
             accountsButton.UseVisualStyleBackColor = false;
@@ -201,9 +210,10 @@
             scheduleButton.FlatAppearance.BorderSize = 0;
             scheduleButton.FlatStyle = FlatStyle.Flat;
             scheduleButton.ForeColor = SystemColors.ControlLightLight;
-            scheduleButton.Location = new Point(0, 75);
+            scheduleButton.Location = new Point(0, 125);
+            scheduleButton.Margin = new Padding(4, 5, 4, 5);
             scheduleButton.Name = "scheduleButton";
-            scheduleButton.Size = new Size(170, 75);
+            scheduleButton.Size = new Size(243, 125);
             scheduleButton.TabIndex = 1;
             scheduleButton.Text = "Schedule";
             scheduleButton.UseVisualStyleBackColor = false;
@@ -217,8 +227,9 @@
             homeButton.FlatStyle = FlatStyle.Flat;
             homeButton.ForeColor = SystemColors.ControlLightLight;
             homeButton.Location = new Point(0, 0);
+            homeButton.Margin = new Padding(4, 5, 4, 5);
             homeButton.Name = "homeButton";
-            homeButton.Size = new Size(170, 75);
+            homeButton.Size = new Size(243, 125);
             homeButton.TabIndex = 0;
             homeButton.Text = "Home";
             homeButton.UseVisualStyleBackColor = false;
@@ -231,18 +242,20 @@
             sideBarDetailPanel.Controls.Add(pictureBox1);
             sideBarDetailPanel.Dock = DockStyle.Top;
             sideBarDetailPanel.Location = new Point(0, 0);
+            sideBarDetailPanel.Margin = new Padding(4, 5, 4, 5);
             sideBarDetailPanel.Name = "sideBarDetailPanel";
-            sideBarDetailPanel.Padding = new Padding(5);
-            sideBarDetailPanel.Size = new Size(170, 94);
+            sideBarDetailPanel.Padding = new Padding(7, 8, 7, 8);
+            sideBarDetailPanel.Size = new Size(243, 157);
             sideBarDetailPanel.TabIndex = 2;
             // 
             // pictureBox1
             // 
             pictureBox1.Dock = DockStyle.Fill;
             pictureBox1.Image = (Image)resources.GetObject("pictureBox1.Image");
-            pictureBox1.Location = new Point(5, 5);
+            pictureBox1.Location = new Point(7, 8);
+            pictureBox1.Margin = new Padding(4, 5, 4, 5);
             pictureBox1.Name = "pictureBox1";
-            pictureBox1.Size = new Size(160, 84);
+            pictureBox1.Size = new Size(229, 141);
             pictureBox1.SizeMode = PictureBoxSizeMode.Zoom;
             pictureBox1.TabIndex = 0;
             pictureBox1.TabStop = false;
@@ -254,16 +267,18 @@
             sideBarPanel.Controls.Add(sideBarDetailPanel);
             sideBarPanel.Dock = DockStyle.Left;
             sideBarPanel.Location = new Point(0, 0);
+            sideBarPanel.Margin = new Padding(4, 5, 4, 5);
             sideBarPanel.Name = "sideBarPanel";
-            sideBarPanel.Size = new Size(170, 590);
+            sideBarPanel.Size = new Size(243, 983);
             sideBarPanel.TabIndex = 0;
             // 
             // mainContentPanel
             // 
             mainContentPanel.Dock = DockStyle.Fill;
-            mainContentPanel.Location = new Point(170, 140);
+            mainContentPanel.Location = new Point(243, 233);
+            mainContentPanel.Margin = new Padding(4, 5, 4, 5);
             mainContentPanel.Name = "mainContentPanel";
-            mainContentPanel.Size = new Size(938, 450);
+            mainContentPanel.Size = new Size(1340, 750);
             mainContentPanel.TabIndex = 3;
             // 
             // notifyIcon
@@ -279,9 +294,10 @@
             networkErrorPanel.BackColor = Color.DimGray;
             networkErrorPanel.Controls.Add(label1);
             networkErrorPanel.Dock = DockStyle.Top;
-            networkErrorPanel.Location = new Point(170, 105);
+            networkErrorPanel.Location = new Point(243, 175);
+            networkErrorPanel.Margin = new Padding(4, 5, 4, 5);
             networkErrorPanel.Name = "networkErrorPanel";
-            networkErrorPanel.Size = new Size(938, 35);
+            networkErrorPanel.Size = new Size(1340, 58);
             networkErrorPanel.TabIndex = 0;
             networkErrorPanel.Visible = false;
             // 
@@ -291,17 +307,18 @@
             label1.Font = new Font("Segoe UI", 14.25F, FontStyle.Regular, GraphicsUnit.Point);
             label1.ForeColor = Color.White;
             label1.Location = new Point(0, 0);
+            label1.Margin = new Padding(4, 0, 4, 0);
             label1.Name = "label1";
-            label1.Size = new Size(938, 35);
+            label1.Size = new Size(1340, 58);
             label1.TabIndex = 0;
             label1.Text = "Network Unavailable";
             label1.TextAlign = ContentAlignment.MiddleLeft;
             // 
             // MainForm
             // 
-            AutoScaleDimensions = new SizeF(7F, 15F);
+            AutoScaleDimensions = new SizeF(10F, 25F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(1108, 590);
+            ClientSize = new Size(1583, 983);
             ControlBox = false;
             Controls.Add(mainContentPanel);
             Controls.Add(networkErrorPanel);
@@ -310,7 +327,8 @@
             Controls.Add(sideBarPanel);
             FormBorderStyle = FormBorderStyle.None;
             Icon = (Icon)resources.GetObject("$this.Icon");
-            MinimumSize = new Size(1064, 590);
+            Margin = new Padding(4, 5, 4, 5);
+            MinimumSize = new Size(1520, 983);
             Name = "MainForm";
             Text = "Foxter";
             WindowState = FormWindowState.Maximized;
