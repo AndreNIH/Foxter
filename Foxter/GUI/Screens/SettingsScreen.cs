@@ -31,7 +31,7 @@ namespace Foxter.GUI.Screens
             var regKey = Registry.CurrentUser.OpenSubKey("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", true)!;
             if (obj.Checked)
             {
-                regKey.SetValue("Foxter", $"\"{Application.ExecutablePath}\" --launch");
+                regKey.SetValue("Foxter", $"\"{Application.ExecutablePath}\" --background");
                 _logger.Info("added startup registry key");
             }
             else

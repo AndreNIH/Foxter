@@ -140,7 +140,7 @@ namespace Foxter
                 
                 //Application launch
                 _logger.Info("running application v" + Assembly.GetExecutingAssembly().GetName().Version!.ToString());
-                bool startupLaunch = Array.Exists(args, arg => arg == "--startup");
+                bool startupLaunch = Array.Exists(args, arg => arg == "--background");
                 if (!CreatePhysicalDatabaseStructure()) return;
                 LoadApplicationSettings();
                 StartApplication(startupLaunch);
