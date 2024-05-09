@@ -11,7 +11,7 @@
 
 [Setup]
 #define MyAppSetupName 'Foxter'
-#define MyAppVersion '0.1.1.181'
+#define MyAppVersion '1.1.0.508'
 #define MyAppPublisher 'Drew IT Solutions'
 
 AppName={#MyAppSetupName}
@@ -45,7 +45,7 @@ Source: "..\Foxter\bin\Release\net7.0-windows10.0.17763.0\*"; Excludes: *.log *.
 
 
 [Registry]
-Root: HKCU; Subkey: "SOFTWARE\Microsoft\Windows\CurrentVersion\Run"; ValueType: string; ValueName: "Foxter"; ValueData: """{app}\Foxter.exe"""; Flags: uninsdeletevalue
+Root: HKCU; Subkey: "SOFTWARE\Microsoft\Windows\CurrentVersion\Run"; ValueType: string; ValueName: "Foxter"; ValueData: """{app}\Foxter.exe"" --background"; Flags: uninsdeletevalue
 
 
 
