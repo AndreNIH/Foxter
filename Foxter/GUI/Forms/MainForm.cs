@@ -104,14 +104,16 @@ namespace Foxter
 
         void ToggleNetworkErrorMode(bool enabled)
         {
-            _logger.Info($"network error mode set to {enabled}");
-            _networkErrorState = enabled;
+            
             if (networkErrorPanel.InvokeRequired)
             {
                 networkErrorPanel.Invoke(delegate { ToggleNetworkErrorMode(enabled); });
+                return;
             }
             else
             {
+                _logger.Info($"network error mode set to {enabled}");
+                _networkErrorState = enabled;
                 networkErrorPanel.Visible = enabled; 
             }
         }
